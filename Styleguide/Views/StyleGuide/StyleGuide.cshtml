@@ -1,0 +1,40 @@
+﻿@using System.Web.Mvc.Html
+@model Styleguide.StyleGuideViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+    <h2>Style guide</h2>
+    <hr />
+    <div style="position: absolute; top: 100px; bottom: 0; left: 0; width: 300px; overflow: auto">
+
+        <h3>Partials</h3>
+        <ul>
+            @foreach (var component in Model.PartialComponents)
+            {
+                <li>
+                    @Html.ActionLink(component, "partial", new { name = component }, new { target = "component" })
+                </li>
+            }
+        </ul>
+
+        <h3>Components</h3>
+        <ul>
+            @foreach (var component in Model.KnockoutComponents)
+            {
+                <li>
+                    @Html.ActionLink(component, "knockout", new { name = component }, new { target = "component" })
+                </li>
+            }
+        </ul>
+    </div>
+    <div style="position: absolute; top: 100px; bottom:0; left: 300px; right:0">
+        <iframe name="component" style="width: 100%; height: 100%"></iframe>
+    </div>
+</body>
+</html>

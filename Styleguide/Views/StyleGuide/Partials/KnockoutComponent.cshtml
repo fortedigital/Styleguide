@@ -1,0 +1,25 @@
+@model Styleguide.KnockoutComponentViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div class="Page Page__layout">
+    <div class="Page__container">
+        <div data-bind="foreach: variants">
+            <div style="margin: 20px">
+                <div data-bind="component: $data"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.styleguide.@(Model.BootstrapFunctionName)();
+</script>
+</body>
+</html>
