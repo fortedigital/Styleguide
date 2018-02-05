@@ -1,6 +1,12 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.0.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide", "Styleguide\Styleguide.csproj", "{977C3F0E-6F48-4B28-A0A5-0C0C7C1545A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.EPiServer", "Styleguide.EPiServer\Styleguide.EPiServer.csproj", "{47E33BE7-DAA1-4DCB-B3A8-A5FBED0595F1}"
+EndProject
 Global
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+	EndGlobalSection
 EndGlobal
