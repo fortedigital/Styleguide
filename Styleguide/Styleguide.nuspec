@@ -1,17 +1,13 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>Forte.Styleguide</id>
     <version>$version$</version>
-    <title>$title$</title>
+    <description>Description</description>
+    <title>Forte.Styleguide</title>
     <authors>Forte_ Digital</authors>
     <owners>$author$</owners>
     <projectUrl>http://github.com/fortedigital/Styleguide/</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Description</description>
-    <copyright>Copyright 2018</copyright>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
-  <!--<files>-->
-    <!--<file src="StyleGuide/StyleGuideController.cs" target="content/StyleGuide"/>-->
-  <!--</files>-->
 </package>

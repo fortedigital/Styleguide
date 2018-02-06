@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -29,13 +28,17 @@ namespace Styleguide
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Name of the component is not defined");
             }
 
+            var componentViewModelLoader = new ComponentViewModelLoader(
+                new ComponentJsonDataLoader(ControllerContext),
+                new RazorBasedComponentViewModelTypeResolver(ControllerContext));                
+            
             var model = new PartialComponentViewModel
             {
                 Name = name,
-                Items = new List<object>()                    
+                Items = componentViewModelLoader.LoadManyFromJson(name)   
             };
             
-            return View("~/Views/StyleGuide/Partials/PartialComponent.cshtml", model);
+            return View("~/Views/StyleGuide/PartialComponent.cshtml", model);
         }
 
         public ActionResult Knockout(string name)
@@ -50,7 +53,7 @@ namespace Styleguide
                 Name = name
             };
 
-            return View("~/Views/StyleGuide/Partials/KnockoutComponent.cshtml", model);
+            return View("~/Views/StyleGuide/KnockoutComponent.cshtml", model);
         }
     }
 }
