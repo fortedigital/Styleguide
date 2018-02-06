@@ -8,6 +8,7 @@
     <authors>Forte_ Digital</authors>
     <owners>$author$</owners>
     <projectUrl>http://github.com/fortedigital/Styleguide/</projectUrl>
+    <licenseUrl>https://github.com/fortedigital/Styleguide/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
 </package>
