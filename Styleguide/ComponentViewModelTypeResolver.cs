@@ -91,7 +91,9 @@ namespace Styleguide
 
         private static string FindViewModelName(ParserResults parserResults, string physicalPath)
         {
-            if (TryFindViewModelName(parserResults.Document, out var viewModelName) == false)
+            string viewModelName;
+
+            if (TryFindViewModelName(parserResults.Document, out viewModelName) == false)
             {
                 throw new InvalidOperationException(
                     $"Unable to find view model name in parsed view, physical path = {physicalPath}");
@@ -122,7 +124,8 @@ namespace Styleguide
 
         private static bool TryFindViewModelName(SyntaxTreeNode node, out string viewModelName)
         {
-            if (node is Block block)
+            var block = node as Block;
+            if (block != null)
             {
                 foreach (var child in block.Children)
                 {
@@ -133,15 +136,17 @@ namespace Styleguide
                 }
             }
 
-            if (node is Span span &&
+            var span = node as Span;
+
+            if (span != null &&
                 span.Content == "model" &&
                 span.Kind == SpanKind.Code)
             {
-                viewModelName = string.Join("", span.Next.Symbols
+                viewModelName = string.Join(",", span.Next.Symbols
                     .SkipWhile(x => string.IsNullOrWhiteSpace(x.Content))
                     .TakeWhile(x => string.IsNullOrWhiteSpace(x.Content) == false)
-                    .Select(x => x.Content));
-                
+                    .Select(x => x.Content));                    
+
                 return true;
             }
 
