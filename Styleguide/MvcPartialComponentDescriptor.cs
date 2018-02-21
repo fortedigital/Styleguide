@@ -31,16 +31,32 @@ namespace Forte.Styleguide
             if (view == null)
                 return new HttpNotFoundResult($"Cound not find partial view {this.Name}");
 
-            var viewModelType = this.ResolveViewModelType(view);
-
-            var viewModelVariants = this.LoadVariants(viewModelType);
-                        
-            var model = new MvcPartialComponentViewModel
+            try
             {
-                PartialName = this.Name,
-                Variants = viewModelVariants
-            };
-            
+                var viewModelType = this.ResolveViewModelType(view);
+
+                var viewModelVariants = this.LoadVariants(viewModelType);
+
+                return PartialView(context, new MvcPartialComponentViewModel
+                {
+                    ComponentName = this.Name,
+                    PartialName = this.Name,
+                    Variants = viewModelVariants
+                });
+                
+            }
+            catch (Exception e)
+            {
+                return PartialView(context, new MvcPartialComponentViewModel
+                {
+                    ComponentName = this.Name,
+                    Error = e.ToString()
+                });
+            }
+        }
+
+        private static PartialViewResult PartialView(ControllerContext context, MvcPartialComponentViewModel model)
+        {
             return new PartialViewResult()
             {
                 View = ViewEngines.Engines.FindView(context, "MvcPartialComponent", null).View,
@@ -57,7 +73,7 @@ namespace Forte.Styleguide
             using (var reader = this.file.OpenText())
             {
                 if (serializer.Deserialize(reader, typeof(object)) is JArray value)
-                    return value.Select(i => i.ToObject(viewModelType, serializer));
+                    return value.Select(i => i.ToObject(viewModelType, serializer)).ToList();
                 return Enumerable.Empty<object>();
             }
         }

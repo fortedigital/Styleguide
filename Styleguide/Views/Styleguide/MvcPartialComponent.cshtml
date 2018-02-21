@@ -5,21 +5,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Style Guide</title>
+    <title>@Model.ComponentName - Style Guide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-
-    <div class="Page Page__layout">
-        <div class="Page__container">
-            @foreach (var variant in @Model.Variants)
-            {
-                <div style="padding: 20px; margin: 20px; border-bottom: 2px solid black">
-                    @Html.Partial(@Model.PartialName, variant)
-                </div>
-            }
-
-        </div>
-    </div>
+    @if (Model.Error != null)
+    {
+        <pre>@Model.Error</pre>
+    }
+    else
+    {
+        foreach (var variant in @Model.Variants)
+        {
+            <div style="padding: 20px; margin: 20px; border-bottom: 2px solid black">
+                @Html.Partial(@Model.PartialName, variant)
+            </div>
+        }
+    }
 </body>
 </html>

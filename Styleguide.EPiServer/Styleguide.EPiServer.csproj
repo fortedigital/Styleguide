@@ -179,6 +179,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContainerExtensions.cs" />
     <Compile Include="ContentProvider\StyleguideContentFactory.cs" />
     <Compile Include="ContentProvider\StyleguideContentIdSequence.cs" />
     <Compile Include="ContentProvider\StyleguideContentEntryPoint.cs" />
@@ -196,7 +197,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="App_Data\GeoLiteCity.dat" />
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />

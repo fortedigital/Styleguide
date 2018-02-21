@@ -20,7 +20,7 @@ namespace Forte.Styleguide
             lock (this.syncLock)
             {
                 if (reload != false || this.catalog == null)
-                    this.catalog = new ComponentCatalog(this.loaders.SelectMany(l => l.LoadComponents()).ToList());
+                    this.catalog = new ComponentCatalog(this.loaders.SelectMany(l => l.LoadComponents()).OrderBy(c=>c.Name).ToList());
                 
                 return this.catalog;
             }
