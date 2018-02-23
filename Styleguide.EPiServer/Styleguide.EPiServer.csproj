@@ -51,12 +51,6 @@
     <Reference Include="EPiServer.Cms.AspNet, Version=11.3.3.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\..\Volvat\packages\EPiServer.CMS.AspNet.11.3.3\lib\net461\EPiServer.Cms.AspNet.dll</HintPath>
     </Reference>
-    <Reference Include="EPiServer.Cms.Shell.UI, Version=11.2.5.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\..\Volvat\packages\EPiServer.CMS.UI.Core.11.2.5\lib\net461\EPiServer.Cms.Shell.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="EPiServer.Cms.TinyMce, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\..\Volvat\packages\EPiServer.CMS.TinyMce.1.0.0\lib\net461\EPiServer.Cms.TinyMce.dll</HintPath>
-    </Reference>
     <Reference Include="EPiServer.Configuration, Version=11.3.3.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\..\Volvat\packages\EPiServer.CMS.AspNet.11.3.3\lib\net461\EPiServer.Configuration.dll</HintPath>
     </Reference>
@@ -89,15 +83,6 @@
     </Reference>
     <Reference Include="EPiServer.ServiceLocation.StructureMap, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\Volvat\packages\EPiServer.ServiceLocation.StructureMap.2.0.0\lib\net461\EPiServer.ServiceLocation.StructureMap.dll</HintPath>
-    </Reference>
-    <Reference Include="EPiServer.Shell, Version=11.2.5.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\..\Volvat\packages\EPiServer.CMS.UI.Core.11.2.5\lib\net461\EPiServer.Shell.dll</HintPath>
-    </Reference>
-    <Reference Include="EPiServer.Shell.UI, Version=11.2.5.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\..\Volvat\packages\EPiServer.CMS.UI.Core.11.2.5\lib\net461\EPiServer.Shell.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="EPiServer.UI, Version=11.2.5.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\..\Volvat\packages\EPiServer.CMS.UI.Core.11.2.5\lib\net461\EPiServer.UI.dll</HintPath>
     </Reference>
     <Reference Include="EPiServer.Web.WebControls, Version=11.3.3.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\..\Volvat\packages\EPiServer.CMS.AspNet.11.3.3\lib\net461\EPiServer.Web.WebControls.dll</HintPath>
@@ -197,10 +182,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Data\GeoLiteCity.dat" />
-    <None Include="modules\_protected\CMS\CMS.zip" />
-    <None Include="modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />
-    <None Include="modules\_protected\Shell\Shell.zip" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
