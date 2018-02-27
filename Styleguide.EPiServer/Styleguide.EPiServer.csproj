@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Forte.Styleguide.EPiServer</RootNamespace>
-    <AssemblyName>Styleguide.EPiServer</AssemblyName>
+    <AssemblyName>Forte.Styleguide.EPiServer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

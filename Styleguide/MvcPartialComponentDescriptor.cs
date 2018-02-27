@@ -59,6 +59,7 @@ namespace Forte.Styleguide
         {
             return new PartialViewResult()
             {
+                // ReSharper disable once Mvc.ViewNotResolved
                 View = ViewEngines.Engines.FindView(context, "MvcPartialComponent", null).View,
                 ViewName = "MvcPartialComponent",
                 ViewData = new ViewDataDictionary(model),
