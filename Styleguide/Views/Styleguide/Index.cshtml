@@ -1,5 +1,5 @@
-﻿@using System.Web.Mvc.Html
-@model Forte.Styleguide.StyleguideIndexViewModel
+﻿@using Forte.Styleguide
+@model StyleguideIndexViewModel
 
 <!DOCTYPE html>
 <html>
@@ -18,7 +18,7 @@
             @foreach (var component in Model.Components)
             {
                 <li>
-                    @Html.ActionLink(component.Name, "Component", "Styleguide", new { name = component.Name }, new { target = "component" })
+                    @Html.StyleguideComponentLink(component, new { target = "component" })
                 </li>
             }
         </ul>
