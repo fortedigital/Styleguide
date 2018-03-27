@@ -72,33 +72,35 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
             var securable = content as IContentSecurable;
             securable?.GetContentSecurityDescriptor().AddEntry(new AccessControlEntry(EveryoneRole.RoleName, AccessLevel.Read));
 
-            var localizable = content as ILocalizable;
-            if (localizable != null)
+            if (content is ILocalizable localizable)
             {
                 localizable.Language = new CultureInfo("no");
             }
 
-            var versionable = content as IVersionable;
-            if (versionable != null)
+            if (content is IVersionable versionable)
             {
                 versionable.Status = VersionStatus.Published;
             }
 
-            var changeTrackable = content as IChangeTrackable;
-            if (changeTrackable != null)
+            if (content is IChangeTrackable changeTrackable)
             {
                 changeTrackable.Changed = DateTime.Now;
             }
 
-            var media = content as MediaData;
-            if (media != null)
+            switch (content)
             {
-                object url;
-                if (properties.TryGetValue("Url", out url))
-                {
-                    media.BinaryData = new WebBlob(new Uri(url.ToString(), UriKind.RelativeOrAbsolute), url.ToString());
-                    media.Thumbnail = media.BinaryData;
-                }
+                case PageData page:
+                    page.LinkType = PageShortcutType.Normal;
+                    break;
+                
+                case MediaData media:
+                    object url;
+                    if (properties.TryGetValue("Url", out url))
+                    {
+                        media.BinaryData = new WebBlob(new Uri(url.ToString(), UriKind.RelativeOrAbsolute), url.ToString());
+                        media.Thumbnail = media.BinaryData;
+                    }
+                    break;
             }
 
             return content;
