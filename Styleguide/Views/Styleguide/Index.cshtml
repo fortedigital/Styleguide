@@ -15,11 +15,17 @@
 
         <h3>Components</h3>
         <ul>
-            @foreach (var component in Model.Components)
+            @foreach (var category in Model.Components.GroupBy(c => c.Category).OrderBy(c => c.Key))
             {
-                <li>
-                    @Html.StyleguideComponentLink(component, new { target = "component" })
-                </li>
+                <li>@category.Key</li>
+                <ul>
+                    @foreach (var component in category.OrderBy(c => c.Name))
+                     {
+                         <li>
+                             @Html.StyleguideComponentLink(component, new {target = "component"})
+                         </li>
+                     }
+                </ul>
             }
         </ul>
     </div>

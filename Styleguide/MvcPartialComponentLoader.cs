@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -28,8 +29,16 @@ namespace Forte.Styleguide
 
         private MvcPartialComponentDescriptor CreateComponentDescriptorFromFullPath(string path)
         {
+            var componentName = Path.GetFileName(path).RemoveSuffix(this.ComponentFileNameExtension);
+            var componentCategory = Path.GetDirectoryName(path)
+                .Split(Path.DirectorySeparatorChar)
+                .Reverse()
+                .SkipWhile(d => d.Equals(componentName, StringComparison.OrdinalIgnoreCase))
+                .First();
+            
             return new MvcPartialComponentDescriptor(
-                Path.GetFileName(path).RemoveSuffix(this.ComponentFileNameExtension),
+                componentName,
+                componentCategory,
                 new FileInfo(path),
                 this.serializerSettings);
         }
