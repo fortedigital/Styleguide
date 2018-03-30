@@ -68,11 +68,6 @@ namespace Forte.Styleguide.EPiServer.JsonConverters
                 : fallback;
         }
 
-        public static string GetName(this JObject jObject)
-        {
-            return jObject.GetString("Name", "Undefined");
-        }
-
         public static int GetId(this JObject jObject)
         {
             return jObject.GetInt("Id", StyleguideContentIdSequence.Next());

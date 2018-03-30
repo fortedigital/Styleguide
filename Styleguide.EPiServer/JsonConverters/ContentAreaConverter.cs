@@ -62,12 +62,12 @@ namespace Forte.Styleguide.EPiServer.JsonConverters
         public static IContent CreateContent(this IStyleguideContentFactory factory, JsonSerializer serializer, JObject element, Type modelType = null)
         {
             var id = element.GetId();
-            var name = element.GetName();
+            var name = element.GetString("Name");
             var contentTypeName = element.GetString("ContentType");
             var properties = element.GetProperties();
 
             IContent content;
-            if (String.IsNullOrEmpty(contentTypeName))                
+            if (string.IsNullOrEmpty(contentTypeName))                
                 content = factory.CreateContent(id, name, modelType ?? typeof(GenericStyleguideContent), properties);                
             else
                 content = factory.CreateContent(id, name, contentTypeName, properties);

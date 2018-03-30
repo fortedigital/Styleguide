@@ -64,11 +64,8 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
             content.ParentLink = this.entryPoint;
             content.ContentGuid = Guid.NewGuid();
             content.ContentLink = new ContentReference(id, StyleguideContentProvider.ProviderName);
-            content.Name = name;
-            if (content is IRoutable)
-                ((IRoutable) content).RouteSegment =
-                    ServiceLocator.Current.GetInstance<IUrlSegmentGenerator>().Create(content.Name); // TODO: inject generator
-
+            content.Name = String.IsNullOrEmpty(name) ? id.ToString() : name;
+            
             var securable = content as IContentSecurable;
             securable?.GetContentSecurityDescriptor().AddEntry(new AccessControlEntry(EveryoneRole.RoleName, AccessLevel.Read));
 
@@ -94,13 +91,26 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
                     break;
                 
                 case MediaData media:
-                    object url;
-                    if (properties.TryGetValue("Url", out url))
+                    if (properties.TryGetValue("Url", out var url))
                     {
-                        media.BinaryData = new WebBlob(new Uri(url.ToString(), UriKind.RelativeOrAbsolute), url.ToString());
+                        var uri = new Uri(url.ToString(), UriKind.RelativeOrAbsolute);
+                        
+                        media.BinaryData = new WebBlob(uri, uri.ToString());
                         media.Thumbnail = media.BinaryData;
+                        if (string.IsNullOrEmpty(name))
+                            media.Name = $"{id}_{Path.GetFileName(uri.AbsolutePath)}";
+                        else
+                            media.Name = name;
+                        if (string.IsNullOrEmpty(Path.GetExtension(media.Name)))
+                            media.Name = media.Name + ".jpg";
                     }
                     break;
+            }
+
+            if (content is IRoutable routable)
+            {
+                var urlSegmentGenerator = ServiceLocator.Current.GetInstance<IUrlSegmentGenerator>();
+                routable.RouteSegment = urlSegmentGenerator.Create(content.Name); // TODO: inject generator
             }
 
             return content;
