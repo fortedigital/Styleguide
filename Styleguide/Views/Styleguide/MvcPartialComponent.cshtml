@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@Model.ComponentName - Style Guide</title>
+    <title>@Model.Name - Style Guide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -18,7 +18,7 @@
         foreach (var variant in @Model.Variants)
         {
             <div style="padding: 20px; margin: 20px; border-bottom: 2px solid black">
-                @Html.Partial(@Model.PartialName, variant)
+                @Html.Partial(@Model.PartialName, variant.Model)
             </div>
         }
     }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Web.Compilation;
 using System.Web.Mvc;
+using Forte.Styleguide.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -37,21 +36,16 @@ namespace Forte.Styleguide
             {
                 var viewModelType = this.ResolveViewModelType(view);
 
-                var viewModelVariants = this.LoadVariants(viewModelType);
+                var viewModel = this.LoadComponentViewModel(viewModelType);
 
-                return PartialView(context, new MvcPartialComponentViewModel
-                {
-                    ComponentName = this.Name,
-                    PartialName = this.Name,
-                    Variants = viewModelVariants
-                });
+                return PartialView(context, viewModel);
                 
             }
             catch (Exception e)
             {
                 return PartialView(context, new MvcPartialComponentViewModel
                 {
-                    ComponentName = this.Name,
+                    Name = this.Name,
                     Error = e.ToString()
                 });
             }
@@ -69,16 +63,38 @@ namespace Forte.Styleguide
             };
         }
 
-        private IEnumerable<object> LoadVariants(Type viewModelType)
+        private MvcPartialComponentViewModel LoadComponentViewModel(Type viewModelType)
         {
             var serializer = JsonSerializer.Create(this.serializerSettings);
+            
+            serializer.Converters.Add(new MvcPartialComponentVariantViewModelConverter(viewModelType));
+
+            var viewModelBuilder = new MvcPartialComponentViewModelBuilder()
+                .WithName(this.Name)
+                .WithPartialName(this.Name);
             
             using (var reader = this.file.OpenText())
             {
                 var desc = serializer.Deserialize(reader, typeof(object));
                 if (desc is JArray value)
-                    return value.Select(i => i.ToObject(viewModelType, serializer)).ToList();
-                return Enumerable.Empty<object>();
+                {
+                    var variants = value.Select(i => i.ToObject(viewModelType, serializer));
+
+                    foreach (var variant in variants)
+                    {
+                        viewModelBuilder = viewModelBuilder.WithVariant(builder => builder.WithModel(variant));
+                    }
+                }
+                
+                if(desc is JObject jObject)
+                {
+                    viewModelBuilder = viewModelBuilder
+                        .WithPartialName(jObject.SelectToken("layout")?.ToObject<string>(serializer))
+                        .WithModel(jObject.SelectToken("model")?.ToObject(viewModelType, serializer))
+                        .WithVariants(jObject.SelectToken("variants")?.ToObject<MvcPartialComponentVariantViewModel[]>(serializer));
+                }
+
+                return viewModelBuilder.Build();
             }
         }
 
