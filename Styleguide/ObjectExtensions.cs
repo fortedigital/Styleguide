@@ -9,9 +9,11 @@ namespace Forte.Styleguide
         public static object Merge(this object @object, object content, JsonSerializer serializer)
         {
             var objectType = @object.GetType();
-            if (objectType != content.GetType())
+            var contentType = content.GetType();
+            
+            if (objectType != contentType)
             {
-                throw new Exception("");
+                throw new Exception($"Expected type of content to be merged: {objectType} but was {contentType}.");
             }
 
             var jObject = JObject.FromObject(@object, serializer);
