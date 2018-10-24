@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Forte.Styleguide
 {
@@ -11,6 +12,11 @@ namespace Forte.Styleguide
         public object GetProperty(string name)
         {
             return Properties.TryGetValue(name, out var propertyValue) ? propertyValue : null;
+        }
+
+        public void PatchModel(object content, JsonSerializer serializer)
+        {
+            this.Model = this.Model.Merge(content, serializer);
         }
     }
 }

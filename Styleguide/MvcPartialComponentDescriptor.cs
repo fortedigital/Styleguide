@@ -67,8 +67,6 @@ namespace Forte.Styleguide
         {
             var serializer = JsonSerializer.Create(this.serializerSettings);
             
-            serializer.Converters.Add(new MvcPartialComponentVariantViewModelConverter(viewModelType));
-
             var viewModelBuilder = new MvcPartialComponentViewModelBuilder()
                 .WithName(this.Name)
                 .WithPartialName(this.Name);
@@ -88,10 +86,21 @@ namespace Forte.Styleguide
                 
                 if(desc is JObject jObject)
                 {
+                    serializer.Converters.Add(new MvcPartialComponentVariantViewModelConverter(viewModelType));
+                    
+                    var rootModelJsonObject = jObject.SelectToken("model") as JObject;
+                    var rootModel = rootModelJsonObject?.ToObject(viewModelType, serializer);
+                    var variants = jObject.SelectToken("variants")?.ToObject<MvcPartialComponentVariantViewModel[]>(serializer) ?? new MvcPartialComponentVariantViewModel[0];
+
+                    foreach (var variant in variants)
+                    {
+                        variant.PatchModel(rootModel, serializer);
+                    }
+                    
                     viewModelBuilder = viewModelBuilder
                         .WithPartialName(jObject.SelectToken("layout")?.ToObject<string>(serializer))
-                        .WithModel(jObject.SelectToken("model")?.ToObject(viewModelType, serializer))
-                        .WithVariants(jObject.SelectToken("variants")?.ToObject<MvcPartialComponentVariantViewModel[]>(serializer));
+                        .WithModel(rootModel)
+                        .WithVariants(variants);
                 }
 
                 return viewModelBuilder.Build();
