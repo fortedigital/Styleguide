@@ -16,7 +16,7 @@ namespace Forte.Styleguide
 
         public void PatchModel(object content, JsonSerializer serializer)
         {
-            this.Model = this.Model.Merge(content, serializer);
+            this.Model = content.Merge(this.Model, serializer);
         }
     }
 }

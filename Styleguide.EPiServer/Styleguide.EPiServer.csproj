@@ -176,16 +176,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Styleguide\Styleguide.csproj">
-      <Project>{84ebe80b-8bbe-43c5-a7ef-6cc22b4c14fa}</Project>
-      <Name>Styleguide</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Styleguide.EPiServer.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Styleguide\Styleguide.csproj">
+      <Project>{84ebe80b-8bbe-43c5-a7ef-6cc22b4c14fa}</Project>
+      <Name>Styleguide</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

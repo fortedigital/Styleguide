@@ -14,15 +14,15 @@ namespace Forte.Styleguide
     {
         public string Name { get; }
         public string Category { get; }
-
-        private readonly FileInfo file;
+        public FileInfo File { get; }
+        
         private readonly JsonSerializerSettings serializerSettings;
 
         public MvcPartialComponentDescriptor(string name, string category, FileInfo file, JsonSerializerSettings serializerSettings)
         {
             this.Name = name;
             this.Category = category;
-            this.file = file;
+            this.File = file;
             this.serializerSettings = serializerSettings;
         }
 
@@ -71,7 +71,7 @@ namespace Forte.Styleguide
                 .WithName(this.Name)
                 .WithPartialName(this.Name);
             
-            using (var reader = this.file.OpenText())
+            using (var reader = this.File.OpenText())
             {
                 var desc = serializer.Deserialize(reader, typeof(object));
                 if (desc is JArray value)

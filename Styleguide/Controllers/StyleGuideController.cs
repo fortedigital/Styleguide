@@ -27,12 +27,46 @@ namespace Forte.Styleguide
             if (string.IsNullOrEmpty(name))            
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Name of the component is not defined");            
 
-            var catalog = this.loader.Load();
-            var component = catalog.GetComponentByName(name);
+            var component = GetComponentByName(name);
             if (component == null)
                 return HttpNotFound();
 
             return component.Execute(ControllerContext);
+        }
+
+        [HttpGet]
+        public ActionResult ComponentContext(string name)
+        {
+            if (string.IsNullOrEmpty(name))            
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Name of the component is not defined");
+            
+            var component = GetComponentByName(name);
+            if (component == null)
+                return HttpNotFound();
+
+            using (var reader = component.File.OpenText())
+            {
+                var model = new MvcPartialComponentContextViewModel
+                {
+                    Name = component.Name,
+                    Context = reader.ReadToEnd()
+                };
+                
+                return new PartialViewResult()
+                {
+                    // ReSharper disable once Mvc.ViewNotResolved
+                    View = ViewEngines.Engines.FindView(this.ControllerContext, "MvcPartialComponentContext", null).View,
+                    ViewName = "MvcPartialComponentContext",
+                    ViewData = new ViewDataDictionary(model),
+                    ViewEngineCollection = ViewEngines.Engines
+                };    
+            }
+        }
+
+        private IStyleguideComponentDescriptor GetComponentByName(string componentName)
+        {
+            var catalog = this.loader.Load();
+            return catalog.GetComponentByName(componentName);
         }
     }
 }

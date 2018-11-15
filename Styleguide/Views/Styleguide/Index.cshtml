@@ -2,35 +2,98 @@
 @model StyleguideIndexViewModel
 
 <!DOCTYPE html>
-<html>
+<html class="has-js" dir="ltr">
 <head>
     <title>Style Guide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="~/Static/Styleguide/css/white.css"/>
 </head>
 <body>
-    <h2>Style guide</h2>
-    <hr />
-    <div style="position: absolute; top: 100px; bottom: 0; left: 0; width: 300px; overflow: auto">
+<div class="Frame" id="frame">
+    <div class="Frame-header">
+        <div class="Header">
+            <a href="" class="Header-title" data-pjax="">Styleguide</a>
+        </div>
+    </div>
+    <div class="Frame-body" data-role="body">
 
-        <h3>Components</h3>
-        <ul>
-            @foreach (var category in Model.Components.GroupBy(c => c.Category).OrderBy(c => c.Key))
-            {
-                <li>@category.Key</li>
-                <ul>
-                    @foreach (var component in category.OrderBy(c => c.Name))
-                     {
-                         <li>
-                             @Html.StyleguideComponentLink(component, new {target = "component"})
-                         </li>
-                     }
-                </ul>
-            }
-        </ul>
+        <div class="Frame-panel Frame-panel--main" data-role="main">
+            <div class="Frame-inner" id="pjax-container">            
+                <div class="Pen" data-behaviour="pen">
+                    <div class="Pen-panel Pen-header"></div>                    
+                    <div class="Pen-panel Pen-preview Preview resizable" data-behaviour="preview">
+                        <div class="Preview-wrapper resizable" data-role="resizer">
+                            <div class="Preview-resizer">
+                                <iframe id="component" src="#" class="Preview-iframe" data-role="window" marginwidth="0" marginheight="0" vspace="0" hspace="0" scrolling="yes" frameborder="0"></iframe>                                
+                            </div>
+                            <div class="Preview-handle" data-role="resize-handle" style="touch-action: none;"></div>
+                            <div class="Preview-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="Pen-handle Pen-handle--browser" data-role="resize-handle" style="touch-action: none;">                        
+                    </div>
+                    <div class="Pen-panel Pen-info" data-role="info">
+                        <div class="Browser" data-behaviour="browser">
+                            <div class="Browser-controls">
+                                <ul class="Browser-tabs">
+                                    <li class="Browser-tab Browser-tab-context">
+                                        <a href="#">Context</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="Browser-panel Browser-code is-active" data-role="tab-panel">
+                                <iframe id="componentContext" src="#" width="100%" height="100%"></iframe>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="Frame-handle" data-role="frame-resize-handle" style="touch-action: none;"></div>
+        
+        <div class="Frame-panel Frame-panel--sidebar resizable" data-role="sidebar" style="width: 240px;">
+            
+            <nav class="Navigation">
+                
+                <div class="Navigation-group">
+
+                    <div class="Tree" data-behaviour="tree" id="tree-components">
+                        <h3 class="Tree-title">Components</h3>
+                        <ul class="Tree-items Tree-depth-2">
+                            @foreach (var component in Model.Components)
+                            {
+                                <li class="Tree-item Tree-entity" data-role="item">
+                                    <a class="Tree-entityLink" href="#" data-component="@component.Name">
+                                        <span>@component.Name</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+                
+            </nav>
+
+        </div>
     </div>
-    <div style="position: absolute; top: 100px; bottom:0; left: 300px; right:0">
-        <iframe name="component" style="width: 100%; height: 100%"></iframe>
-    </div>
+</div>
+<script type="text/javascript" src="~/Static/Styleguide/js/mandelbrot.js" ></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('a.Tree-entityLink').click(function(event) {
+            event.preventDefault();
+            
+            var componentName = $(this).data("component");
+
+            $("iframe#component").attr("src", "styleguide/Component/" + componentName);
+            $("iframe#componentContext").attr("src", "styleguide/ComponentContext/" + componentName);
+        });
+    });
+</script>
+
 </body>
 </html>

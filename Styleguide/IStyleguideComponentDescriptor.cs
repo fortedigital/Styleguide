@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.IO;
+using System.Web.Mvc;
 
 namespace Forte.Styleguide
 {
@@ -6,6 +7,7 @@ namespace Forte.Styleguide
     {
         string Name { get; }
         string Category { get; }
+        FileInfo File { get; }
         ActionResult Execute(ControllerContext context);
     }
 }
