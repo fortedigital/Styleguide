@@ -63,6 +63,11 @@ namespace Forte.Styleguide
             };
         }
 
+        private object CreateInstanceOfType(Type type)
+        {
+            return Activator.CreateInstance(type);
+        }
+
         private MvcPartialComponentViewModel LoadComponentViewModel(Type viewModelType)
         {
             var serializer = JsonSerializer.Create(this.serializerSettings);
@@ -91,6 +96,10 @@ namespace Forte.Styleguide
                     var rootModelJsonObject = jObject.SelectToken("model") as JObject;
                     
                     var rootModel = rootModelJsonObject?.ToObject(viewModelType, serializer);
+                    if (rootModel == null)
+                    {
+                        rootModel = CreateInstanceOfType(viewModelType);
+                    }
                     
                     var variants = jObject.SelectToken("variants")?.ToObject<MvcPartialComponentVariantViewModel[]>(serializer) ?? new MvcPartialComponentVariantViewModel[0];
 
@@ -98,7 +107,7 @@ namespace Forte.Styleguide
                     {
                         if (variant.Model == null)
                         {
-                            variant.Model = Activator.CreateInstance(rootModel.GetType());
+                            variant.Model = CreateInstanceOfType(viewModelType);
                         }
                         
                         variant.PatchModel(rootModel, serializer);
