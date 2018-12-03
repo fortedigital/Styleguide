@@ -89,11 +89,18 @@ namespace Forte.Styleguide
                     serializer.Converters.Add(new MvcPartialComponentVariantViewModelConverter(viewModelType));
                     
                     var rootModelJsonObject = jObject.SelectToken("model") as JObject;
+                    
                     var rootModel = rootModelJsonObject?.ToObject(viewModelType, serializer);
+                    
                     var variants = jObject.SelectToken("variants")?.ToObject<MvcPartialComponentVariantViewModel[]>(serializer) ?? new MvcPartialComponentVariantViewModel[0];
 
                     foreach (var variant in variants)
                     {
+                        if (variant.Model == null)
+                        {
+                            variant.Model = Activator.CreateInstance(rootModel.GetType());
+                        }
+                        
                         variant.PatchModel(rootModel, serializer);
                     }
                     
