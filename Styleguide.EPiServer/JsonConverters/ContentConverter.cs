@@ -82,7 +82,7 @@ namespace Forte.Styleguide.EPiServer.JsonConverters
                 .Concat(FilterPropertiesOfType<string>(properties, JTokenType.Float))
                 .Concat(FilterPropertiesOfType<string>(properties, JTokenType.Date))
                 .Concat(FilterPropertiesOfType<string>(properties, JTokenType.String))
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase);
         }
 
         private static Dictionary<string, object> FilterPropertiesOfType<T>(IEnumerable<JProperty> properties, JTokenType type)
