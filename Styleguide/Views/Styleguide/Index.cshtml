@@ -86,11 +86,20 @@
     $(document).ready(function() {
         $('a.Tree-entityLink').click(function(event) {
             event.preventDefault();
-            
+
             var componentName = $(this).data("component");
 
+            window.location.hash = componentName;
+            
             $("iframe#component").attr("src", "styleguide/Component/" + componentName);
             $("iframe#componentContext").attr("src", "styleguide/ComponentContext/" + componentName);
+        });
+
+        $(function() {
+            var selectedComponent = window.location.hash;
+            if (selectedComponent) {
+                $("a[href='" + selectedComponent + "']").click();
+            }
         });
     });
 </script>
