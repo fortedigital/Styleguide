@@ -13,10 +13,5 @@ namespace Forte.Styleguide
         {
             return Properties.TryGetValue(name, out var propertyValue) ? propertyValue : null;
         }
-
-        public void PatchModel(object content, JsonSerializer serializer)
-        {
-            this.Model = content.Merge(this.Model, serializer);
-        }
     }
 }

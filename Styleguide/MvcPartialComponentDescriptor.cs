@@ -92,31 +92,29 @@ namespace Forte.Styleguide
                 if(desc is JObject jObject)
                 {
                     serializer.Converters.Add(new MvcPartialComponentVariantViewModelConverter(viewModelType));
-                    
-                    var rootModelJsonObject = jObject.SelectToken("model") as JObject;
-                    
-                    var rootModel = rootModelJsonObject?.ToObject(viewModelType, serializer);
-                    if (rootModel == null)
-                    {
-                        rootModel = CreateInstanceOfType(viewModelType);
-                    }
-                    
-                    var variants = jObject.SelectToken("variants")?.ToObject<MvcPartialComponentVariantViewModel[]>(serializer) ?? new MvcPartialComponentVariantViewModel[0];
 
-                    foreach (var variant in variants)
+                    var rootModelJsonObject = jObject.SelectToken("model") ?? new JObject();
+                    var rootModel = rootModelJsonObject?.ToObject(viewModelType, serializer);
+                    
+                    var variantsToken = jObject.SelectToken("variants"); 
+                    var variantsModelTokens = variantsToken?.Select(token => token.SelectToken("model"));
+                    
+                    foreach (var variantModelToken in variantsModelTokens ?? Enumerable.Empty<JToken>())
                     {
-                        if (variant.Model == null)
+                        var rootModelCopy = rootModelJsonObject.DeepClone();
+                        if (rootModelCopy is JContainer container)
                         {
-                            variant.Model = CreateInstanceOfType(viewModelType);
+                            container.Merge(variantModelToken);
+                            variantModelToken.Replace(rootModelCopy);
                         }
-                        
-                        variant.PatchModel(rootModel, serializer);
                     }
+
+                    var variantsAfterMerge = variantsToken?.ToObject<MvcPartialComponentVariantViewModel[]>(serializer) ?? new MvcPartialComponentVariantViewModel[0];
                     
                     viewModelBuilder = viewModelBuilder
                         .WithPartialName(jObject.SelectToken("layout")?.ToObject<string>(serializer))
                         .WithModel(rootModel)
-                        .WithVariants(variants);
+                        .WithVariants(variantsAfterMerge);
                 }
 
                 return viewModelBuilder.Build();

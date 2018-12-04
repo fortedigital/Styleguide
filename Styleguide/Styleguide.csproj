@@ -73,7 +73,6 @@
     <Compile Include="IStyleguideComponentDescriptor.cs" />
     <Compile Include="IStyleguideComponentLoader.cs" />
     <Compile Include="MvcPartialComponentLoader.cs" />
-    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MvcPartialComponentDescriptor.cs" />
     <Compile Include="StringExtensions.cs" />
