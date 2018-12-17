@@ -65,7 +65,7 @@
                             @foreach (var component in Model.Components)
                             {
                                 <li class="Tree-item Tree-entity" data-role="item">
-                                    <a class="Tree-entityLink" href="#" data-component="@component.Name">
+                                    <a class="Tree-entityLink" href="@string.Concat("#", component.Name)" data-component="@component.Name">
                                         <span>@component.Name</span>
                                     </a>
                                 </li>
