@@ -32,23 +32,11 @@ namespace Forte.Styleguide
             if (view == null)
                 return new HttpNotFoundResult($"Cound not find partial view {this.Name}");
 
-            try
-            {
-                var viewModelType = this.ResolveViewModelType(view);
+            var viewModelType = this.ResolveViewModelType(view);
 
-                var viewModel = this.LoadComponentViewModel(viewModelType);
+            var viewModel = this.LoadComponentViewModel(viewModelType);
 
-                return PartialView(context, viewModel);
-                
-            }
-            catch (Exception e)
-            {
-                return PartialView(context, new MvcPartialComponentViewModel
-                {
-                    Name = this.Name,
-                    Error = e.ToString()
-                });
-            }
+            return PartialView(context, viewModel);
         }
 
         private static PartialViewResult PartialView(ControllerContext context, MvcPartialComponentViewModel model)
@@ -61,11 +49,6 @@ namespace Forte.Styleguide
                 ViewData = new ViewDataDictionary(model),
                 ViewEngineCollection = ViewEngines.Engines
             };
-        }
-
-        private object CreateInstanceOfType(Type type)
-        {
-            return Activator.CreateInstance(type);
         }
 
         private MvcPartialComponentViewModel LoadComponentViewModel(Type viewModelType)
