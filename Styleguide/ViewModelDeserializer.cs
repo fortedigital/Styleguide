@@ -42,16 +42,24 @@ namespace Forte.Styleguide
                 var variantsList = new List<MvcPartialComponentVariantViewModel>();
                 foreach (var variant in variantsToken)
                 {
-                    var rootModelCopy = rootModelJsonObject.DeepClone();
-                    if (!(rootModelCopy is JContainer container)) continue;
-                    
                     var variantModel = variant.SelectToken("model");
-                    container.Merge(variantModel);
-                    variantsList.Add(new MvcPartialComponentVariantViewModel
+                    var viewModel = new MvcPartialComponentVariantViewModel
                     {
-                        Model = container.ToObject(viewModelType, serializer),
-                        Name = variant.SelectToken("name").ToString()
-                    });
+                        Name = variant.SelectToken("name").ToString(),
+                    };
+                    
+                    if (rootModelJsonObject is JContainer container)
+                    {
+                        container.Merge(variantModel);
+                        viewModel.Model = container.ToObject(viewModelType, serializer);
+                    }
+
+                    if (rootModelJsonObject is JValue)
+                    {
+                        viewModel.Model = variantModel != null ? variantModel.ToObject(viewModelType) : rootModel;
+                    }
+                    
+                    variantsList.Add(viewModel);
                 }
                 
                 viewModelBuilder = viewModelBuilder
