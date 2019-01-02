@@ -15,7 +15,7 @@ namespace Forte.Styleguide.EPiServer
 {
     public static class ContainerExtensions
     {
-        public static void ConfigureStyleguide(this IContainer container, string featuresRootPath = "~/Features", string componentFileNameExtension = ".styleguide.json")
+        public static void ConfigureStyleguide(this IContainer container, string featuresRootPath = "~/Features", string componentFileNameExtension = ".styleguide.json", string layoutPath = null)
         {
             RouteTable.Routes.MapRoute(
                 "styleguide",
@@ -40,7 +40,7 @@ namespace Forte.Styleguide.EPiServer
                         c.GetInstance<ContentReferenceConverter>(),
                         c.GetInstance<ContentAreaConverter>()
                     }
-                }));
+                }, layoutPath));
                 
             });
         }
