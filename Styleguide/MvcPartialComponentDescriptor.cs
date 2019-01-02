@@ -33,10 +33,13 @@ namespace Forte.Styleguide
 
             var viewModelType = this.ResolveViewModelType(view);
 
-            var jsonContent = await this.File.OpenText().ReadToEndAsync();
-            var viewModel = ViewModelDeserializer.Deserialize(viewModelType, jsonContent, this.Name, this.serializerSettings);
-
-            return PartialView(context, viewModel);
+            using (var reader = this.File.OpenText())
+            {
+                var jsonContent = await reader.ReadToEndAsync();
+                var viewModel = ViewModelDeserializer.Deserialize(viewModelType, jsonContent, this.Name, this.serializerSettings);
+                
+                return PartialView(context, viewModel);
+            }
         }
 
         private static PartialViewResult PartialView(ControllerContext context, MvcPartialComponentViewModel model)
