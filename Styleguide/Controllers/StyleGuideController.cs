@@ -1,6 +1,5 @@
-﻿using System.IO;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Forte.Styleguide
@@ -22,7 +21,7 @@ namespace Forte.Styleguide
             return View(model);
         }
 
-        public ActionResult Component(string name)
+        public async Task<ActionResult> Component(string name)
         {
             if (string.IsNullOrEmpty(name))            
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Name of the component is not defined");            
@@ -31,7 +30,7 @@ namespace Forte.Styleguide
             if (component == null)
                 return HttpNotFound();
 
-            return component.Execute(ControllerContext);
+            return await component.Execute(ControllerContext);
         }
 
         [HttpGet]
