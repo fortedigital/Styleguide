@@ -39,7 +39,10 @@ namespace Forte.Styleguide
             {
                 var jsonContent = await reader.ReadToEndAsync();
                 var viewModel = ViewModelDeserializer.Deserialize(viewModelType, jsonContent, this.Name, this.serializerSettings);
-                viewModel.LayoutPath = this.LayoutPath;
+                if (string.IsNullOrEmpty(viewModel.LayoutPath))
+                {
+                    viewModel.LayoutPath = this.LayoutPath;
+                }
                 
                 return PartialView(context, viewModel);
             }

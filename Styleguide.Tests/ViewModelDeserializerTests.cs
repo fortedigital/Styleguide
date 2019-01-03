@@ -16,6 +16,7 @@ namespace Styleguide.Tests
                 ""name""  : ""John"",
                 ""label"" : ""CEO""
               },
+              ""layoutPath"" : ""~/Views/Shared/_Layout.cshtml"",
               ""variants"":[
                 {
                   ""name"" : ""Vertical layout""
@@ -30,6 +31,8 @@ namespace Styleguide.Tests
             //then
             Assert.AreEqual("Test", viewModel.Name);
             Assert.AreEqual(1, viewModel.Variants.Count());
+            Assert.AreEqual("~/Views/Shared/_Layout.cshtml", viewModel.LayoutPath);
+            Assert.AreEqual("Test", viewModel.PartialName);
 
             var variant = viewModel.Variants.First();
             Assert.AreEqual(typeof(DummyViewModel), variant.Model.GetType());
@@ -39,6 +42,31 @@ namespace Styleguide.Tests
             Assert.AreEqual("John", model.Name);
             Assert.AreEqual("CEO", model.Label);
             
+        }
+      
+        [Test]
+        public void GivenJsonWithPartialName_Deserialize_ReturnsValidViewModel()
+        {
+            //given
+            var content = @"{
+                  ""model"" : {
+                    ""name""  : ""John"",
+                    ""label"" : ""CEO""
+                  },
+                  ""partialName"" : ""Avatar"",
+                  ""variants"":[
+                    {
+                      ""name"" : ""Vertical layout""
+                    }
+                  ]
+                }";
+                
+            //when
+            var viewModel = ViewModelDeserializer.Deserialize(typeof(DummyViewModel), content, "Test");
+                
+            //then
+            Assert.AreEqual("Test", viewModel.Name);
+            Assert.AreEqual("Avatar", viewModel.PartialName);
         }
 
         [Test]
@@ -222,10 +250,10 @@ namespace Styleguide.Tests
           public string Label { get; set; }
         }
 
-      private class DummyNestedViewModel
-      {
-        public int Count { get; set; }
-        public DummyViewModel DummyViewModel { get; set; }
-      }
+        private class DummyNestedViewModel
+        {
+          public int Count { get; set; }
+          public DummyViewModel DummyViewModel { get; set; }
+        }
     }
 }
