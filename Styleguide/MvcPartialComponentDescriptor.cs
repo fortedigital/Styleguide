@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Compilation;
 using System.Web.Mvc;
-using Forte.Styleguide.Converters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Forte.Styleguide
 {
@@ -28,7 +27,7 @@ namespace Forte.Styleguide
             this.serializerSettings = serializerSettings;
         }
 
-        public ActionResult Execute(ControllerContext context)
+        public async Task<ActionResult> Execute(ControllerContext context)
         {
             var view = this.FindPartialView(context, this.Name);
             if (view == null)
@@ -36,10 +35,14 @@ namespace Forte.Styleguide
 
             var viewModelType = this.ResolveViewModelType(view);
 
-            var viewModel = this.LoadComponentViewModel(viewModelType);
-            viewModel.LayoutPath = this.LayoutPath;
-
-            return PartialView(context, viewModel);
+            using (var reader = this.File.OpenText())
+            {
+                var jsonContent = await reader.ReadToEndAsync();
+                var viewModel = ViewModelDeserializer.Deserialize(viewModelType, jsonContent, this.Name, this.serializerSettings);
+                viewModel.LayoutPath = this.LayoutPath;
+                
+                return PartialView(context, viewModel);
+            }
         }
 
         private static PartialViewResult PartialView(ControllerContext context, MvcPartialComponentViewModel model)
@@ -52,59 +55,6 @@ namespace Forte.Styleguide
                 ViewData = new ViewDataDictionary(model),
                 ViewEngineCollection = ViewEngines.Engines
             };
-        }
-
-        private MvcPartialComponentViewModel LoadComponentViewModel(Type viewModelType)
-        {
-            var serializer = JsonSerializer.Create(this.serializerSettings);
-            
-            var viewModelBuilder = new MvcPartialComponentViewModelBuilder()
-                .WithName(this.Name)
-                .WithPartialName(this.Name);
-            
-            using (var reader = this.File.OpenText())
-            {
-                var desc = serializer.Deserialize(reader, typeof(object));
-                if (desc is JArray value)
-                {
-                    var variants = value.Select(i => i.ToObject(viewModelType, serializer));
-
-                    foreach (var variant in variants)
-                    {
-                        viewModelBuilder = viewModelBuilder.WithVariant(builder => builder.WithModel(variant));
-                    }
-                }
-                
-                if(desc is JObject jObject)
-                {
-                    serializer.Converters.Add(new MvcPartialComponentVariantViewModelConverter(viewModelType));
-
-                    var rootModelJsonObject = jObject.SelectToken("model") ?? new JObject();
-                    var rootModel = rootModelJsonObject?.ToObject(viewModelType, serializer);
-                    
-                    var variantsToken = jObject.SelectToken("variants"); 
-                    var variantsModelTokens = variantsToken?.Select(token => token.SelectToken("model"));
-                    
-                    foreach (var variantModelToken in variantsModelTokens ?? Enumerable.Empty<JToken>())
-                    {
-                        var rootModelCopy = rootModelJsonObject.DeepClone();
-                        if (rootModelCopy is JContainer container)
-                        {
-                            container.Merge(variantModelToken);
-                            variantModelToken.Replace(rootModelCopy);
-                        }
-                    }
-
-                    var variantsAfterMerge = variantsToken?.ToObject<MvcPartialComponentVariantViewModel[]>(serializer) ?? new MvcPartialComponentVariantViewModel[0];
-                    
-                    viewModelBuilder = viewModelBuilder
-                        .WithPartialName(jObject.SelectToken("layout")?.ToObject<string>(serializer))
-                        .WithModel(rootModel)
-                        .WithVariants(variantsAfterMerge);
-                }
-
-                return viewModelBuilder.Build();
-            }
         }
 
         private Type ResolveViewModelType(BuildManagerCompiledView view)
