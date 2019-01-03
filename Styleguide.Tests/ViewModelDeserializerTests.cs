@@ -162,11 +162,70 @@ namespace Styleguide.Tests
             var horizontalModel = (int) horizontalVariant.Model;
             Assert.AreEqual(2, horizontalModel);
         }
+
+        [Test]
+        public void GivenJsonWithNestedObjectsViewModel_Deserialize_ReturnsValidViewModel()
+        {
+            //given
+            var content = @"{
+              ""model"" : {
+                  ""count""  : 1,
+                  ""DummyViewModel"" : {
+                    ""name"": ""John"",
+                    ""label"": ""CTO""
+                  }
+                },
+              
+                ""variants"":[
+                {
+                  ""name"" : ""Vertical layout"",
+                },
+                {
+                  ""name"" : ""Horizontal layout"",
+                  ""model"" : {
+                    ""count"" : 7,
+                    ""DummyViewModel"" : {
+                      ""label"" : ""Dev""
+                    }
+                  }
+                }
+                ]
+            }";
+                    
+            //when
+            var viewModel = ViewModelDeserializer.Deserialize(typeof(DummyNestedViewModel), content, "Test");
+    
+            //then
+            Assert.AreEqual(2, viewModel.Variants.Count());
+                  
+            var verticalVariant = viewModel.Variants.First();
+            Assert.AreEqual(typeof(DummyNestedViewModel), verticalVariant.Model.GetType());
+            Assert.AreEqual("Vertical layout", verticalVariant.Name);
+              
+            var verticalModel = (DummyNestedViewModel) verticalVariant.Model;
+            Assert.AreEqual(1, verticalModel.Count);
+            Assert.AreEqual("John", verticalModel.DummyViewModel.Name);
+                  
+            var horizontalVariant = viewModel.Variants.Last();
+            Assert.AreEqual(typeof(DummyNestedViewModel), horizontalVariant.Model.GetType());
+            Assert.AreEqual("Horizontal layout", horizontalVariant.Name);
+                
+            var horizontalModel = (DummyNestedViewModel) horizontalVariant.Model;
+            Assert.AreEqual(7, horizontalModel.Count);
+            Assert.AreEqual("John", horizontalModel.DummyViewModel.Name);
+            Assert.AreEqual("Dev", horizontalModel.DummyViewModel.Label);
+        }
       
         private class DummyViewModel
         {
           public string Name { get; set; }
           public string Label { get; set; }
         }
+
+      private class DummyNestedViewModel
+      {
+        public int Count { get; set; }
+        public DummyViewModel DummyViewModel { get; set; }
+      }
     }
 }
