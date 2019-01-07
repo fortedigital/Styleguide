@@ -14,10 +14,9 @@ namespace Forte.Styleguide
             if (serializerSettings == null) serializerSettings = new JsonSerializerSettings();
             
             var serializer = JsonSerializer.Create(serializerSettings);
-            
+
             var viewModelBuilder = new MvcPartialComponentViewModelBuilder()
-                .WithName(name)
-                .WithPartialName(name);
+                .WithName(name);
 
             var desc = JsonConvert.DeserializeObject(jsonContent, serializerSettings);            
             if (desc is JArray value)
@@ -61,9 +60,14 @@ namespace Forte.Styleguide
                     
                     variantsList.Add(viewModel);
                 }
+
+                var partialName = jObject.SelectToken("partialName") != null
+                    ? jObject.SelectToken("partialName").ToObject<string>(serializer)
+                    : name;
                 
-                viewModelBuilder = viewModelBuilder
-                    .WithPartialName(jObject.SelectToken("layout")?.ToObject<string>(serializer))
+                viewModelBuilder
+                    .WithLayout(jObject.SelectToken("layoutPath")?.ToObject<string>(serializer))
+                    .WithPartialName(partialName)
                     .WithModel(rootModel)
                     .WithVariants(variantsList.ToArray());
             }

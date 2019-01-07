@@ -8,13 +8,15 @@ namespace Forte.Styleguide
 {
     public class MvcPartialComponentLoader : IStyleguideComponentLoader
     {
+        public string LayoutPath { get; }
         public readonly string RootPath;
         public readonly string ComponentFileNameExtension;
         
         private readonly JsonSerializerSettings serializerSettings;
 
-        public MvcPartialComponentLoader(string rootPath, string componentFileNameExtension, JsonSerializerSettings serializerSettings)
+        public MvcPartialComponentLoader(string rootPath, string componentFileNameExtension, JsonSerializerSettings serializerSettings, string layoutPath = null)
         {
+            this.LayoutPath = layoutPath;
             this.RootPath = rootPath;
             this.ComponentFileNameExtension = componentFileNameExtension;
             this.serializerSettings = serializerSettings;
@@ -39,6 +41,7 @@ namespace Forte.Styleguide
             return new MvcPartialComponentDescriptor(
                 componentName,
                 componentCategory,
+                this.LayoutPath,
                 new FileInfo(path),
                 this.serializerSettings);
         }

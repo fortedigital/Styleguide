@@ -46,6 +46,13 @@ namespace Forte.Styleguide
             return this;
         }
 
+        public MvcPartialComponentViewModelBuilder WithLayout(string layoutPath)
+        {
+            viewModel.LayoutPath = layoutPath;
+
+            return this;
+        }
+
         public MvcPartialComponentViewModel Build()
         {
             return viewModel;

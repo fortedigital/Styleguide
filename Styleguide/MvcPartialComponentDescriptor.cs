@@ -14,14 +14,16 @@ namespace Forte.Styleguide
         public string Name { get; }
         public string Category { get; }
         public FileInfo File { get; }
-        
+        public string LayoutPath { get; }
+
         private readonly JsonSerializerSettings serializerSettings;
 
-        public MvcPartialComponentDescriptor(string name, string category, FileInfo file, JsonSerializerSettings serializerSettings)
+        public MvcPartialComponentDescriptor(string name, string category, string layoutPath, FileInfo file, JsonSerializerSettings serializerSettings)
         {
             this.Name = name;
             this.Category = category;
             this.File = file;
+            this.LayoutPath = layoutPath;
             this.serializerSettings = serializerSettings;
         }
 
@@ -37,6 +39,10 @@ namespace Forte.Styleguide
             {
                 var jsonContent = await reader.ReadToEndAsync();
                 var viewModel = ViewModelDeserializer.Deserialize(viewModelType, jsonContent, this.Name, this.serializerSettings);
+                if (string.IsNullOrEmpty(viewModel.LayoutPath))
+                {
+                    viewModel.LayoutPath = this.LayoutPath;
+                }
                 
                 return PartialView(context, viewModel);
             }
