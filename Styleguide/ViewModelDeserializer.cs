@@ -9,16 +9,20 @@ namespace Forte.Styleguide
 {
     public static class ViewModelDeserializer
     {
+        private const string ModelPropertyName = "model";
+        private const string VariantsPropertyName = "variants";
+        private const string NamePropertyName = "name";
+
         public static MvcPartialComponentViewModel Deserialize(Type viewModelType, string jsonContent, string name, JsonSerializerSettings serializerSettings = null)
         {
             if (serializerSettings == null) serializerSettings = new JsonSerializerSettings();
-            
+
             var serializer = JsonSerializer.Create(serializerSettings);
 
             var viewModelBuilder = new MvcPartialComponentViewModelBuilder()
                 .WithName(name);
 
-            var desc = JsonConvert.DeserializeObject(jsonContent, serializerSettings);            
+            var desc = JsonConvert.DeserializeObject(jsonContent, serializerSettings);
             if (desc is JArray value)
             {
                 var variants = value.Select(i => i.ToObject(viewModelType, serializer));
@@ -28,25 +32,32 @@ namespace Forte.Styleguide
                     viewModelBuilder = viewModelBuilder.WithVariant(builder => builder.WithModel(variant));
                 }
             }
-            
-            if(desc is JObject jObject)
+
+            if (desc is JObject jObject)
             {
                 serializer.Converters.Add(new MvcPartialComponentVariantViewModelConverter(viewModelType));
 
-                var rootModelJsonObject = jObject.SelectToken("model") ?? new JObject();
+                var rootModelJsonObject = jObject.SelectToken(ModelPropertyName) ?? new JObject();
                 var rootModel = rootModelJsonObject?.ToObject(viewModelType, serializer);
-                
-                var variantsToken = jObject.SelectToken("variants");
-                
+
+                var variantsToken = jObject.SelectToken(VariantsPropertyName)
+                                    ?? throw new InvalidOperationException($"Property '{VariantsPropertyName}' was not found.");
+
+
                 var variantsList = new List<MvcPartialComponentVariantViewModel>();
                 foreach (var variant in variantsToken)
                 {
-                    var variantModel = variant.SelectToken("model");
+                    var variantModel = variant.SelectToken(ModelPropertyName);
+
+
+                    var variantName = variant.SelectToken(NamePropertyName)
+                                      ?? throw new InvalidOperationException($"Property '{NamePropertyName}' was not found in variant definition.");
+
                     var viewModel = new MvcPartialComponentVariantViewModel
                     {
-                        Name = variant.SelectToken("name").ToString(),
+                        Name = variantName.ToString(),
                     };
-                    
+
                     if (rootModelJsonObject is JContainer container)
                     {
                         container.Merge(variantModel);
@@ -57,14 +68,19 @@ namespace Forte.Styleguide
                     {
                         viewModel.Model = variantModel != null ? variantModel.ToObject(viewModelType) : rootModel;
                     }
-                    
+
                     variantsList.Add(viewModel);
+                }
+
+                if (variantsList.Count == 0)
+                {
+                    throw new InvalidOperationException("At least one variant should be defined.");
                 }
 
                 var partialName = jObject.SelectToken("partialName") != null
                     ? jObject.SelectToken("partialName").ToObject<string>(serializer)
                     : name;
-                
+
                 viewModelBuilder
                     .WithLayout(jObject.SelectToken("layoutPath")?.ToObject<string>(serializer))
                     .WithPartialName(partialName)
