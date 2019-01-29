@@ -279,5 +279,78 @@ namespace Styleguide.Tests
             Assert.That(viewModel.Model, Is.Not.Null);
             Assert.That(viewModel.Model, Is.InstanceOf<EmptyViewModel>());
         }
+      
+      [Test]
+      public void GivenJson_Deserialize_ReturnsVariantViewData()
+      {
+        //given
+        var content = @"{
+              ""model"" : {
+                ""name""  : ""John"",
+                ""label"" : ""CEO""
+              },
+              ""variants"":[
+                {
+                  ""viewData"" : {
+                    ""variant"": ""test""
+                  }
+                }
+              ]
+            }";
+
+
+        //when
+        var viewModel = ViewModelDeserializer.Deserialize(typeof(DummyViewModel), content, "Test");
+
+        //then
+        var variant = viewModel.Variants.First();
+        Assert.AreEqual("test", variant.ViewData["variant"]);
+      }
+     
+      [Test]
+      public void GivenUnnamedVariants_Deserialize_ReturnsVariantNames()
+      {
+        //given
+        var content = @"{
+              ""model"" : {
+                ""name""  : ""John"",
+                ""label"" : ""CEO""
+              },
+              ""variants"":[
+                {}, {}
+              ]
+            }";
+
+
+        //when
+        var viewModel = ViewModelDeserializer.Deserialize(typeof(DummyViewModel), content, "Test");
+
+        //then
+        Assert.AreEqual("Variant 1", viewModel.Variants.First().Name);
+        Assert.AreEqual("Variant 2", viewModel.Variants.Skip(1).First().Name);
+      }
+      
+      [Test]
+      public void GivenSingleUnnamedVariant_Deserialize_ReturnsVariantName()
+      {
+        //given
+        var content = @"{
+              ""model"" : {
+                ""name""  : ""John"",
+                ""label"" : ""CEO""
+              },
+              ""variants"":[
+                {}
+              ]
+            }";
+
+
+        //when
+        var viewModel = ViewModelDeserializer.Deserialize(typeof(DummyViewModel), content, "Test");
+
+        //then
+        Assert.AreEqual("Normal", viewModel.Variants.First().Name);
+      }                  
+      
     }
 }

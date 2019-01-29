@@ -68,7 +68,6 @@
     <Compile Include="ComponentCatalog.cs" />
     <Compile Include="ComponentCatalogLoader.cs" />
     <Compile Include="Controllers\StyleGuideController.cs" />
-    <Compile Include="Converters\MvcPartialComponentVariantViewModelConverter.cs" />
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="IStyleguideComponentDescriptor.cs" />
     <Compile Include="IStyleguideComponentLoader.cs" />

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Forte.Styleguide.Converters;
+using System.Web.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -12,6 +12,7 @@ namespace Forte.Styleguide
         private const string ModelPropertyName = "model";
         private const string VariantsPropertyName = "variants";
         private const string NamePropertyName = "name";
+        private const string ViewDataPropertyName = "viewData";
 
         public static MvcPartialComponentViewModel Deserialize(Type viewModelType, string jsonContent, string name, JsonSerializerSettings serializerSettings = null)
         {
@@ -35,8 +36,6 @@ namespace Forte.Styleguide
 
             if (desc is JObject jObject)
             {
-                serializer.Converters.Add(new MvcPartialComponentVariantViewModelConverter(viewModelType));
-
                 var rootModelJsonObject = jObject.SelectToken(ModelPropertyName) ?? new JObject();
                 var rootModel = rootModelJsonObject?.ToObject(viewModelType, serializer);
 
@@ -44,18 +43,18 @@ namespace Forte.Styleguide
                                     ?? throw new InvalidOperationException($"Property '{VariantsPropertyName}' was not found.");
 
 
+                int variantNo = 1;
                 var variantsList = new List<MvcPartialComponentVariantViewModel>();
                 foreach (var variant in variantsToken)
                 {
+                    var variantName = variant.SelectToken(NamePropertyName);
                     var variantModel = variant.SelectToken(ModelPropertyName);
-
-
-                    var variantName = variant.SelectToken(NamePropertyName)
-                                      ?? throw new InvalidOperationException($"Property '{NamePropertyName}' was not found in variant definition.");
+                    var variantViewData = variant.SelectToken(ViewDataPropertyName);
 
                     var viewModel = new MvcPartialComponentVariantViewModel
                     {
-                        Name = variantName.ToString(),
+                        Name = variantName?.ToString() ?? (variantsToken.Count() == 1 ? "Normal" : $"Variant {variantNo}"),
+                        ViewData = variantViewData?.ToObject<ViewDataDictionary>(serializer) ?? new ViewDataDictionary()
                     };
 
                     if (rootModelJsonObject is JContainer container)
@@ -70,6 +69,7 @@ namespace Forte.Styleguide
                     }
 
                     variantsList.Add(viewModel);
+                    variantNo++;                    
                 }
 
                 if (variantsList.Count == 0)

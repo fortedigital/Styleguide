@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Web.Mvc;
 
 namespace Forte.Styleguide
 {
@@ -7,11 +7,6 @@ namespace Forte.Styleguide
     {
         public string Name { get; set; }
         public object Model { get; set; }
-        public IDictionary<string, object> Properties { get; set; } = new Dictionary<string, object>();
-
-        public object GetProperty(string name)
-        {
-            return Properties.TryGetValue(name, out var propertyValue) ? propertyValue : null;
-        }
+        public ViewDataDictionary ViewData { get; set; } = new ViewDataDictionary();
     }
 }
