@@ -350,7 +350,76 @@ namespace Styleguide.Tests
 
         //then
         Assert.AreEqual("Normal", viewModel.Variants.First().Name);
-      }                  
-      
+      }
+
+      [Test]
+      // Github Issue #5 , part 1
+      // It should be possible to override model field with null value
+      public void GivenVariantOverridingWithNull_Deserialize_ReturnsNulledVariant()
+      {
+        //given
+        var content = @"{
+              ""model"" : {
+                ""name""  : ""John"",
+                ""label"" : ""CEO""
+              },
+              ""variants"":[
+                {
+                  ""name"" : ""no label variant"",
+                  ""model"" : {
+                    ""label"" : null
+                  }
+                }
+              ]
+            }";
+        
+        //when
+        var viewModel = ViewModelDeserializer.Deserialize(typeof(DummyViewModel), content, "Test");
+
+        //then
+        var noLabelVariant = (DummyViewModel) viewModel.Variants.First().Model;
+        Assert.Null(noLabelVariant.Label);
+        Assert.AreEqual("John", noLabelVariant.Name);
+      }
+
+      [Test]
+      // Github Issue #5 , part 2
+      // When having multiple variants, second variant should not treat model from first variant as a base one
+      public void GivenMultipleVariants_Deserialize_ShouldUseProperBaseModel()
+      {
+        //given
+        var content = @"{
+              ""model"" : {
+                ""name""  : ""John"",
+                ""label"" : ""CEO""
+              },
+              ""variants"":[
+                {
+                  ""name"" : ""variant 1"",
+                  ""model"" : {
+                    ""name"" : ""Bob""
+                  }
+                },
+                {
+                  ""name"" : ""variant 2"",
+                  ""model"" : {
+                    ""label"" : ""new label""
+                  }
+                }
+              ]
+            }";
+        
+        //when
+        var viewModel = ViewModelDeserializer.Deserialize(typeof(DummyViewModel), content, "Test");
+        
+        //then
+        var variant1 = (DummyViewModel) viewModel.Variants.First().Model;
+        var variant2 = (DummyViewModel) viewModel.Variants.Last().Model;
+        
+        Assert.AreEqual("Bob", variant1.Name);
+        Assert.AreEqual("CEO", variant1.Label);
+        Assert.AreEqual("John", variant2.Name);
+        Assert.AreEqual("new label", variant2.Label);
+      }
     }
 }
