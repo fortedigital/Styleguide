@@ -29,11 +29,11 @@ namespace Forte.Styleguide
 
         public async Task<ActionResult> Execute(ControllerContext context)
         {
-            var view = this.FindPartialView(context, this.Name);
+            var view = FindPartialView(context, this.Name);
             if (view == null)
                 return new HttpNotFoundResult($"Cound not find partial view {this.Name}");
 
-            var viewModelType = this.ResolveViewModelType(view);
+            var viewModelType = ResolveViewModelType(view);
 
             using (var reader = this.File.OpenText())
             {
@@ -60,7 +60,7 @@ namespace Forte.Styleguide
             };
         }
 
-        private Type ResolveViewModelType(BuildManagerCompiledView view)
+        private static Type ResolveViewModelType(BuildManagerCompiledView view)
         {
             var viewType = BuildManager.GetCompiledType(view.ViewPath);
             var webViewPageType = viewType
@@ -75,9 +75,9 @@ namespace Forte.Styleguide
             return typeof(object);
         }
 
-        private RazorView FindPartialView(ControllerContext context, string name)
+        private static RazorView FindPartialView(ControllerContext context, string name)
         {
-            var result = ViewEngines.Engines.FindPartialView(context, this.Name);
+            var result = ViewEngines.Engines.FindPartialView(context, name);
 
             return result?.View as RazorView;
         }
