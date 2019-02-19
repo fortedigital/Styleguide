@@ -97,9 +97,11 @@
         });
 
         $(function() {
-            var selectedComponent = window.location.hash;
-            if (selectedComponent) {
-                $("a[href='" + selectedComponent + "']").click();
+            if (window.location.hash) {
+                var selectedComponent = window.location.hash.substr(1);
+                if (selectedComponent) {
+                    $("a[data-component='" + selectedComponent + "']").click();
+                }
             }
         });
     });
