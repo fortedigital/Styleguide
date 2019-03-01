@@ -5,6 +5,6 @@ let app = new App(process.env.STYLEGUIDE_URL, process.env.AZURE_STORAGE_CONTAINE
 
 app.run()
     .catch(err => {
-        throw err;
+        console.error(err);
         process.exit(1);
     });
