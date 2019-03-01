@@ -1,7 +1,6 @@
 import * as puppeteer from 'puppeteer';
 import * as azure from 'azure-storage';
 import * as looksSame from 'looks-same';
-import { exists } from 'fs';
 
 export default class App {
 
@@ -64,6 +63,15 @@ export default class App {
         });
     }
 
+    async uploadDiffPartialBlob(partialName: string) : Promise<void> {
+        console.log('Uploading diff for' + partialName);
+        await this.blobService.createBlockBlobFromLocalFile(this.azureStorageContainerName, 'diff/' + partialName + '.png', 'diff/' + partialName + '.png', (error) => {
+            if (error != null) {
+                console.error('Error uploading file', error)
+            }
+        });
+    }
+
     async downloadReferencePartialBlob(partialName: string): Promise<void> {
         return new Promise((resolve, reject) => {
             console.log('Downloading reference screenshot ' + partialName);
@@ -110,7 +118,6 @@ export default class App {
                 }
             });
         })
-        
     }
 
     async run(): Promise<void> {
@@ -131,6 +138,7 @@ export default class App {
             var ifDifferent = await this.comparePartialScreenshots(partialName);
             if (ifDifferent) {
                 partialWithDifferences.push(partialName);    
+                await this.uploadDiffPartialBlob(partialName);
             }
         }
         
