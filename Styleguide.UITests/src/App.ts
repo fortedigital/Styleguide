@@ -111,8 +111,8 @@ export default class App {
                           console.error('Error creating image diff for ', partialName)
                           process.exit(1);
                         }
+                        resolve(true);
                       });
-                    resolve(true);
                 } else {
                     resolve(false)
                 }
