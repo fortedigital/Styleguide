@@ -9,11 +9,13 @@ export default class App {
     private browser: puppeteer.Browser;
     private blobService: azure.BlobService;
     private excludePartials: string[];
+    private useAzureStorage: boolean;
 
     constructor(styleguideUrl: string, azureStorageContainerName: string, excludePartialsString: string) {
         this.styleguideUrl = styleguideUrl;
         this.azureStorageContainerName = azureStorageContainerName;
         this.excludePartials = excludePartialsString ? excludePartialsString.split(';') : [];
+        this.useAzureStorage = !!azureStorageContainerName;
     }
 
     async fetchPartials(): Promise<string[]> {
@@ -133,12 +135,18 @@ export default class App {
                 continue;
             }
             await this.makeSingleScreenshot(partialName);
-            await this.uploadPartialBlob(partialName);
-            await this.downloadReferencePartialBlob(partialName)
+
+            if (this.useAzureStorage) {
+                await this.uploadPartialBlob(partialName);
+                await this.downloadReferencePartialBlob(partialName)
+            }
+
             var ifDifferent = await this.comparePartialScreenshots(partialName);
             if (ifDifferent) {
                 partialWithDifferences.push(partialName);    
-                await this.uploadDiffPartialBlob(partialName);
+                if (this.useAzureStorage) {
+                    await this.uploadDiffPartialBlob(partialName);
+                }
             }
         }
         
