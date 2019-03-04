@@ -19,6 +19,7 @@
       "src/**/*"
   ],
   "files": [
-      "./index.ts"
+      "runTests.ts",
+      "initAccepted.ts"
   ]
 }

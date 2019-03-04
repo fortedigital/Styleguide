@@ -11,11 +11,11 @@ This tool allows you to check if any of your partials differs from its previous 
 
 ## Storage 
 
-### Local storage
+### Local storage (default)
 
 This option is useful when you want to run this tool locally.
 
-By default this tool will look for `accepted` and write to `diff` folders locally, in root directory. Just put screenshots in `accepted` folder and search for diff images in `diff` folder. 
+By default this tool will look for `accepted` and write to `diff` folders locally, in root directory. Just put screenshots (or run `yarn initAccepted`) in `accepted` folder and search for diff images in `diff` folder. 
 
 
 ### Azure storage
@@ -42,6 +42,12 @@ For some reason you want to exclude some partials from being compared (for examp
 In this case you may pass semicolon (`;`) separated list of partials:
 
 `EXCLUDE_PARTIALS=PartialOne;PartialTwo`
+
+### Initialization
+
+On a first run there's no `accepted` images. You can put them manually, or in order to take current screenshots and populate them as _accepted_ run:
+
+    yarn initAccepted
 
 ### Final notes
 

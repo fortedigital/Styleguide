@@ -15,6 +15,7 @@
   },
   "scripts": {
     "compile": "tsc",
-    "go": "tsc && node dist/index.js"
+    "go": "tsc && node dist/runTests.js",
+    "initAccepted": "tsc && node dist/initAccepted.js"
   }
 }
