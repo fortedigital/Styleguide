@@ -1,21 +1,20 @@
 import * as puppeteer from 'puppeteer';
-import * as azure from 'azure-storage';
 import * as looksSame from 'looks-same';
+import { IFileStorage } from './IFileStorage';
 
 export default class App {
 
     private styleguideUrl: string;
-    private azureStorageContainerName: string;
     private browser: puppeteer.Browser;
-    private blobService: azure.BlobService;
     private excludePartials: string[];
-    private useAzureStorage: boolean;
 
-    constructor(styleguideUrl: string, azureStorageContainerName: string, excludePartialsString: string) {
+    private fileStorage : IFileStorage;
+
+    constructor(styleguideUrl: string, excludePartialsString: string, fileStorage: IFileStorage) {
         this.styleguideUrl = styleguideUrl;
-        this.azureStorageContainerName = azureStorageContainerName;
         this.excludePartials = excludePartialsString ? excludePartialsString.split(';') : [];
-        this.useAzureStorage = !!azureStorageContainerName;
+
+        this.fileStorage = fileStorage;
     }
 
     async fetchPartials(): Promise<string[]> {
@@ -56,39 +55,6 @@ export default class App {
         });
     }
 
-    async uploadPartialBlob(partialName: string): Promise<void> {
-        console.log('Uploading ' + partialName);
-        await this.blobService.createBlockBlobFromLocalFile(this.azureStorageContainerName, 'current/' + partialName + '.png', 'screenshots/' + partialName + '.png', (error) => {
-            if (error != null) {
-                console.error('Error uploading file', error)
-            }
-        });
-    }
-
-    async uploadDiffPartialBlob(partialName: string) : Promise<void> {
-        console.log('Uploading diff for' + partialName);
-        await this.blobService.createBlockBlobFromLocalFile(this.azureStorageContainerName, 'diff/' + partialName + '.png', 'diff/' + partialName + '.png', (error) => {
-            if (error != null) {
-                console.error('Error uploading file', error)
-            }
-        });
-    }
-
-    async downloadReferencePartialBlob(partialName: string): Promise<void> {
-        return new Promise((resolve, reject) => {
-            console.log('Downloading reference screenshot ' + partialName);
-            this.blobService.getBlobToLocalFile(this.azureStorageContainerName, 'accepted/' + partialName + '.png', 'accepted/' + partialName + '.png', (error: Error) => {
-                if (error != null) {
-                    console.error('Error downloading file', error);
-                    reject(error);
-                } else {
-                    resolve();
-                }
-            })
-        })
-        
-    }
-
     async comparePartialScreenshots(partialName: string) : Promise<boolean> {
         return new Promise((resolve, reject) => {
             console.log('Comparing ' + partialName);
@@ -122,11 +88,35 @@ export default class App {
         })
     }
 
+    checkReferenceScreenshotsExistance = async (partialNames: string[]): Promise<string[]> => {
+        let notExistingReferences : string[] = [];
+
+        for (let i = 0; i < partialNames.length; i++) {
+            let partialName = partialNames[i];
+            if (this.excludePartials.indexOf(partialName) > -1) {
+                continue;
+            }
+
+            let fileExists = await this.fileStorage.doesBlobExist('accepted/' + partialName + '.png');
+            if (!fileExists) {
+                notExistingReferences.push(partialName);
+            }
+        }
+
+        return notExistingReferences;
+    }
+
     async run(): Promise<void> {
         this.browser = await puppeteer.launch();
-        this.blobService = azure.createBlobService();
         let partialNames = await this.fetchPartials();
         console.log('Discovered ' + partialNames.length + ' partials');
+
+        let notExistingReferencePartials = await this.checkReferenceScreenshotsExistance(partialNames);
+        if (notExistingReferencePartials.length > 0) {
+            console.log('Accepted screenshots are missing for following partials:', notExistingReferencePartials);
+            process.exit(1);
+        }
+
         let partialWithDifferences : string[] = [];
 
         for (let i = 0; i < partialNames.length; i++) {
@@ -134,19 +124,15 @@ export default class App {
             if (this.excludePartials.indexOf(partialName) > -1) {
                 continue;
             }
-            await this.makeSingleScreenshot(partialName);
 
-            if (this.useAzureStorage) {
-                await this.uploadPartialBlob(partialName);
-                await this.downloadReferencePartialBlob(partialName)
-            }
+            await this.makeSingleScreenshot(partialName);
+            await this.fileStorage.uploadPartialBlob('current/' + partialName + '.png', 'screenshots/' + partialName + '.png');
+            await this.fileStorage.downloadReferencePartialBlob('current/' + partialName + '.png', 'accepted/' + partialName + '.png')
 
             var ifDifferent = await this.comparePartialScreenshots(partialName);
             if (ifDifferent) {
                 partialWithDifferences.push(partialName);    
-                if (this.useAzureStorage) {
-                    await this.uploadDiffPartialBlob(partialName);
-                }
+                await this.fileStorage.uploadDiffPartialBlob('diff/' + partialName + '.png', 'diff/' + partialName + '.png');
             }
         }
         

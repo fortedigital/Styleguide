@@ -1,7 +1,13 @@
 import App from './src/App';
+import AzureBlobStorage from './src/AzureBlobStorage';
+import LocalFileStorage from './src/LocalFileStorage';
 require('dotenv').load();
 
-let app = new App(process.env.STYLEGUIDE_URL, process.env.AZURE_STORAGE_CONTAINER_NAME, process.env.EXCLUDE_PARTIALS);
+let fileStorage = process.env.AZURE_STORAGE_CONTAINER_NAME 
+     ? new AzureBlobStorage(process.env.AZURE_STORAGE_CONTAINER_NAME)
+     : new LocalFileStorage();
+
+let app = new App(process.env.STYLEGUIDE_URL, process.env.EXCLUDE_PARTIALS, fileStorage);
 
 app.run()
     .catch(err => {
