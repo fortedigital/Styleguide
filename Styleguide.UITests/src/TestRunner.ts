@@ -40,7 +40,7 @@ export default class TestRunner {
         return notExistingReferences;
     }
 
-    async run(): Promise<void> {
+    run = async (): Promise<void> => {
         try {
             let browser = await puppeteer.launch();
             let partialNames = await this.partialDiscoveryService.fetchPartials(browser);
@@ -62,7 +62,7 @@ export default class TestRunner {
     
                 await this.screenshoter.makeScreenshot(browser, partialName, 'screenshots/' + partialName + '.png');
                 await this.fileStorage.uploadPartialBlob('current/' + partialName + '.png', 'screenshots/' + partialName + '.png');
-                await this.fileStorage.downloadReferencePartialBlob('current/' + partialName + '.png', 'accepted/' + partialName + '.png')
+                await this.fileStorage.downloadReferencePartialBlob('accepted/' + partialName + '.png', 'accepted/' + partialName + '.png');
     
                 var ifDifferent = await this.screenshotComparer.compareScreenshots('screenshots/' + partialName + '.png', 'accepted/' + partialName + '.png', 'diff/' + partialName + '.png');
                 if (ifDifferent) {

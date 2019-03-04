@@ -5,7 +5,7 @@ export interface IScreenshotComparer {
 }
 
 export class ScreenshotComparer implements IScreenshotComparer {
-    async compareScreenshots(actualPath: string, expectedPath: string, diffPath: string): Promise<boolean> {
+    compareScreenshots = async (actualPath: string, expectedPath: string, diffPath: string): Promise<boolean> => {
         return new Promise((resolve, reject) => {
             console.log('Comparing ' + actualPath);
             looksSame(actualPath, expectedPath, (error: Error | null, result: any) => {

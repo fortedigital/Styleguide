@@ -11,7 +11,7 @@ export default class AzureBlobStorage implements IFileStorage {
         this.blobService = azure.createBlobService();
     }
 
-    async doesBlobExist(partialPath: string): Promise<boolean> {
+    doesBlobExist = async (partialPath: string): Promise<boolean> => {
         return new Promise<boolean>((resolve => {
             this.blobService.doesBlobExist(this.azureStorageContainerName, partialPath, (error:Error, result: azure.BlobService.BlobResult) => {
                 resolve(result.exists);
@@ -19,7 +19,7 @@ export default class AzureBlobStorage implements IFileStorage {
         }));
     }
 
-    async uploadPartialBlob(partialPath: string, targetPath: string): Promise<void> {
+    uploadPartialBlob = async (partialPath: string, targetPath: string): Promise<void> => {
         await this.blobService.createBlockBlobFromLocalFile(this.azureStorageContainerName, partialPath, targetPath, (error) => {
             if (error != null) {
                 console.error('Error uploading file', error)
@@ -27,7 +27,7 @@ export default class AzureBlobStorage implements IFileStorage {
         });
     }
 
-    async downloadReferencePartialBlob(partialPath: string, targetPath: string): Promise<void> {
+    downloadReferencePartialBlob = async (partialPath: string, targetPath: string): Promise<void> => {
         return new Promise((resolve, reject) => {
             this.blobService.getBlobToLocalFile(this.azureStorageContainerName, partialPath, targetPath, (error: Error) => {
                 if (error != null) {
@@ -37,11 +37,11 @@ export default class AzureBlobStorage implements IFileStorage {
                     resolve();
                 }
             })
-        })
+        });
         
     }
 
-    async uploadDiffPartialBlob(partialPath: string, targetPath: string) : Promise<void> {
+    uploadDiffPartialBlob = async (partialPath: string, targetPath: string) : Promise<void> => {
         await this.blobService.createBlockBlobFromLocalFile(this.azureStorageContainerName, partialPath, targetPath, (error) => {
             if (error != null) {
                 console.error('Error uploading file', error)

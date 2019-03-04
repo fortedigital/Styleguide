@@ -11,7 +11,7 @@ export class Screenshoter implements IScreenshoter {
         this.styleguideUrl = styleguideUrl;
     }
     
-    async makeScreenshot(browser: Browser, partialName: string, targetPath: string): Promise<void> {
+    makeScreenshot = async (browser: Browser, partialName: string, targetPath: string): Promise<void> => {
         const componentPage = await browser.newPage();
         componentPage.setDefaultNavigationTimeout(60000);
         await componentPage.goto(this.styleguideUrl + '/Component/' + partialName, { waitUntil: 'networkidle0' });

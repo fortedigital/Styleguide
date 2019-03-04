@@ -11,7 +11,7 @@ export class PartialDiscoveryService implements IPartialDiscoveryService {
         this.styleguideUrl = styleguideUrl;
     }
 
-    async fetchPartials(browser: Browser): Promise<string[]> {
+    fetchPartials = async (browser: Browser): Promise<string[]> => {
         const page = await browser.newPage();
 
         page.setDefaultNavigationTimeout(120000);
