@@ -2,6 +2,8 @@ import * as puppeteer from 'puppeteer';
 import { IFileStorage } from "./IFileStorage";
 import { IPartialDiscoveryService, PartialDiscoveryService } from "./IPartialDiscoveryService";
 import { IScreenshoter, Screenshoter } from './IScreenshoter';
+import PathTools from './PathTools';
+import { PartialFolder } from "./PartialFolder";
 
 export default class AcceptedInitializer {
     private fileStorage: IFileStorage;
@@ -28,8 +30,8 @@ export default class AcceptedInitializer {
                     continue;
                 }
     
-                await this.screenshoter.makeScreenshot(browser, partialName, 'accepted/' + partialName + '.png');
-                await this.fileStorage.uploadPartialBlob('accepted/' + partialName + '.png', 'accepted/' + partialName + '.png');
+                await this.screenshoter.makeScreenshot(browser, partialName, PathTools.GetPartialPath(partialName, PartialFolder.Accepted));
+                await this.fileStorage.uploadBlobFromLocalFile(PathTools.GetPartialPath(partialName, PartialFolder.Accepted), PathTools.GetPartialPath(partialName, PartialFolder.Accepted));
             }
     
             await browser.close();

@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "azure-storage": "^2.10.2",
+    "@azure/storage-blob": "^10.3.0",
     "dotenv": "^6.2.0",
     "looks-same": "^6.0.0",
     "puppeteer": "^1.12.2",

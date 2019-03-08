@@ -4,7 +4,7 @@ import LocalFileStorage from './src/LocalFileStorage';
 require('dotenv').load();
 
 let fileStorage = process.env.AZURE_STORAGE_CONTAINER_NAME 
-     ? new AzureBlobStorage(process.env.AZURE_STORAGE_CONTAINER_NAME)
+     ? new AzureBlobStorage(process.env.AZURE_STORAGE_CONTAINER_NAME, process.env.AZURE_STORAGE_ACCOUNT_NAME, process.env.AZURE_STORAGE_ACCOUNT_KEY)
      : new LocalFileStorage();
 
 let testRunner = new TestRunner(process.env.STYLEGUIDE_URL, process.env.EXCLUDE_PARTIALS, fileStorage);

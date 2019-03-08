@@ -1,51 +1,81 @@
 import { IFileStorage } from "./IFileStorage";
-import * as azure from 'azure-storage';
+import * as fs from 'fs';
+import * as path from 'path';
+import {
+    SharedKeyCredential,
+    StorageURL,
+    ServiceURL,
+    ContainerURL,
+    Aborter,
+    BlobURL,
+    BlockBlobURL,
+    uploadFileToBlockBlob,
+} from '@azure/storage-blob';
+import { ContainerListBlobFlatSegmentResponse } from "@azure/storage-blob/typings/lib/generated/lib/models";
 
 export default class AzureBlobStorage implements IFileStorage {
-    
-    private azureStorageContainerName : string;
-    private blobService: azure.BlobService;
 
-    constructor(azureStorageContainerName: string) {
-        this.azureStorageContainerName = azureStorageContainerName;
-        this.blobService = azure.createBlobService();
+    private containerURL: ContainerURL;
+
+    constructor(containerName: string, accountName: string, accountKey: string) {
+        const sharedKeyCredential = new SharedKeyCredential(accountName, accountKey);
+        const pipeline = StorageURL.newPipeline(sharedKeyCredential);
+        const serviceUrl = new ServiceURL(`https://${accountName}.blob.core.windows.net`, pipeline);
+        this.containerURL = ContainerURL.fromServiceURL(serviceUrl, containerName);
     }
 
     doesBlobExist = async (partialPath: string): Promise<boolean> => {
-        return new Promise<boolean>((resolve => {
-            this.blobService.doesBlobExist(this.azureStorageContainerName, partialPath, (error:Error, result: azure.BlobService.BlobResult) => {
-                resolve(result.exists);
-            });
-        }));
-    }
-
-    uploadPartialBlob = async (partialPath: string, targetPath: string): Promise<void> => {
-        await this.blobService.createBlockBlobFromLocalFile(this.azureStorageContainerName, partialPath, targetPath, (error) => {
-            if (error != null) {
-                console.error('Error uploading file', error)
+        return new Promise<boolean>(async (resolve) => {
+            const blobUrl = BlobURL.fromContainerURL(this.containerURL, partialPath);
+            try {
+                await blobUrl.getProperties(Aborter.none);
+                resolve(true);
+            } catch {
+                resolve(false);
             }
         });
+    }
+
+    uploadBlobFromLocalFile = async (partialPath: string, targetPath: string): Promise<void> => {
+        const blobURL = BlobURL.fromContainerURL(this.containerURL, targetPath);
+        const blobBlockUrl = BlockBlobURL.fromBlobURL(blobURL);
+        await uploadFileToBlockBlob(Aborter.none, partialPath, blobBlockUrl);
     }
 
     downloadReferencePartialBlob = async (partialPath: string, targetPath: string): Promise<void> => {
-        return new Promise((resolve, reject) => {
-            this.blobService.getBlobToLocalFile(this.azureStorageContainerName, partialPath, targetPath, (error: Error) => {
-                if (error != null) {
-                    console.error('Error downloading file', error);
-                    reject(error);
-                } else {
-                    resolve();
-                }
+        return new Promise(async (resolve) => {
+            const blobUrl = BlobURL.fromContainerURL(this.containerURL, partialPath);
+
+            const downloadResponse = await blobUrl.download(Aborter.none, 0);
+            const content = downloadResponse.readableStreamBody;
+
+            let writeStream = fs.createWriteStream(targetPath);
+            content.pipe(writeStream);
+
+            writeStream.once("close", (fd: number) => {
+                resolve();
             })
         });
-        
+
     }
 
-    uploadDiffPartialBlob = async (partialPath: string, targetPath: string) : Promise<void> => {
-        await this.blobService.createBlockBlobFromLocalFile(this.azureStorageContainerName, partialPath, targetPath, (error) => {
-            if (error != null) {
-                console.error('Error uploading file', error)
+    clearBlobsInFolder = async (folderPath: string): Promise<void> => {
+        let marker = undefined;
+        do {
+            let listBlobsResponse: ContainerListBlobFlatSegmentResponse = await this.containerURL.listBlobFlatSegment(
+                Aborter.none,
+                marker
+            );
+
+            marker = listBlobsResponse.nextMarker;
+            for (const blob of listBlobsResponse.segment.blobItems) {
+                if (path.dirname(blob.name) != folderPath) {
+                    continue;
+                }
+                
+                let blobUrl = BlobURL.fromContainerURL(this.containerURL, blob.name);
+                blobUrl.delete(Aborter.none);
             }
-        });
+        } while (marker);
     }
 }

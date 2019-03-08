@@ -22,10 +22,11 @@ By default this tool will look for `accepted` and write to `diff` folders locall
 
 This option is useful when you want to run this tool on build agent which most probably has problems with storage as it is provisioned on each build.
 
-In order to use Azure Storage you need to two environment variables with self explanatory values:
+In order to use Azure Storage you need to three environment variables with self explanatory values:
 
 ```
-AZURE_STORAGE_CONNECTION_STRING=
+AZURE_STORAGE_ACCOUNT_NAME=
+AZURE_STORAGE_ACCOUNT_KEY=
 AZURE_STORAGE_CONTAINER_NAME=
 ```
 
