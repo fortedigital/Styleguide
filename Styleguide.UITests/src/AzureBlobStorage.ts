@@ -48,6 +48,9 @@ export default class AzureBlobStorage implements IFileStorage {
 
             const downloadResponse = await blobUrl.download(Aborter.none, 0);
             const content = downloadResponse.readableStreamBody;
+            if (!content) {
+                throw new Error('no content from ' + partialPath)
+            }
 
             let writeStream = fs.createWriteStream(targetPath);
             content.pipe(writeStream);

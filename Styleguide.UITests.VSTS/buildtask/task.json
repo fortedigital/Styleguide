@@ -1,0 +1,62 @@
+{
+    "id": "358055EC-6E64-4FC8-AF39-E6B9CD53FFC5",
+    "name": "StyleguideUITests",
+    "friendlyName": "Styleguide UI test",
+    "description": "Regression tests for Styleguide.",
+    "helpMarkDown": "",
+    "category": "Release",
+    "author": "Forte Digital",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Runs Styleguide UI Tests",
+    "inputs": [
+        {
+            "name": "StyleguideUrl",
+            "type": "string",
+            "label": "Styleguide URL",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Styleguide URL"
+        },
+        {
+            "name": "ExcludePartials",
+            "type": "string",
+            "label": "Exclude partials",
+            "defaultValue": null,
+            "required": false,
+            "helpMarkDown": "Semicolon (`;`) separated list of partials to exclude from tests"
+        },
+        {
+            "name": "AzureStorageAccountName",
+            "type": "string",
+            "label": "Azure Storage Accounte Name",
+            "defaultValue": null,
+            "required": false,
+            "helpMarkDown": "Azure Storage Accounte Name"
+        },
+        {
+            "name": "AzureStorageAccountKey",
+            "type": "string",
+            "label": "Azure Storage Account Key",
+            "defaultValue": null,
+            "required": false,
+            "helpMarkDown": "Azure Storage Account Key"
+        },
+        {
+            "name": "AzureStorageContainerName",
+            "type": "string",
+            "label": "Azure Storage Container Name",
+            "defaultValue": null,
+            "required": false,
+            "helpMarkDown": "Azure Storage Container Name"
+        }
+    ],
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+}

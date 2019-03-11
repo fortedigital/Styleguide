@@ -18,10 +18,16 @@ export class PartialDiscoveryService implements IPartialDiscoveryService {
         await page.goto(this.styleguideUrl, { waitUntil: 'networkidle0' });
 
         let partialNames = await page.evaluate(() => {
-            let data = [];
+            let data: string[] = [];
             let elements = document.getElementsByClassName('Tree-item');
             for (let i = 0; i < elements.length; i++) {
-                data.push(elements[i].querySelector('a').getAttribute('data-component'));
+                let element = elements[i].querySelector('a');
+
+                if (element == null) continue;
+                let partialName = element.getAttribute('data-component');
+
+                if (partialName == null) continue;
+                data.push(partialName);
             }
 
             return data;

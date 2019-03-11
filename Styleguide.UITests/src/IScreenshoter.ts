@@ -18,7 +18,16 @@ export class Screenshoter implements IScreenshoter {
                 componentPage.setDefaultNavigationTimeout(60000);
                 await componentPage.goto(this.styleguideUrl + '/Component/' + partialName, { waitUntil: 'networkidle0' });
                 const bodyHandle = await componentPage.$('body');
-                const { width, height } = await bodyHandle.boundingBox();
+                if (bodyHandle == null) {
+                    throw new Error('No body element');
+                }
+
+                const boundingBox = await bodyHandle.boundingBox();
+                if (boundingBox == null) {
+                    throw new Error('No bounding box');
+                }
+
+                const { width, height } = boundingBox;
         
                 console.log('Screenshoting ' + partialName, targetPath);
                 await componentPage.screenshot({
