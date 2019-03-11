@@ -11,16 +11,11 @@
     ],
     "description": "A VSTS Task that run Styleguide UI Tests",
     "categories": [
-        "Build and release"
+        "Azure Pipelines"
     ],
     "icons": {
         "default": "icon.png"        
     },
-    "files": [
-        {
-            "path": "buildAndReleaseTask"
-        }
-    ],
     "contributions": [
         {
             "id": "StyleGuideUITestsTask",
