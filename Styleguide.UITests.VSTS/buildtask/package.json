@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "azure-pipelines-task-lib": "^2.7.7"
+    "azure-pipelines-task-lib": "^2.7.7",
+    "StyleguideUiTests": "file:../../Styleguide.UiTests"
   },
   "devDependencies": {
     "@types/node": "^11.11.0",

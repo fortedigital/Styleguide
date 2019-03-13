@@ -1,7 +1,7 @@
 import tl = require('azure-pipelines-task-lib/task');
-import TestRunner from '../../Styleguide.UITests/src/TestRunner';
-import AzureBlobStorage from '../../Styleguide.UITests/src/AzureBlobStorage';
-import LocalFileStorage from '../../Styleguide.UITests/src/LocalFileStorage';
+import TestRunner from 'StyleguideUiTests/src/TestRunner';
+import AzureBlobStorage from 'StyleguideUiTests/src/AzureBlobStorage';
+import LocalFileStorage from 'StyleguideUiTests/src/LocalFileStorage';
 
 
 async function run() {

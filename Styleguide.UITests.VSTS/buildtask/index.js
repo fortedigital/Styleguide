@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const tl = require("azure-pipelines-task-lib/task");
-const TestRunner_1 = require("../../Styleguide.UITests/src/TestRunner");
-const AzureBlobStorage_1 = require("../../Styleguide.UITests/src/AzureBlobStorage");
-const LocalFileStorage_1 = require("../../Styleguide.UITests/src/LocalFileStorage");
+const TestRunner_1 = require("StyleguideUiTests/src/TestRunner");
+const AzureBlobStorage_1 = require("StyleguideUiTests/src/AzureBlobStorage");
+const LocalFileStorage_1 = require("StyleguideUiTests/src/LocalFileStorage");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
