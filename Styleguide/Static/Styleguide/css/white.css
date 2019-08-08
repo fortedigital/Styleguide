@@ -1521,7 +1521,7 @@ h6 {
   min-width: 240px;
   max-width: 480px;
   background-color: #f6f6f6;
-  padding: 1rem 0; }
+  padding: 20px 0; }
   [dir="ltr"] .Frame-panel--sidebar {
     border-right: 1px solid rgba(83, 83, 99, 0.25); }
   [dir="rtl"] .Frame-panel--sidebar {
@@ -1754,7 +1754,7 @@ h6 {
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
   max-height: 3rem;
-  padding: 0.75rem;
+  padding: 5px;
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center; }
@@ -2272,7 +2272,9 @@ h6 {
   [dir="rtl"] .Tree-depth-2 .Tree-collectionLabel, [dir="rtl"]
   .Tree-depth-2 .Tree-entityLink {
     padding-right: 2rem; }
-
+  .Tree-depth-2 {
+    margin-bottom: 30px;
+  }
 .Tree-depth-3 .Tree-collectionLabel,
 .Tree-depth-3 .Tree-entityLink {
   -webkit-padding-start: 3rem;
