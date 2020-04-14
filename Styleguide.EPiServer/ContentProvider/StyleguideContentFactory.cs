@@ -72,6 +72,7 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
             if (content is ILocalizable localizable)
             {
                 localizable.Language = new CultureInfo("no");
+                localizable.MasterLanguage = localizable.Language;
             }
 
             if (content is IVersionable versionable)
