@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -42,6 +43,8 @@ namespace Forte.Styleguide
                 var variantsToken = jObject.SelectToken(VariantsPropertyName)
                                     ?? throw new InvalidOperationException($"Property '{VariantsPropertyName}' was not found.");
 
+                var jsonSerializer = new JsonSerializer();
+                jsonSerializer.Converters.Add(new ResultConverter());
 
                 int variantNo = 1;
                 var variantsList = new List<MvcPartialComponentVariantViewModel>();
@@ -56,7 +59,7 @@ namespace Forte.Styleguide
                     var viewModel = new MvcPartialComponentVariantViewModel
                     {
                         Name = variantName?.ToString() ?? (variantsToken.Count() == 1 ? "Normal" : $"Variant {variantNo}"),
-                        ViewData = variantViewData?.ToObject<ViewDataDictionary>(serializer) ?? new ViewDataDictionary()
+                        ViewData = variantViewData?.ToObject<ViewDataDictionary>(jsonSerializer) ?? new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
                     };
 
                     if (rootModelClone is JContainer container)

@@ -1,34 +1,37 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Forte.Styleguide
 {
     public class StyleguideController : Controller
     {
-        private readonly ComponentCatalogLoader loader;
+        private readonly ComponentCatalogLoader _loader;
 
         public StyleguideController(ComponentCatalogLoader loader)
         {
-            this.loader = loader;
+            _loader = loader;
         }
-
-        public ActionResult Index()
+        public ActionResult Indexxx()
         {
-            var catalog = this.loader.Load(reload: true);
+            
+            var catalog = _loader.Load(reload: true);
             var model = new StyleguideIndexViewModel(catalog.Components);
 
+            
             return View(model);
         }
 
         public async Task<ActionResult> Component(string name)
         {
-            if (string.IsNullOrEmpty(name))            
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Name of the component is not defined");            
+            if (string.IsNullOrEmpty(name))
+                return BadRequest("Name of the component is not defined");
 
             var component = GetComponentByName(name);
             if (component == null)
-                return HttpNotFound();
+                return NotFound();
 
             return await component.Execute(ControllerContext);
         }
@@ -36,35 +39,30 @@ namespace Forte.Styleguide
         [HttpGet]
         public ActionResult ComponentContext(string name)
         {
-            if (string.IsNullOrEmpty(name))            
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Name of the component is not defined");
-            
+            if (string.IsNullOrEmpty(name))
+                return BadRequest("Name of the component is not defined");
+
             var component = GetComponentByName(name);
             if (component == null)
-                return HttpNotFound();
+                return NotFound();
 
-            using (var reader = component.File.OpenText())
+            using var reader = component.File.OpenText();
+            var model = new MvcPartialComponentContextViewModel
             {
-                var model = new MvcPartialComponentContextViewModel
-                {
-                    Name = component.Name,
-                    Context = reader.ReadToEnd()
-                };
+                Name = component.Name,
+                Context = reader.ReadToEnd()
+            };
                 
-                return new PartialViewResult()
-                {
-                    // ReSharper disable once Mvc.ViewNotResolved
-                    View = ViewEngines.Engines.FindView(this.ControllerContext, "MvcPartialComponentContext", null).View,
-                    ViewName = "MvcPartialComponentContext",
-                    ViewData = new ViewDataDictionary(model),
-                    ViewEngineCollection = ViewEngines.Engines
-                };    
-            }
+            return new PartialViewResult()
+            {
+                ViewName = "MvcPartialComponentContext",
+                ViewData = ViewData
+            };
         }
 
         private IStyleguideComponentDescriptor GetComponentByName(string componentName)
         {
-            var catalog = this.loader.Load();
+            var catalog = _loader.Load();
             return catalog.GetComponentByName(componentName);
         }
     }

@@ -30,8 +30,8 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
 
             provider.Initialize(ProviderName, new NameValueCollection
             {
-                { ContentProviderElement.EntryPointString, entryPoint.ToString() },
-                { ContentProviderElement.CapabilitiesString, ContentProviderCapabilities.None.ToString() }
+                { "entryPoint", entryPoint.ToString() },
+                {"capabilities", ContentProviderCapabilities.None.ToString() }
             });
 
             var providerManager = ServiceLocator.Current.GetInstance<IContentProviderManager>();

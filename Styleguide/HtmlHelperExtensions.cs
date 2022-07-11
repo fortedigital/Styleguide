@@ -1,11 +1,12 @@
-﻿using System.Web.Mvc;
-using System.Web.Mvc.Html;
+﻿
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Forte.Styleguide
 {
     public static class HtmlHelperExtensions
     {
-        public static MvcHtmlString StyleguideComponentLink(this HtmlHelper html, IStyleguideComponentDescriptor component,
+        public static HtmlString StyleguideComponentLink(this IHtmlHelper html, IStyleguideComponentDescriptor component,
             object htmlAttributes = null)
         {
             return html.ActionLink(
@@ -13,7 +14,7 @@ namespace Forte.Styleguide
                 "Component", 
                 "Styleguide", 
                 new { name = component.Name },
-                htmlAttributes ?? new object());
+                htmlAttributes ?? new object()) as HtmlString;
         }
     }
 }

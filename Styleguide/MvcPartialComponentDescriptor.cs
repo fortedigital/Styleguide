@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Compilation;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 
 namespace Forte.Styleguide
@@ -16,56 +19,54 @@ namespace Forte.Styleguide
         public FileInfo File { get; }
         public string LayoutPath { get; }
 
-        private readonly JsonSerializerSettings serializerSettings;
+        private readonly JsonSerializerSettings _serializerSettings;
+        private readonly IViewEngine _engine;
 
-        public MvcPartialComponentDescriptor(string name, string category, string layoutPath, FileInfo file, JsonSerializerSettings serializerSettings)
+        public MvcPartialComponentDescriptor(string name, string category, string layoutPath, FileInfo file, JsonSerializerSettings serializerSettings, IViewEngine engine)
         {
-            this.Name = name;
-            this.Category = category;
-            this.File = file;
-            this.LayoutPath = layoutPath;
-            this.serializerSettings = serializerSettings;
+            Name = name;
+            Category = category;
+            File = file;
+            LayoutPath = layoutPath;
+            _engine = engine;
+            _serializerSettings = serializerSettings;
         }
 
         public async Task<ActionResult> Execute(ControllerContext context)
         {
-            var view = FindPartialView(context, this.Name);
+            var view = FindPartialView(context, Name);
             if (view == null)
-                return new HttpNotFoundResult($"Cound not find partial view {this.Name}");
+                return new NotFoundObjectResult($"Cound not find partial view {Name}");
 
             var viewModelType = ResolveViewModelType(view);
 
-            using (var reader = this.File.OpenText())
+            using var reader = this.File.OpenText();
+            var jsonContent = await reader.ReadToEndAsync();
+            var viewModel = ViewModelDeserializer.Deserialize(viewModelType, jsonContent, Name, _serializerSettings);
+            if (string.IsNullOrEmpty(viewModel.LayoutPath))
             {
-                var jsonContent = await reader.ReadToEndAsync();
-                var viewModel = ViewModelDeserializer.Deserialize(viewModelType, jsonContent, this.Name, this.serializerSettings);
-                if (string.IsNullOrEmpty(viewModel.LayoutPath))
-                {
-                    viewModel.LayoutPath = this.LayoutPath;
-                }
-                
-                return PartialView(context, viewModel);
+                viewModel.LayoutPath = this.LayoutPath;
             }
+                
+            return PartialView(context, viewModel);
         }
 
         private static PartialViewResult PartialView(ControllerContext context, MvcPartialComponentViewModel model)
         {
             return new PartialViewResult()
             {
-                // ReSharper disable once Mvc.ViewNotResolved
-                View = ViewEngines.Engines.FindView(context, "MvcPartialComponent", null).View,
                 ViewName = "MvcPartialComponent",
-                ViewData = new ViewDataDictionary(model),
-                ViewEngineCollection = ViewEngines.Engines
+                ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()) {{"model", model}}
             };
         }
 
-        private static Type ResolveViewModelType(BuildManagerCompiledView view)
+        private static Type ResolveViewModelType(RazorView view)
         {
-            var viewType = BuildManager.GetCompiledType(view.ViewPath);
+
+            var viewType = ModuleViewCompiler.Current.CompileAsync(view.Path).Result.Type;
             var webViewPageType = viewType
                 .GetBaseTypes()
-                .FirstOrDefault(t =>t.IsGenericType && t.GetGenericTypeDefinition() == typeof(WebViewPage<>));
+                .FirstOrDefault(t =>t.IsGenericType && t.GetGenericTypeDefinition() == typeof(RazorPage<>));
             
             if (webViewPageType != null)
             {
@@ -75,9 +76,9 @@ namespace Forte.Styleguide
             return typeof(object);
         }
 
-        private static RazorView FindPartialView(ControllerContext context, string name)
+        private RazorView FindPartialView(ControllerContext context, string name)
         {
-            var result = ViewEngines.Engines.FindPartialView(context, name);
+            var result = _engine.FindView(context, name, false);
 
             return result?.View as RazorView;
         }

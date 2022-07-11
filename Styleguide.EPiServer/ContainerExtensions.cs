@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Mvc.Routing.Constraints;
-using System.Web.Routing;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using EPiServer;
 using EPiServer.Construction;
 using EPiServer.DataAbstraction;
@@ -10,19 +8,28 @@ using Forte.Styleguide.EPiServer.ContentProvider;
 using Forte.Styleguide.EPiServer.JsonConverters;
 using Newtonsoft.Json;
 using StructureMap;
+using Forte.Styleguide.EPiServer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace Forte.Styleguide.EPiServer
 {
+
+    public static class MyServer
+    {
+        public static string MapPath(string path)
+        {
+            return Path.Combine(
+                (string)AppDomain.CurrentDomain.GetData("ContentRootPath"),
+                path);
+        }
+    }
+
+
     public static class ContainerExtensions
     {
         public static void ConfigureStyleguide(this IContainer container, string featuresRootPath = "~/Features", string componentFileNameExtension = ".styleguide.json", string layoutPath = null)
         {
-            RouteTable.Routes.MapRoute(
-                "styleguide",
-                "styleguide/{action}/{name}",
-                new { controller = "styleguide", action = "index", name = UrlParameter.Optional }
-            );
-
             container.Configure(config =>
             {
                 config.For<IStyleguideContentFactory>().Add(c => new StyleguideContentFactory(
@@ -32,7 +39,7 @@ namespace Forte.Styleguide.EPiServer
                 
                 config.For<IStyleguideContentRepository>().Add<StyleguideContentRepository>();
                 
-                config.For<IStyleguideComponentLoader>().Add(c => new MvcPartialComponentLoader(HttpContext.Current.Server.MapPath(featuresRootPath), componentFileNameExtension, new JsonSerializerSettings
+                config.For<IStyleguideComponentLoader>().Add(c => new MvcPartialComponentLoader( MyServer.MapPath(featuresRootPath), componentFileNameExtension, new JsonSerializerSettings
                 {
                     Converters = new List<JsonConverter>
                     {
@@ -40,7 +47,7 @@ namespace Forte.Styleguide.EPiServer
                         c.GetInstance<ContentReferenceConverter>(),
                         c.GetInstance<ContentAreaConverter>()
                     }
-                }, layoutPath));
+                }, c.GetInstance<IViewEngine>() ,layoutPath));
                 
             });
         }
