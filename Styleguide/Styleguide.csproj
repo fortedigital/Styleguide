@@ -109,8 +109,10 @@
     <Content Include="Static\Styleguide\img\icon-navigation-opened.svg" />
     <Content Include="Static\Styleguide\img\icon-window.svg" />
     <Content Include="Static\Styleguide\img\loader.svg" />
+    <Content Include="Static\Styleguide\js\jquery-3.6.0.js" />
     <Content Include="Static\Styleguide\js\mandelbrot.js" />
     <Content Include="Static\Styleguide\js\mandelbrot.js.map" />
+    <Content Include="Static\Styleguide\js\rxjs.js" />
     <Content Include="Styleguide.nuspec" />
     <Content Include="Views\Styleguide\MvcPartialComponent.cshtml" />
     <Content Include="Views\Styleguide\Index.cshtml" />
