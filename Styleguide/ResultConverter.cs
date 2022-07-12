@@ -19,19 +19,18 @@ namespace Forte.Styleguide
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            // Load the JSON for the Result into a JObject
             JObject jo = JObject.Load(reader);
 
             // Read the properties which will be used as constructor parameters
-            int? code = (int?)jo["Code"];
-            string format = (string)jo["Format"];
+            var variant = jo.ToObject<Dictionary<string, object>>();
 
             // Construct the Result object using the non-default constructor
-            ViewDataDictionary result = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary());
+            var result = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary());
 
-            // (If anything else needs to be populated on the result object, do that here)
-
-            // Return the result
+            foreach (var keyValuePair in variant)
+            {
+                result.Add(keyValuePair);
+            }
             return result;
         }
 
