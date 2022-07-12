@@ -6,9 +6,7 @@
     <!--Generates a package at build-->
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <!--Do not include the generator as a lib dependency-->
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>true</ImplicitUsings>
-    <LangVersion>Latest</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
