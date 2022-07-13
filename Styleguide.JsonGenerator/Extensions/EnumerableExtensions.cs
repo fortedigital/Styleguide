@@ -20,6 +20,10 @@ namespace Styleguide.JsonGenerator.Extensions
         public static IEnumerable<INamedTypeSymbol> GetAllFromCodeBase(this IEnumerable<INamedTypeSymbol> list) =>
             list.Where(typeSymbol => typeSymbol.Locations.Any(location => location.Kind == LocationKind.SourceFile));
 
+        public static IEnumerable<INamedTypeSymbol> GetAllWithAttribute(this IEnumerable<INamedTypeSymbol> list,
+            INamedTypeSymbol attribute) =>
+            list.Where(typeSymbol => typeSymbol.HasAttribute(attribute));
+
         public static void GenerateStyleguideJsonFilesForControllers(
             this IEnumerable<(INamedTypeSymbol Controller, INamedTypeSymbol BlockModel)> list) =>
             list.AsParallel().ForAll(tuple =>

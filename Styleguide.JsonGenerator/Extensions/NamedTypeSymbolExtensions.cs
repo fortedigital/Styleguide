@@ -23,6 +23,15 @@ namespace Styleguide.JsonGenerator.Extensions
             return false;
         }
 
+        public static bool HasAttribute(this INamedTypeSymbol symbol, INamedTypeSymbol attributeSymbol) =>
+            symbol.GetAttributes().Any(attribute => SymbolEqualityComparer.Default.Equals(attributeSymbol, attribute.AttributeClass));
+        
+        
+        public static string GetType(this INamedTypeSymbol symbol, INamedTypeSymbol attributeSymbol)
+        {
+            return symbol.GetAttributes().First().ConstructorArguments.FirstOrDefault().Type.MetadataName;
+        }
+
         public static string GetContainingFilePath(this INamedTypeSymbol symbol) =>
             symbol.Locations.FirstOrDefault()?.GetLineSpan().Path;
     }

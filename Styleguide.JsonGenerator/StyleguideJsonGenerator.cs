@@ -14,6 +14,7 @@ namespace Styleguide.JsonGenerator
     {
         private const string EPiServerBlockDataTypeMetadataName = "EPiServer.Core.BlockData";
         private const string EPiServerBlockControllerTypeMetadataName = "EPiServer.Web.Mvc.BlockController`1";
+        private const string StyleguideViewModelForAttributeTypeMetadataName = "Styleguide.JsonGenerator.Annotations.StyleguideViewModelForAttribute";
 
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -33,13 +34,19 @@ namespace Styleguide.JsonGenerator
             var epiServerBlockDataType = compilation.GetTypeByMetadataNameOrThrow(EPiServerBlockDataTypeMetadataName);
             var epiServerBlockControllerType =
                 compilation.GetTypeByMetadataNameOrThrow(EPiServerBlockControllerTypeMetadataName);
+            var styleguideViewModelForAttributeType =
+                compilation.GetTypeByMetadataNameOrThrow(StyleguideViewModelForAttributeTypeMetadataName);
 
-            var epiServerBlockControllerDataTypes =
+            var blockControllers =
                 allTypes.GetAllDescendantsOf(epiServerBlockControllerType).GetAllNonAbstract().GetAllFromCodeBase();
-            var epiServerBlockDataTypes =
-                allTypes.GetAllDescendantsOf(epiServerBlockDataType).GetAllNonAbstract().GetAllFromCodeBase();
+            var blockModels =
+                allTypes.GetAllDescendantsOf(epiServerBlockDataType).GetAllNonAbstract().GetAllFromCodeBase(); 
+            var blockViewModels = allTypes.GetAllNonAbstract().GetAllFromCodeBase()
+                .GetAllWithAttribute(styleguideViewModelForAttributeType);
 
-            GroupControllersWithCorrespondingBlocks(epiServerBlockControllerDataTypes, epiServerBlockDataTypes)
+            var x = blockViewModels.First().GetAttributes().First().ConstructorArguments.First().Value;
+            
+            GroupControllersWithCorrespondingBlocks(blockControllers, blockModels)
                 .GenerateStyleguideJsonFilesForControllers();
 
         }
