@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -44,7 +43,7 @@ namespace Styleguide.JsonGenerator
             var blockViewModels = allTypes.GetAllNonAbstract().GetAllFromCodeBase()
                 .GetAllWithAttribute(styleguideViewModelForAttributeType);
 
-            var x = blockViewModels.First().GetAttributes().First().ConstructorArguments.First().Value;
+            var x = GroupViewModelsWithCorrespondingModels(blockViewModels, compilation);
             
             GroupControllersWithCorrespondingBlocks(blockControllers, blockModels)
                 .GenerateStyleguideJsonFilesForControllers();
@@ -58,5 +57,11 @@ namespace Styleguide.JsonGenerator
                 blockType => blockType.MetadataName,
                 (controller, blockModel) => (controller, blockModel)
             );
+        
+        private INamedTypeSymbol GetModelFromViewModel(INamedTypeSymbol viewModel, CSharpCompilation compilation) => viewModel.GetAttributes().First().ConstructorArguments.First().ConvertToType(compilation);
+
+        private IEnumerable<(INamedTypeSymbol BlockModel, INamedTypeSymbol BlockViewModel)>
+            GroupViewModelsWithCorrespondingModels(IEnumerable<INamedTypeSymbol> viewModels, CSharpCompilation compilation) => viewModels
+            .Select(x => (GetModelFromViewModel(x, compilation), x));
     }
 }
