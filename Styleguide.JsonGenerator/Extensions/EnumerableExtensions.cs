@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -25,11 +26,12 @@ namespace Styleguide.JsonGenerator.Extensions
             {
                 var targetDirectory = Directory.GetParent(tuple.Controller.GetContainingFilePath()) ?? throw new ArgumentNullException();
                 var targetFileName = tuple.Controller.Name.Replace("Controller", string.Empty);
-
+                Debug.Write($"{targetFileName}: ");
                 try
                 {
                     using (var fs = new FileStream($"{Path.Combine(targetDirectory.FullName, $"{targetFileName}{StyleguideJsonFileExtension}")}", FileMode.CreateNew, FileAccess.Write, FileShare.None))
                     {
+                        Debug.WriteLine("CREATED");
                         using (var streamWriter = new StreamWriter(fs))
                         {
                             streamWriter.Write("{ }");
@@ -38,6 +40,7 @@ namespace Styleguide.JsonGenerator.Extensions
                 }
                 catch
                 {
+                    Debug.WriteLine("SKIPPED");
                     // ignored
                 }
             });
