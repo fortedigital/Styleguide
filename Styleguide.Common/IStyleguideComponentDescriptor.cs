@@ -1,6 +1,10 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+#if NETSTANDARD2_0
+    using Microsoft.AspNetCore.Mvc;
+#else
+    using System.Web.Mvc;
+#endif
 
 namespace Forte.Styleguide
 {

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Html;
+﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Forte.Styleguide
@@ -10,9 +9,9 @@ namespace Forte.Styleguide
             object htmlAttributes = null)
         {
             return html.ActionLink(
-                component.Name, 
-                "Component", 
-                "Styleguide", 
+                component.Name,
+                "Component",
+                "Styleguide",
                 new { name = component.Name },
                 htmlAttributes ?? new object()) as HtmlString;
         }
