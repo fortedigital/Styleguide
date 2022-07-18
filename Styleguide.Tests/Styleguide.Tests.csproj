@@ -5,6 +5,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RazorStyleguide\Styleguide.csproj" />
+    <ProjectReference Include="..\Styleguide.EPiServer\Styleguide.EPiServer.csproj" />
     <ProjectReference Include="..\Styleguide\Styleguide.csproj" />
   </ItemGroup>
   <ItemGroup>

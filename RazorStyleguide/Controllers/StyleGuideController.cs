@@ -14,14 +14,15 @@ namespace Forte.Styleguide
         {
             _loader = loader;
         }
-        public ActionResult Indexxx()
+        [HttpGet("styleguide")]
+        public ActionResult Index()
         {
             
             var catalog = _loader.Load(reload: true);
             var model = new StyleguideIndexViewModel(catalog.Components);
 
             
-            return View(model);
+            return View("~/Areas/MyFeature/Pages/Index.cshtml", model);
         }
 
         public async Task<ActionResult> Component(string name)
@@ -56,7 +57,7 @@ namespace Forte.Styleguide
             return new PartialViewResult()
             {
                 ViewName = "MvcPartialComponentContext",
-                ViewData = ViewData
+                ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()) { { "model", model } }
             };
         }
 
