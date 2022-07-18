@@ -7,7 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="..\RazorStyleguide\Styleguide.csproj" />
     <ProjectReference Include="..\Styleguide.EPiServer\Styleguide.EPiServer.csproj" />
-    <ProjectReference Include="..\Styleguide\Styleguide.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
