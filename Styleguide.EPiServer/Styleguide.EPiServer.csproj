@@ -50,6 +50,6 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RazorStyleguide\Styleguide.csproj" />
+    <ProjectReference Include="..\Styleguide\Styleguide.csproj" />
   </ItemGroup>
 </Project>
