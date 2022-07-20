@@ -2,6 +2,8 @@
 
 namespace Styleguide.JsonGenerator.Annotations
 {
+    // ReSharper disable once UnusedType.Global
+    [AttributeUsage(AttributeTargets.Class)]
     public class StyleguideViewModelForAttribute : Attribute
     {
         // ReSharper disable once UnusedAutoPropertyAccessor.Global

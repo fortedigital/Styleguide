@@ -6,8 +6,11 @@ namespace Styleguide.JsonGenerator.Extensions
 {
     public static class TypedConstantExtensions
     {
-        private const string TypeSymbolNameFromCSharpStringPattern = @"^{typeof\((?<typeSymbolMetadataName>.+)\)}$";
+        private const string TypeSymbolNameFromCSharpStringPattern = @"typeof\((?<typeSymbolMetadataName>.+)\)";
         
+        /*
+         * Please replace this with generic Attribute as soon as C#10 is allowed in SourceGenerators
+         */
         public static INamedTypeSymbol ConvertToType(this TypedConstant typedConstant, CSharpCompilation compilation)
         {
             var regex = new Regex(TypeSymbolNameFromCSharpStringPattern);

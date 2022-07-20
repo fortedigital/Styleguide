@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Styleguide.JsonGenerator.Extensions;
@@ -11,10 +14,35 @@ namespace Styleguide.JsonGenerator
     [Generator]
     public class StyleguideJsonGenerator : ISourceGenerator
     {
-        private const string EPiServerBlockDataTypeMetadataName = "EPiServer.Core.BlockData";
-        private const string EPiServerBlockControllerTypeMetadataName = "EPiServer.Web.Mvc.BlockController`1";
-        private const string StyleguideViewModelForAttributeTypeMetadataName = "Styleguide.JsonGenerator.Annotations.StyleguideViewModelForAttribute";
+        static StyleguideJsonGenerator()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += (_, args) =>
+            {
+                AssemblyName name = new AssemblyName(args.Name);
+                Assembly loadedAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().FullName == name.FullName);
+                if (loadedAssembly != null)
+                {
+                    return loadedAssembly;
+                }
 
+                string resourceName = $"Styleguide.JsonGenerator.{name.Name}.dll";
+
+                using (Stream resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                {
+                    if (resourceStream == null)
+                    {
+                        return null;
+                    }
+
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        resourceStream.CopyTo(memoryStream);
+                        return Assembly.Load(memoryStream.ToArray());
+                    }
+                }
+            };
+        }
+        
         public void Initialize(GeneratorInitializationContext context)
         {
 #if DEBUG
@@ -28,40 +56,9 @@ namespace Styleguide.JsonGenerator
         public void Execute(GeneratorExecutionContext context)
         {
             var compilation = (CSharpCompilation)context.Compilation;
-
-            var allTypes = compilation.GetAllTypes();
-            var epiServerBlockDataType = compilation.GetTypeByMetadataNameOrThrow(EPiServerBlockDataTypeMetadataName);
-            var epiServerBlockControllerType =
-                compilation.GetTypeByMetadataNameOrThrow(EPiServerBlockControllerTypeMetadataName);
-            var styleguideViewModelForAttributeType =
-                compilation.GetTypeByMetadataNameOrThrow(StyleguideViewModelForAttributeTypeMetadataName);
-
-            var blockControllers =
-                allTypes.GetAllDescendantsOf(epiServerBlockControllerType).GetAllNonAbstract().GetAllFromCodeBase();
-            var blockModels =
-                allTypes.GetAllDescendantsOf(epiServerBlockDataType).GetAllNonAbstract().GetAllFromCodeBase(); 
-            var blockViewModels = allTypes.GetAllNonAbstract().GetAllFromCodeBase()
-                .GetAllWithAttribute(styleguideViewModelForAttributeType);
-
-            var x = GroupViewModelsWithCorrespondingModels(blockViewModels, compilation);
             
-            GroupControllersWithCorrespondingBlocks(blockControllers, blockModels)
-                .GenerateStyleguideJsonFilesForControllers();
-
+            var generator = new JsonGenerator(compilation);
+            generator.Run();
         }
-        
-        private IEnumerable<(INamedTypeSymbol Controller, INamedTypeSymbol BlockModel)> GroupControllersWithCorrespondingBlocks(IEnumerable<INamedTypeSymbol> controllers, IEnumerable<INamedTypeSymbol> blocks) => controllers
-            .Join(
-                blocks,
-                controllerType => controllerType.BaseType?.TypeArguments.FirstOrDefault()?.MetadataName,
-                blockType => blockType.MetadataName,
-                (controller, blockModel) => (controller, blockModel)
-            );
-        
-        private INamedTypeSymbol GetModelFromViewModel(INamedTypeSymbol viewModel, CSharpCompilation compilation) => viewModel.GetAttributes().First().ConstructorArguments.First().ConvertToType(compilation);
-
-        private IEnumerable<(INamedTypeSymbol BlockModel, INamedTypeSymbol BlockViewModel)>
-            GroupViewModelsWithCorrespondingModels(IEnumerable<INamedTypeSymbol> viewModels, CSharpCompilation compilation) => viewModels
-            .Select(x => (GetModelFromViewModel(x, compilation), x));
     }
 }
