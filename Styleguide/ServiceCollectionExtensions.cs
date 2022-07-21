@@ -12,19 +12,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Forte.Styleguide
 {
-    public static class StyleguideServiceColletionExtensions
+    public static class StyleguideServiceCollectionExtensions
     {
-        public static IServiceCollection AddStyleGuide(this IServiceCollection services)
+        public static IServiceCollection AddStyleGuideEpiserverCore(this IServiceCollection services)
         {
-            services.Configure<RazorViewEngineOptions>(o =>
-            {
-                o.ViewLocationFormats.Add("Views/{1}/{0}" + RazorViewEngine.ViewExtension);
-            });
             services.AddMvc(options => options.EnableEndpointRouting = false);
             return services;
         }
 
-        public static void UseEpiServerStyleguide(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static void UseStyleguideEpiserverCore(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMvc(routes =>
                 routes.MapRoute(

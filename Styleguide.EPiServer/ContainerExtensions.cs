@@ -8,8 +8,6 @@ using Forte.Styleguide.EPiServer.ContentProvider;
 using Forte.Styleguide.EPiServer.JsonConverters;
 using Newtonsoft.Json;
 using StructureMap;
-using Forte.Styleguide.EPiServer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace Forte.Styleguide.EPiServer
