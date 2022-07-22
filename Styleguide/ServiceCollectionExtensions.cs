@@ -16,6 +16,10 @@ namespace Forte.Styleguide
     {
         public static IServiceCollection AddStyleGuideEpiserverCore(this IServiceCollection services)
         {
+            services.Configure<RazorViewEngineOptions>(o =>
+            {
+                o.ViewLocationFormats.Add("Views/{1}/{0}" + RazorViewEngine.ViewExtension);
+            });
             services.AddMvc(options => options.EnableEndpointRouting = false);
             return services;
         }
