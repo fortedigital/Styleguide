@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Forte.Styleguide.Views.Styleguide;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Styleguide.Views.Styleguide;
 
-namespace Styleguide
+namespace Forte.Styleguide
 {
     public static class ViewModelDeserializer
     {

@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Styleguide;
 
 namespace Forte.Styleguide.EPiServer
 {

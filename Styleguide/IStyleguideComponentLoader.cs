@@ -1,4 +1,4 @@
-﻿namespace Styleguide
+﻿namespace Forte.Styleguide
 {
     public interface IStyleguideComponentLoader
     {

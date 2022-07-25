@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Styleguide
+namespace Forte.Styleguide
 {
     class ResultConverter : JsonConverter
     {

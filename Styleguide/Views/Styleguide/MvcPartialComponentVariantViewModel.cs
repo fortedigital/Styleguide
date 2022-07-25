@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace Styleguide.Views.Styleguide
+namespace Forte.Styleguide.Views.Styleguide
 {
     public class MvcPartialComponentVariantViewModel
     {

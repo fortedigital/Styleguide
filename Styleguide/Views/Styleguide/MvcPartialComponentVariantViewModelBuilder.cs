@@ -1,4 +1,4 @@
-﻿namespace Styleguide.Views.Styleguide
+﻿namespace Forte.Styleguide.Views.Styleguide
 {
     public class MvcPartialComponentVariantViewModelBuilder
     {

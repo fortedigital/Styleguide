@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Newtonsoft.Json;
 
-namespace Styleguide
+namespace Forte.Styleguide
 {
     public class MvcPartialComponentLoader : IStyleguideComponentLoader
     {

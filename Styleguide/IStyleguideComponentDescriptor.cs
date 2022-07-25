@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Styleguide
+namespace Forte.Styleguide
 {
     public interface IStyleguideComponentDescriptor
     {

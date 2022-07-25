@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
-namespace Styleguide
+namespace Forte.Styleguide
 {
     public class ModuleViewCompiler : IViewCompiler
     {

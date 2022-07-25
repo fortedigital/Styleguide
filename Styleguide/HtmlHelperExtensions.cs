@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Styleguide
+namespace Forte.Styleguide
 {
     public static class HtmlHelperExtensions
     {
