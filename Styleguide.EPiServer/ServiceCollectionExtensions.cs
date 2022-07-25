@@ -72,7 +72,6 @@ namespace Forte.Styleguide.EPiServer
             //AppDomain.CurrentDomain.SetData("ContentRootPath", env.ContentRootPath);
             //AppDomain.CurrentDomain.SetData("WebRootPath", env.WebRootPath);
         }
-       
     }
 
 }
