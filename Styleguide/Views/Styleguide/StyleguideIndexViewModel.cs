@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Forte.Styleguide
+﻿namespace Styleguide.Views.Styleguide
 {
     public class StyleguideIndexViewModel
     {

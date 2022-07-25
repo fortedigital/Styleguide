@@ -8,6 +8,8 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.clef
+Styleguide.EPiServer/modules/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

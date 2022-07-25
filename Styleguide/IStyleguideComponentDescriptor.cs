@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Forte.Styleguide
+namespace Styleguide
 {
     public interface IStyleguideComponentDescriptor
     {

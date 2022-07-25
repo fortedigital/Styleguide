@@ -1,4 +1,4 @@
-﻿namespace Forte.Styleguide
+﻿namespace Styleguide
 {
     public static class StringExtensions
     {

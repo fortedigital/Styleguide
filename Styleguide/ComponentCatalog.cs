@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Forte.Styleguide
+﻿namespace Styleguide
 {
     public class ComponentCatalog
     {

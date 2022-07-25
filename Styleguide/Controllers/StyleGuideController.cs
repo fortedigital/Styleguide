@@ -1,10 +1,9 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Styleguide.Views.Styleguide;
 
-namespace Forte.Styleguide
+namespace Styleguide.Controllers
 {
     public class StyleguideController : Controller
     {
@@ -22,7 +21,7 @@ namespace Forte.Styleguide
             var model = new StyleguideIndexViewModel(catalog.Components);
 
             
-            return View("~/Areas/MyFeature/Pages/Index.cshtml", model);
+            return View(model);
         }
 
         public async Task<ActionResult> Component(string name)

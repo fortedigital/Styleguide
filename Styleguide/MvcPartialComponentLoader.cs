@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
+﻿using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Newtonsoft.Json;
 
-namespace Forte.Styleguide
+namespace Styleguide
 {
     public class MvcPartialComponentLoader : IStyleguideComponentLoader
     {
