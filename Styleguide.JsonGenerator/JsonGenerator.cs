@@ -72,35 +72,45 @@ namespace Styleguide.JsonGenerator
             .ForAll(source =>
             {
                 var targetDirectory = Directory.GetParent(source.SourceType.GetContainingFilePath()) ?? throw new ArgumentNullException();
-                var targetFileName = source.SourceType.Name.Replace("ViewModel", string.Empty).Replace("Block", string.Empty);
+                var targetFileName = source.SourceType.Name.Replace("ViewModel", string.Empty);
                 Debug.Write($"{targetFileName}: ");
 
                 var properties = source.SourceType.GetMembers().OfType<IPropertySymbol>()
                     .Where(symbol => symbol.DeclaredAccessibility == Accessibility.Public) // get all public
                     .Where(symbol => !symbol.HasAttribute(_styleguideIgnoreAttributeType.Value)); // that are not marked as StyleguideIgnore
+
+                JObject componentContext;
                 
-                var componentContext = 
-                    new JObject(
-                        new JProperty(
-                            "category",
-                            source.Category
+                try
+                {
+                    componentContext = 
+                        new JObject(
+                            new JProperty(
+                                "category",
+                                source.Category
                             ),
-                        new JProperty(
-                            "model", 
-                            new JObject(
-                                properties.Select(CreateProperty)
+                            new JProperty(
+                                "model", 
+                                new JObject(
+                                    properties.Select(CreateProperty)
                                 )
-                        ),
-                        new JProperty(
-                            "variants", 
-                            new JArray(
+                            ),
+                            new JProperty(
+                                "variants", 
+                                new JArray(
                                     new JObject(
                                         new JProperty("name", "Standard"),
                                         new JProperty("model", new JObject())
                                         )
                                 )
                             )
-                    );
+                        );
+                }
+                catch (Exception e)
+                {
+                    Exceptions.Add(e);
+                    return;
+                }
                 
                 try
                 {
@@ -126,22 +136,24 @@ namespace Styleguide.JsonGenerator
             
             if (sourceProperty.HasAttribute(_styleguideItemsContentTypesAttributeType.Value))
             {
-                if (!sourceProperty.Type.IsDescendantOf(_systemIEnumerableType.Value))
-                    Exceptions.Add(new Exception($"Property ${sourceProperty.Name} is not a collection. Use StyleguideContentTypeAttribute instead."));
+                if (!sourceProperty.Type.OriginalDefinition.DoesImplement(_systemIEnumerableType.Value))
+                {
+                    throw new Exception($"[{sourceProperty.ContainingType.Name}] Property {sourceProperty.Name} is not a collection. Use StyleguideContentTypeAttribute instead.");
+                }
 
                 var itemsContentTypesAttribute = propertyAttributes.First(attribute =>
                     attribute.AttributeClass?.MetadataName ==
                     _styleguideItemsContentTypesAttributeType.Value.MetadataName);
 
-                var contentTypes = itemsContentTypesAttribute.ConstructorArguments.Select(arg => arg.Value).Cast<string>();
+                var contentTypes = itemsContentTypesAttribute.ConstructorArguments.FirstOrDefault().Values.Select(value => value.Value).Cast<string>();
                 
                 return new JProperty(sourceProperty.Name, new JArray(contentTypes.Select(CreateJsonObjectForContentType)));
             }
 
             if (sourceProperty.HasAttribute(_styleguideContentTypeAttributeType.Value))
             {
-                if (sourceProperty.Type.IsDescendantOf(_systemIEnumerableType.Value))
-                    Exceptions.Add(new Exception($"Property ${sourceProperty.Name} is a collection. Use StyleguideItemsContentTypesAttribute instead."));
+                if (sourceProperty.Type.OriginalDefinition.DoesImplement(_systemIEnumerableType.Value))
+                    throw new Exception($"[{sourceProperty.ContainingType.Name}] Property {sourceProperty.Name} is a collection. Use StyleguideItemsContentTypesAttribute instead.");
                 
                 var contentTypeAttribute = propertyAttributes.First(attribute =>
                     attribute.AttributeClass?.MetadataName ==

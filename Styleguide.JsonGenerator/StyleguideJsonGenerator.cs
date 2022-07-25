@@ -61,4 +61,15 @@ namespace Styleguide.JsonGenerator
             generator.Run();
         }
     }
+
+    public class TypeMembersVisitor : SymbolVisitor
+    {
+        public List<(string Name, ITypeSymbol type)> Properties = new List<(string Name, ITypeSymbol type)>();
+
+        public override void VisitProperty(IPropertySymbol symbol)
+        {
+            if(symbol.DeclaredAccessibility == Accessibility.Public) 
+                Properties.Add((symbol.Name, symbol.Type));
+        }
+    }
 }

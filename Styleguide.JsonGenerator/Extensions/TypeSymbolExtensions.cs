@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 
 namespace Styleguide.JsonGenerator.Extensions
@@ -20,6 +23,25 @@ namespace Styleguide.JsonGenerator.Extensions
             }
 
             return false;
+        }
+
+        public static bool DoesImplement(this ITypeSymbol symbol, INamedTypeSymbol @interface) =>
+            symbol.AllInterfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, @interface));
+
+        public static ImmutableArray<ISymbol> GetAllMembers(this ITypeSymbol symbol)
+        {
+            var retVal = new List<ISymbol>();
+            var tmp = symbol.BaseType;
+
+            retVal.AddRange(symbol.GetMembers());
+            
+            while (tmp != null)
+            {
+                retVal.AddRange(tmp.GetMembers());
+                tmp = tmp.BaseType;
+            }
+
+            return retVal.ToImmutableArray();
         }
     }
 }
