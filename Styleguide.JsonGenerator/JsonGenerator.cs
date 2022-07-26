@@ -174,17 +174,17 @@ namespace Styleguide.JsonGenerator
         
         // private JArray CreateJsonArrayForCollection(string[] contentTypes)
         
-        private INamedTypeSymbol GetModelFromViewModel(INamedTypeSymbol viewModel) => 
+        private ITypeSymbol GetModelFromViewModel(ITypeSymbol viewModel) => 
             viewModel.GetAttributes()
                 .First(data =>
                     data.AttributeClass?.MetadataName == _styleguideViewModelForAttributeType.Value.MetadataName)
                 .ConstructorArguments.First().ConvertToType(Compilation);
         
-        private IEnumerable<(INamedTypeSymbol ViewModel, INamedTypeSymbol Model)>
-            GroupViewModelsWithCorrespondingModels(IEnumerable<INamedTypeSymbol> viewModels) => viewModels
+        private IEnumerable<(ITypeSymbol ViewModel, ITypeSymbol Model)>
+            GroupViewModelsWithCorrespondingModels(IEnumerable<ITypeSymbol> viewModels) => viewModels
             .Select(viewModel => (viewModel, GetModelFromViewModel(viewModel)));
         
-        private string GetCategory(INamedTypeSymbol model) => (string) model.GetAttributes()
+        private string GetCategory(ITypeSymbol model) => (string) model.GetAttributes()
             .FirstOrDefault(attribute => attribute.AttributeClass?.MetadataName == _epiServerContentTypeAttributeType.Value.MetadataName)?
             .NamedArguments.FirstOrDefault(kvp => kvp.Key == "GroupName").Value.Value ?? StyleguideDefaultCategoryName;
     }

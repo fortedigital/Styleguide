@@ -10,16 +10,16 @@ namespace Styleguide.JsonGenerator.Extensions
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<INamedTypeSymbol> GetAllDescendantsOf(this IEnumerable<INamedTypeSymbol> list,
-            INamedTypeSymbol symbol) => list.Where(typeSymbol => typeSymbol.IsDescendantOf(symbol));
+        public static IEnumerable<ITypeSymbol> GetAllDescendantsOf(this IEnumerable<ITypeSymbol> list,
+            ITypeSymbol symbol) => list.Where(typeSymbol => typeSymbol.IsDescendantOf(symbol));
 
-        public static IEnumerable<INamedTypeSymbol> GetAllNonAbstract(this IEnumerable<INamedTypeSymbol> list) =>
+        public static IEnumerable<ITypeSymbol> GetAllNonAbstract(this IEnumerable<ITypeSymbol> list) =>
             list.Where(typeSymbol => !typeSymbol.IsAbstract);
 
-        public static IEnumerable<INamedTypeSymbol> GetAllFromCodeBase(this IEnumerable<INamedTypeSymbol> list) =>
-            list.Where(typeSymbol => typeSymbol.Locations.Any(location => location.Kind == LocationKind.SourceFile));
+        public static IEnumerable<ITypeSymbol> GetAllFromCodeBase(this IEnumerable<ITypeSymbol> list) =>
+            list.Where(type => type.IsFromCodeBase());
 
-        public static IEnumerable<INamedTypeSymbol> GetAllWithAttribute(this IEnumerable<INamedTypeSymbol> list,
+        public static IEnumerable<ITypeSymbol> GetAllWithAttribute(this IEnumerable<ITypeSymbol> list,
             INamedTypeSymbol attribute) =>
             list.Where(typeSymbol => typeSymbol.HasAttribute(attribute));
     }

@@ -43,5 +43,11 @@ namespace Styleguide.JsonGenerator.Extensions
 
             return retVal.ToImmutableArray();
         }
+        
+        public static string GetContainingFilePath(this ITypeSymbol symbol) =>
+            symbol.Locations.FirstOrDefault()?.GetLineSpan().Path;
+
+        public static bool IsFromCodeBase(this ITypeSymbol symbol) =>
+            symbol.Locations.Any(location => location.Kind == LocationKind.SourceFile);
     }
 }
