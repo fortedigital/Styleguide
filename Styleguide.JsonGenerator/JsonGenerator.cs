@@ -210,6 +210,13 @@ namespace Styleguide.JsonGenerator
 
         #endregion
         
+        #region Expandable assemblies
+
+        private readonly string[] expandableAssembliesNames = {
+            "ImageResizer.Plugins.EPiFocalPoint",
+        };
+
+        #endregion
         public TypeMembersVisitor(CSharpCompilation compilation)
         {
             iEnumerableType = new Lazy<INamedTypeSymbol>(() =>
@@ -247,7 +254,6 @@ namespace Styleguide.JsonGenerator
 #pragma warning restore RS1024
 
             #endregion
-
         }
         
         public override JProperty VisitProperty(IPropertySymbol symbol)
@@ -299,13 +305,15 @@ namespace Styleguide.JsonGenerator
 
             return SymbolEqualityComparer.Default.Equals(symbol.Type, stringType)
                 ? new JProperty(symbol.Name, "")
-                : new JProperty(
+                : ShouldExpand(symbol.Type)
+                    ? new JProperty(
                     symbol.Name,
                     new JObject(
                         GetContentTypeNameProperty(symbol.Type),
                         GetValidMembers(symbol.Type).Select(VisitProperty)
+                        )
                     )
-                );
+                    : new JProperty(symbol.Name, new JObject());
         }
         
         private IEnumerable<IPropertySymbol> GetValidMembers(ITypeSymbol propertyType) => 
@@ -318,5 +326,8 @@ namespace Styleguide.JsonGenerator
         private JProperty GetContentTypeNameProperty(ITypeSymbol propertyType) =>
             new JProperty("ContentType", propertyType.IsAbstract ? "#PROVIDE_CONCRETE_TYPE#" : propertyType.Name);
         
+        private bool ShouldExpand(ITypeSymbol typeSymbol) => 
+            typeSymbol.IsFromCodeBase() || expandableAssembliesNames.Contains(typeSymbol.ContainingAssembly.Identity.Name);
+
     }
 }
