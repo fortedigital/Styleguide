@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Forte.Styleguide
+﻿namespace Styleguide.Views.Styleguide
 {
     public class MvcPartialComponentViewModelBuilder
     {

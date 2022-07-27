@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using EPiServer;
-using EPiServer.Configuration;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
@@ -31,7 +30,7 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
             provider.Initialize(ProviderName, new NameValueCollection
             {
                 { "entryPoint", entryPoint.ToString() },
-                {"capabilities", ContentProviderCapabilities.None.ToString() }
+                { "capabilities", ContentProviderCapabilities.None.ToString() }
             });
 
             var providerManager = ServiceLocator.Current.GetInstance<IContentProviderManager>();

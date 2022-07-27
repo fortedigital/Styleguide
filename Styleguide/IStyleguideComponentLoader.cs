@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Forte.Styleguide
+﻿namespace Forte.Styleguide
 {
     public interface IStyleguideComponentLoader
     {

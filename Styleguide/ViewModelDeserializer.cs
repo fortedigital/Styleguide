@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Styleguide.Views.Styleguide;
 
 namespace Forte.Styleguide
 {
@@ -46,7 +44,7 @@ namespace Forte.Styleguide
                 var jsonSerializer = new JsonSerializer();
                 jsonSerializer.Converters.Add(new ResultConverter());
 
-                int variantNo = 1;
+                var variantNo = 1;
                 var variantsList = new List<MvcPartialComponentVariantViewModel>();
                 foreach (var variant in variantsToken)
                 {
