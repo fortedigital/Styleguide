@@ -6,7 +6,6 @@ using System.Net;
 using EPiServer.Construction;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.DataAnnotations;
 using EPiServer.Framework.Blobs;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
