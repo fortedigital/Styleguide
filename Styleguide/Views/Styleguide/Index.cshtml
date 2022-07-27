@@ -1,11 +1,11 @@
-﻿@using Forte.Styleguide
-@model StyleguideIndexViewModel
+﻿@model Forte.Styleguide.Views.Styleguide.StyleguideIndexViewModel
 
 <!DOCTYPE html>
 <html class="has-js" dir="ltr">
 <head>
     <title>Style Guide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="crossorigin="anonymous"></script>
     <link rel="stylesheet" href="_content/Styleguide/Styleguide/css/white.css"/>
 </head>
 <body>
@@ -59,7 +59,7 @@
                 <div class="Navigation-group">
 
                     <div class="Tree" data-behaviour="tree" id="tree-components">
-                         <ul class="Tree-items Tree-depth-1">
+                        <ul class="Tree-items Tree-depth-1">
                             @foreach (var category in Model.Components.GroupBy(c => c.Category).OrderBy(c => c.Key))
                             {
                                 <ul class="Tree-items Tree-depth-2">
@@ -86,14 +86,18 @@
     </div>
 </div>
 <script type="text/javascript" src="_content/Styleguide/Styleguide/js/mandelbrot.js" ></script>
+<script type="text/javascript" defer>
 
-<script type="text/javascript">
     (() => {
+
         document.querySelectorAll('a.Tree-entityLink').forEach(x => x.addEventListener('click',
             (e) => {
                 e.preventDefault();
+
                 var componentName = e.target.getAttribute('data-component')
+                console.log(e);
                 window.location.hash = componentName;
+
                 document.querySelectorAll("iframe#component").forEach(x => x.setAttribute("src", "styleguide/Component/" + componentName));
                 document.querySelectorAll("iframe#componentContext").forEach(x => x.setAttribute("src", "styleguide/ComponentContext/" + componentName));
             }));
@@ -105,7 +109,13 @@
                 document.querySelectorAll<HTMLAnchorElement>("a[data-component='" + selectedComponent + "']").forEach(x => {x.click();});
             }
         }
+
     })();
+
+                }
+            }
+        });
+    });
 </script>
 
 </body>

@@ -9,6 +9,19 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.cms.tinymce\3.2.0\contentFiles\any\any\modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.cms.ui.admin\12.7.0\contentFiles\any\any\modules\_protected\EPiServer.Cms.UI.Admin\EPiServer.Cms.UI.Admin.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.cms.ui.settings\12.7.0\contentFiles\any\any\modules\_protected\EPiServer.Cms.UI.Settings\EPiServer.Cms.UI.Settings.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.cms.ui.visitorgroups\12.7.0\contentFiles\any\any\modules\_protected\EPiServer.Cms.UI.VisitorGroups\EPiServer.Cms.UI.VisitorGroups.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.cms.ui\12.7.0\contentFiles\any\any\modules\_protected\CMS\CMS.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.cms.ui\12.7.0\contentFiles\any\any\modules\_protected\Shell\Shell.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.commerce.ui.admin\14.4.0\contentFiles\any\any\modules\_protected\EPiServer.Commerce.UI.Admin\EPiServer.Commerce.UI.Admin.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.commerce.ui.customerservice\14.4.0\contentFiles\any\any\modules\_protected\EPiServer.Commerce.UI.CustomerService\EPiServer.Commerce.UI.CustomerService.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.commerce.ui\14.4.0\contentFiles\any\any\modules\_protected\Commerce\Commerce.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.commerce.ui\14.4.0\contentFiles\any\any\modules\_protected\EPiServer.Commerce.Shell\EPiServer.Commerce.Shell.zip" />
+    <None Remove="C:\Users\PiotrGebalski\.nuget\packages\episerver.telemetry.ui\2.2.0\contentFiles\any\any\modules\_protected\episerver-telemetry-ui\episerver-telemetry-ui.zip" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <HintPath>..\..\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\6.0.6\ref\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
@@ -38,10 +51,7 @@
 	  <PackageReference Include="EPiServer.CMS.UI.Core" Version="12.7.0" />
 	  <PackageReference Include="EPiServer.Framework" Version="12.7.0" />
 	  <PackageReference Include="EPiServer.Framework.AspNetCore" Version="12.7.0" />
-	  <PackageReference Include="Microsoft.AspNet.Providers.Core" Version="2.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="StructureMap" Version="4.6.1" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

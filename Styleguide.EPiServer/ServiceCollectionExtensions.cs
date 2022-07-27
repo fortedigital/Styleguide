@@ -18,6 +18,17 @@ namespace Forte.Styleguide.EPiServer
     {
         public static IServiceCollection AddStyleGuideEpiServer(this IServiceCollection services, string featuresRootPath = "Features", string componentFileNameExtension = ".styleguide.json", string layoutPath = null)
         {
+            return path;
+            //return Path.Combine(
+            //    (string)AppDomain.CurrentDomain.GetData("ContentRootPath"),
+            //    path);
+        }
+    }
+
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddStyleGuideEPiServer(this IServiceCollection services, string featuresRootPath = "Features", string componentFileNameExtension = ".styleguide.json", string layoutPath = null)
+        {
             services.AddControllersWithViews();
             var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IViewCompilerProvider));
             services.Remove(descriptor);
