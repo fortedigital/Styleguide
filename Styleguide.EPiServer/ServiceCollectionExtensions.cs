@@ -17,7 +17,7 @@ namespace Forte.Styleguide.EPiServer
 
     public static class ServiceColletionExtensions
     {
-        public static IServiceCollection AddStyleGuide(this IServiceCollection services)
+        public static IServiceCollection AddStyleGuidee(this IServiceCollection services)
         {
             services.AddControllersWithViews();
             ServiceDescriptor descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IViewCompilerProvider));
@@ -29,7 +29,7 @@ namespace Forte.Styleguide.EPiServer
             return services;
         }
 
-        public static void UseEpiServerStyleguide(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static void UseEpiServerStyleguidee(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             AppDomain.CurrentDomain.SetData("ContentRootPath", env.ContentRootPath);
             AppDomain.CurrentDomain.SetData("WebRootPath", env.WebRootPath);
