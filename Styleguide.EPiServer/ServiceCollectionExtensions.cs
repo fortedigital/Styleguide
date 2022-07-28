@@ -21,21 +21,21 @@ namespace Forte.Styleguide.EPiServer
             var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IViewCompilerProvider));
             services.Remove(descriptor);
             services.AddSingleton<IViewCompilerProvider, ModuleViewCompilerProvider>();
-            services.AddScoped(typeof(ComponentCatalogLoader));
-            services.AddScoped(typeof(ContentConverter));
-            services.AddScoped(typeof(ContentReferenceConverter));
-            services.AddScoped(typeof(ContentAreaConverter));
+            services.AddTransient(typeof(ComponentCatalogLoader));
+            services.AddTransient(typeof(ContentConverter));
+            services.AddTransient(typeof(ContentReferenceConverter));
+            services.AddTransient(typeof(ContentAreaConverter));
             services.AddScoped<IViewEngine, RazorViewEngine>();
 
-            services.AddScoped<IStyleguideContentFactory>(provider => new StyleguideContentFactory(
+            services.AddTransient<IStyleguideContentFactory>(provider => new StyleguideContentFactory(
                 StyleguideContentEntryPoint.Ensure(provider.GetRequiredService<IContentRepository>()),
                 provider.GetRequiredService<IContentTypeRepository>(),
                 provider.GetRequiredService<IContentFactory>()));
 
-            services.AddScoped<IStyleguideContentRepository, StyleguideContentRepository>();
+            services.AddTransient<IStyleguideContentRepository, StyleguideContentRepository>();
 
 
-            services.AddScoped<IStyleguideComponentLoader, MvcPartialComponentLoader>(provider =>
+            services.AddTransient<IStyleguideComponentLoader, MvcPartialComponentLoader>(provider =>
                 new MvcPartialComponentLoader(featuresRootPath, componentFileNameExtension,
                     new JsonSerializerSettings
                     {
