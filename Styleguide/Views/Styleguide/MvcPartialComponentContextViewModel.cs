@@ -1,4 +1,4 @@
-﻿namespace Forte.Styleguide.Views.Styleguide
+﻿namespace Styleguide.Views.Styleguide
 {
     public class MvcPartialComponentContextViewModel
     {

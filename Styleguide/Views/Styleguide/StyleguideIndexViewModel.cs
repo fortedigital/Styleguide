@@ -1,4 +1,4 @@
-﻿namespace Forte.Styleguide.Views.Styleguide
+﻿namespace Forte.Styleguide
 {
     public class StyleguideIndexViewModel
     {

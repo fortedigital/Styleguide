@@ -1,9 +1,10 @@
-﻿using Forte.Styleguide.Views.Styleguide;
+﻿using Forte.Styleguide;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Styleguide.Views.Styleguide;
 
-namespace Forte.Styleguide.Controllers
+namespace Styleguide.Controllers
 {
     public class StyleguideController : Controller
     {
