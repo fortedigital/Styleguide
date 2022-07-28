@@ -2,9 +2,6 @@
 
   <PropertyGroup>
 	  <TargetFramework>net6.0</TargetFramework>
-	  <RootNamespace>Forte.Styleguide</RootNamespace>
-	  <AssemblyName>Forte.Styleguide</AssemblyName>
-	  <PackageId>Forte.Styleguide</PackageId>
 	  <Nullable>enable</Nullable>
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>

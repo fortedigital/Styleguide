@@ -44,7 +44,7 @@ namespace Forte.Styleguide
                 var jsonSerializer = new JsonSerializer();
                 jsonSerializer.Converters.Add(new ResultConverter());
 
-                int variantNo = 1;
+                var variantNo = 1;
                 var variantsList = new List<MvcPartialComponentVariantViewModel>();
                 foreach (var variant in variantsToken)
                 {

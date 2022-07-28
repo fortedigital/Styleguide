@@ -31,11 +31,11 @@ namespace Forte.Styleguide
         {
             if (moduleAssembly == null)
                 throw new ArgumentNullException(nameof(moduleAssembly));
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenSource = new CancellationTokenSource();
             CancellationTokenSources.Add(moduleAssembly.FullName, cancellationTokenSource);
-            ViewsFeature feature = new ViewsFeature();
+            var feature = new ViewsFeature();
             ApplicationPartManager.PopulateFeature(feature);
-            foreach (CompiledViewDescriptor compiledView in feature.ViewDescriptors
+            foreach (var compiledView in feature.ViewDescriptors
                 .Where(v => v.Type.Assembly == moduleAssembly))
             {
                 if (!CompiledViews.ContainsKey(compiledView.RelativePath))
@@ -64,10 +64,10 @@ namespace Forte.Styleguide
 
         private void PopulateCompiledViews()
         {
-            ViewsFeature feature = new ViewsFeature();
+            var feature = new ViewsFeature();
             ApplicationPartManager.PopulateFeature(feature);
             CompiledViews = new Dictionary<string, CompiledViewDescriptor>(feature.ViewDescriptors.Count, StringComparer.OrdinalIgnoreCase);
-            foreach (CompiledViewDescriptor compiledView in feature.ViewDescriptors)
+            foreach (var compiledView in feature.ViewDescriptors)
             {
                 if (CompiledViews.ContainsKey(compiledView.RelativePath))
                     continue;
@@ -81,7 +81,7 @@ namespace Forte.Styleguide
                 throw new ArgumentNullException(nameof(relativePath));
             if (CompiledViews.TryGetValue(relativePath, out CompiledViewDescriptor cachedResult))
                 return cachedResult;
-            string normalizedPath = GetNormalizedPath(relativePath);
+            var normalizedPath = GetNormalizedPath(relativePath);
             if (CompiledViews.TryGetValue(normalizedPath, out cachedResult))
                 return cachedResult;
             return await Task.FromResult(new CompiledViewDescriptor()
@@ -105,11 +105,11 @@ namespace Forte.Styleguide
 
         protected string NormalizePath(string path)
         {
-            bool addLeadingSlash = path[0] != '\\' && path[0] != '/';
-            bool transformSlashes = path.IndexOf('\\') != -1;
+            var addLeadingSlash = path[0] != '\\' && path[0] != '/';
+            var transformSlashes = path.IndexOf('\\') != -1;
             if (!addLeadingSlash && !transformSlashes)
                 return path;
-            int length = path.Length;
+            var length = path.Length;
             if (addLeadingSlash)
                 length++;
             return string.Create(length, (path, addLeadingSlash), (span, tuple) =>
