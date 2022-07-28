@@ -6,6 +6,9 @@
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <PackageId>Forte.Styleguide</PackageId>
+	  <RootNamespace>Forte.Styleguide</RootNamespace>
+	  <AssemblyName>Forte.Styleguide</AssemblyName>
   </PropertyGroup>
 	
   <ItemGroup>
