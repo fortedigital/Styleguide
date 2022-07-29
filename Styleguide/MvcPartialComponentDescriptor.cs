@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-using Styleguide.Views.Styleguide;
+using Forte.Styleguide.Views.Styleguide;
 
 namespace Forte.Styleguide
 {

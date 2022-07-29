@@ -21,10 +21,10 @@ namespace Forte.Styleguide.EPiServer
             var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IViewCompilerProvider));
             services.Remove(descriptor);
             services.AddSingleton<IViewCompilerProvider, ModuleViewCompilerProvider>();
-            services.AddTransient(typeof(ComponentCatalogLoader));
-            services.AddTransient(typeof(ContentConverter));
-            services.AddTransient(typeof(ContentReferenceConverter));
-            services.AddTransient(typeof(ContentAreaConverter));
+            services.AddTransient<ComponentCatalogLoader>();
+            services.AddTransient<ContentConverter>();
+            services.AddTransient<ContentReferenceConverter>();
+            services.AddTransient<ContentAreaConverter>();
             services.AddScoped<IViewEngine, RazorViewEngine>();
 
             services.AddTransient<IStyleguideContentFactory>(provider => new StyleguideContentFactory(
