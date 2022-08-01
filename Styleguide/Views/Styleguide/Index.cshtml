@@ -6,6 +6,7 @@
     <title>Style Guide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="_content/Forte.Styleguide/Styleguide/css/white.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="Frame" id="frame">
@@ -41,7 +42,7 @@
                                 </ul>
                             </div>
                             <div class="Browser-panel Browser-code is-active" data-role="tab-panel">
-                                <iframe id="componentContext" src="about:blank" width="100%" height="100%"></iframe>    
+                                <iframe id="componentContext" src="about:blank" width="100%" height="100%" ></iframe>    
                             </div>
                         </div>
                     </div>
@@ -66,7 +67,7 @@
                                     @foreach (var component in category.OrderBy(c => c.Name))
                                     {
                                         <li class="Tree-item Tree-entity" data-role="item">
-                                            <a class="Tree-entityLink" href="@Url.Action("Component", "Styleguide", new {Name = component.Name})" data-component="@component.Name">
+                                            <a class="Tree-entityLink"  data-component="@component.Name">
                                                 <span>@component.Name</span>
                                             </a>
                                         </li>
@@ -88,14 +89,10 @@
 <script type="text/javascript" defer>
 
     (() => {
-
         document.querySelectorAll('a.Tree-entityLink').forEach(x => x.addEventListener('click',
-            (e) => {
-                e.preventDefault();
-
-                var componentName = e.target.getAttribute('data-component')
+            function() { 
+                 var componentName = this.getAttribute('data-component');
                 window.location.hash = componentName;
-
                 document.querySelectorAll("iframe#component").forEach(x => x.setAttribute("src", "styleguide/Component/" + componentName));
                 document.querySelectorAll("iframe#componentContext").forEach(x => x.setAttribute("src", "styleguide/ComponentContext/" + componentName));
             }));
@@ -107,7 +104,6 @@
                 document.querySelectorAll<HTMLAnchorElement>("a[data-component='" + selectedComponent + "']").forEach(x => {x.click();});
             }
         }
-
     })();
 </script>
 

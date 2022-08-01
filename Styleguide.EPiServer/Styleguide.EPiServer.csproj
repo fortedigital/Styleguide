@@ -34,8 +34,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.7" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="OdeToCode.AddFeatureFolders" Version="2.0.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
@@ -43,14 +44,14 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="EPiServer.Commerce" Version="14.4.0" />
-	  <PackageReference Include="EPiServer.CMS" Version="12.7.0" />
-	  <PackageReference Include="EPiServer.CMS.AspNetCore.HtmlHelpers" Version="12.7.0" />
-	  <PackageReference Include="EPiServer.CMS.Core" Version="12.7.0" />
-	  <PackageReference Include="EPiServer.CMS.UI" Version="12.7.0" />
-	  <PackageReference Include="EPiServer.CMS.UI.Core" Version="12.7.0" />
-	  <PackageReference Include="EPiServer.Framework" Version="12.7.0" />
-	  <PackageReference Include="EPiServer.Framework.AspNetCore" Version="12.7.0" />
+	  <PackageReference Include="EPiServer.Commerce" Version="14.5.0" />
+	  <PackageReference Include="EPiServer.CMS" Version="12.9.0" />
+	  <PackageReference Include="EPiServer.CMS.AspNetCore.HtmlHelpers" Version="12.8.0" />
+	  <PackageReference Include="EPiServer.CMS.Core" Version="12.8.0" />
+	  <PackageReference Include="EPiServer.CMS.UI" Version="12.9.0" />
+	  <PackageReference Include="EPiServer.CMS.UI.Core" Version="12.9.0" />
+	  <PackageReference Include="EPiServer.Framework" Version="12.8.0" />
+	  <PackageReference Include="EPiServer.Framework.AspNetCore" Version="12.8.0" />
 	  <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>

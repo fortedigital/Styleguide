@@ -5,6 +5,7 @@ using Forte.Styleguide.Views.Styleguide;
 
 namespace Forte.Styleguide.Controllers
 {
+    [Route("styleguide")]
     public class StyleguideController : Controller
     {
         private readonly ComponentCatalogLoader _loader;
@@ -13,7 +14,6 @@ namespace Forte.Styleguide.Controllers
         {
             _loader = loader;
         }
-        [HttpGet("styleguide")]
         public ActionResult Index()
         {
             
@@ -23,8 +23,8 @@ namespace Forte.Styleguide.Controllers
             
             return View(model);
         }
-
-        public async Task<ActionResult> Component(string name)
+        [HttpGet("Component/{name}")]
+        public async Task<ActionResult> Component([FromRoute]string name)
         {
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Name of the component is not defined");
@@ -35,9 +35,8 @@ namespace Forte.Styleguide.Controllers
 
             return await component.Execute(ControllerContext);
         }
-
-        [HttpGet]
-        public ActionResult ComponentContext(string name)
+        [HttpGet("ComponentContext/{name}")]
+        public ActionResult ComponentContext([FromRoute]string name)
         {
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Name of the component is not defined");

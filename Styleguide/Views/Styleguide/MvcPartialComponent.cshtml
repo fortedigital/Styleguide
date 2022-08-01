@@ -1,8 +1,8 @@
-@model Forte.Styleguide.Views.Styleguide.MvcPartialComponentViewModel
+@using Forte.Styleguide.Views.Styleguide
 
-@if (!string.IsNullOrEmpty(Model.LayoutPath))
+@if (!string.IsNullOrEmpty(((MvcPartialComponentViewModel)ViewData["Model"]).LayoutPath))
 {
-    Layout = Model.LayoutPath;
+    Layout = ((MvcPartialComponentViewModel)ViewData["Model"]).LayoutPath;
 }
 
 <style>
@@ -30,17 +30,17 @@
     
 </style>
 
-@if (Model.Error != null)
+@if (((MvcPartialComponentViewModel)ViewData["Model"]).Error != null)
 {
-    <pre class="StyleguideComponent__error">@Model.Error</pre>
+    <pre class="StyleguideComponent__error">@((MvcPartialComponentViewModel)ViewData["Model"]).Error</pre>
 }
 else
 {
-    foreach (var variant in @Model.Variants)
+    foreach (var variant in ((MvcPartialComponentViewModel)ViewData["Model"]).Variants)
     {
         <span class="StyleguideComponentVariant__name">@variant.Name</span>        
         <div class="StyleguideComponentVariant__wrapper">
-            @Html.Partial(@Model.PartialName, variant.Model, variant.ViewData)
+            @Html.Partial(((MvcPartialComponentViewModel)ViewData["Model"]).PartialName, variant.Model, variant.ViewData)
         </div>
     }
 }

@@ -1,4 +1,4 @@
-@model Forte.Styleguide.Views.Styleguide.MvcPartialComponentContextViewModel
+@using Forte.Styleguide.Views.Styleguide
 
 <html>
     <head>
@@ -7,7 +7,7 @@
     <body>
         <div class="Browser-panel Browser-code is-active" data-role="tab-panel">
             <code class="Code Code--lang-json">
-                <pre>@Model.Context</pre>
+                <pre>@(((MvcPartialComponentContextViewModel)ViewData["Model"]).Context)</pre>
             </code>
         </div>
     </body>

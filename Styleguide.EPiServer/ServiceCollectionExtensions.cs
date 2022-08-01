@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using EPiServer;
 using EPiServer.Construction;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
 namespace Forte.Styleguide.EPiServer
@@ -17,7 +19,6 @@ namespace Forte.Styleguide.EPiServer
     {
         public static IServiceCollection AddStyleGuideEpiServer(this IServiceCollection services, string featuresRootPath = "Features", string componentFileNameExtension = ".styleguide.json", string layoutPath = null)
         {
-            services.AddControllersWithViews();
             var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IViewCompilerProvider));
             services.Remove(descriptor);
             services.AddSingleton<IViewCompilerProvider, ModuleViewCompilerProvider>();
@@ -34,9 +35,10 @@ namespace Forte.Styleguide.EPiServer
 
             services.AddTransient<IStyleguideContentRepository, StyleguideContentRepository>();
 
-
+            var serviceProvider = services.BuildServiceProvider();
+            var iHostEnvironment = serviceProvider.GetRequiredService<IHostEnvironment>();
             services.AddTransient<IStyleguideComponentLoader, MvcPartialComponentLoader>(provider =>
-                new MvcPartialComponentLoader(featuresRootPath, componentFileNameExtension,
+                new MvcPartialComponentLoader(Path.Combine(iHostEnvironment.ContentRootPath, featuresRootPath), componentFileNameExtension,
                     new JsonSerializerSettings
                     {
                         Converters = new List<JsonConverter>()

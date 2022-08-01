@@ -32,7 +32,7 @@ namespace Forte.Styleguide
         {
             var view = FindPartialView(context, Name);
             if (view == null)
-                return new NotFoundObjectResult($"Cound not find partial view {Name}");
+                return new NotFoundObjectResult($"Could not find partial view {Name}");
 
             var viewModelType = ResolveViewModelType(view);
 
@@ -43,8 +43,9 @@ namespace Forte.Styleguide
             {
                 viewModel.LayoutPath = this.LayoutPath;
             }
-                
-            return PartialView(context, viewModel);
+
+            var result = PartialView(context, viewModel);
+            return result;
         }
 
         private static PartialViewResult PartialView(ControllerContext context, MvcPartialComponentViewModel model)
@@ -52,7 +53,7 @@ namespace Forte.Styleguide
             return new PartialViewResult()
             {
                 ViewName = "MvcPartialComponent",
-                ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()) {{"model", model}}
+                ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()) {{"Model", model}}
             };
         }
 
