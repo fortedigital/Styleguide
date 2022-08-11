@@ -12,7 +12,7 @@ namespace Forte.Styleguide
     public class MvcPartialComponentDescriptor : IStyleguideComponentDescriptor
     {
         public string Name { get; }
-        public string Category { get; }
+        public string Category { get; private set; }
         public FileInfo File { get; }
         public string LayoutPath { get; }
 
@@ -43,6 +43,8 @@ namespace Forte.Styleguide
                 {
                     viewModel.LayoutPath = this.LayoutPath;
                 }
+
+                Category = viewModel.Category ?? Category;
                 
                 return PartialView(context, viewModel);
             }

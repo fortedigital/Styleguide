@@ -13,6 +13,7 @@ namespace Forte.Styleguide
         private const string VariantsPropertyName = "variants";
         private const string NamePropertyName = "name";
         private const string ViewDataPropertyName = "viewData";
+        private const string ModelCategoryName = "category";
 
         public static MvcPartialComponentViewModel Deserialize(Type viewModelType, string jsonContent, string name, JsonSerializerSettings serializerSettings = null)
         {
@@ -83,11 +84,14 @@ namespace Forte.Styleguide
                     ? jObject.SelectToken("partialName").ToObject<string>(serializer)
                     : name;
 
+                var category = jObject.SelectToken(ModelCategoryName)?.ToObject<string>(serializer);
+                
                 viewModelBuilder
                     .WithLayout(jObject.SelectToken("layoutPath")?.ToObject<string>(serializer))
                     .WithPartialName(partialName)
                     .WithModel(rootModel)
-                    .WithVariants(variantsList.ToArray());
+                    .WithVariants(variantsList.ToArray())
+                    .WithCategory(category);
             }
 
             return viewModelBuilder.Build();

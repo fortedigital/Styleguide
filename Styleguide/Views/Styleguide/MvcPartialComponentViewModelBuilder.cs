@@ -53,6 +53,13 @@ namespace Forte.Styleguide
             return this;
         }
 
+        public MvcPartialComponentViewModelBuilder WithCategory(string category)
+        {
+            viewModel.Category = category;
+
+            return this;
+        }
+
         public MvcPartialComponentViewModel Build()
         {
             return viewModel;
