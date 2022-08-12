@@ -58,5 +58,5 @@ builder.Services.AddStyleguideEpiServer("PathToYourFolder")
 
 If you use `Startup.cs` file then:
 ```cs
-services.AddStyleguideEpiServer("PathToYourFolder)
+services.AddStyleguideEpiServer("PathToYourFolder")
 ```
