@@ -48,15 +48,36 @@ public class Startup
     }
 }
 ```
+
+## Configure RazorViewEngine
+To let Styleguide work properly you have to configure `RazorViewEngine`.
+Assuming your blocks are placed in `~/Features/Parials/BlockName` path, 
+for example: `Features/Partials/BarChart` then your controller should be named `BarChartController` and view name should be `BarChart.cshtml`.
+To make it work well you should write in `Program.cs`(make sure you have `#using Microsoft.AspNetCore.Mvc.Razor;`):
+```cs
+builder.Services.Configure<RazorViewEngineOpions>(options => 
+{
+    options.ViewLocationFormats.Add("~/Features/Partials/{0}/{0}.cshtml");
+});
+```
+
+If you use `Startup.cs`, then it would be:
+```cs
+services.Configure<RazorViewEngineOpions>(options => 
+{
+    options.ViewLocationFormats.Add("~/Features/Partials/{0}/{0}.cshtml");
+});
+```
+
 ## Customize blocks path
 
-By default blocks should be placed in `Features` folder.
+By default blocks should be placed in `~/Features` folder.
 If you want to change the folder with blocks you should write in `Program.cs`:
 ```cs
-builder.Services.AddStyleguideEpiServer("PathToYourFolder")
+builder.Services.AddStyleguideEpiServer("PathToYourFolder");
 ```
 
 If you use `Startup.cs` file then:
 ```cs
-services.AddStyleguideEpiServer("PathToYourFolder")
+services.AddStyleguideEpiServer("PathToYourFolder");
 ```
