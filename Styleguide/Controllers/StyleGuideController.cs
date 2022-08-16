@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Forte.Styleguide.Views.Styleguide;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Forte.Styleguide.Controllers
 {
+    [Authorize]
     [Route("styleguide")]
     public class StyleguideController : Controller
     {
