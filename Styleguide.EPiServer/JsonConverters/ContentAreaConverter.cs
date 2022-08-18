@@ -50,7 +50,11 @@ namespace Forte.Styleguide.EPiServer.JsonConverters
                 var content = this.factory.CreateContent(serializer, element);
                 this.repository.AddOrReplace(content);
 
-                area.Items.Add(new ContentAreaItem { ContentLink = content.ContentLink });
+                area.Items.Add(new ContentAreaItem
+                {
+                    ContentLink = content.ContentLink, 
+                    ContentGuid = content.ContentGuid,
+                });
             }
 
             return area;
