@@ -28,7 +28,8 @@ namespace Forte.Styleguide.EPiServer
                 config.For<IStyleguideContentFactory>().Add(c => new StyleguideContentFactory(
                     StyleguideContentEntryPoint.Ensure(c.GetInstance<IContentRepository>()),
                     c.GetInstance<IContentTypeRepository>(),
-                    c.GetInstance<IContentFactory>()));
+                    c.GetInstance<IContentFactory>(), 
+                    c.GetInstance<ISharedBlockFactory>()));
                 
                 config.For<IStyleguideContentRepository>().Add<StyleguideContentRepository>();
                 

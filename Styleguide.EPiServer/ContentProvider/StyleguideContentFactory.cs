@@ -29,7 +29,7 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
         private readonly ISharedBlockFactory sharedBlockFactory;
         private readonly IContentFactory contentFactory;
 
-        public StyleguideContentFactory(ContentReference entryPoint, IContentTypeRepository contentTypeRepository, IContentFactory contentFactory, IContentTypeBaseResolver contentTypeBaseResolver, ISharedBlockFactory sharedBlockFactory)
+        public StyleguideContentFactory(ContentReference entryPoint, IContentTypeRepository contentTypeRepository, IContentFactory contentFactory, ISharedBlockFactory sharedBlockFactory)
         {
             this.entryPoint = entryPoint;
             this.contentTypeRepository = contentTypeRepository;
