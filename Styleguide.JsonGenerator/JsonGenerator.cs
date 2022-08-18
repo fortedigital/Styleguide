@@ -29,32 +29,20 @@ namespace Styleguide.JsonGenerator
         
         #endregion
         
-        private readonly Lazy<INamedTypeSymbol> _systemIEnumerableType;
         private readonly Lazy<INamedTypeSymbol> _epiServerContentTypeAttributeType;
         private readonly Lazy<INamedTypeSymbol> _styleguideViewModelForAttributeType;
-        private readonly Lazy<INamedTypeSymbol> _styleguideContentTypeAttributeType;
-        private readonly Lazy<INamedTypeSymbol> _styleguideItemsContentTypesAttributeType;
         private readonly Lazy<INamedTypeSymbol> _styleguideIgnoreAttributeType;
-        
+
         public JsonGenerator(CSharpCompilation compilation) : base(compilation)
         {
             _styleguideViewModelForAttributeType = new Lazy<INamedTypeSymbol>(() =>
                 compilation.GetTypeByMetadataNameOrThrow(StyleguideViewModelForAttributeTypeMetadataName));
-            
-            _systemIEnumerableType = new Lazy<INamedTypeSymbol>(() =>
-                compilation.GetTypeByMetadataNameOrThrow(SystemIEnumerableTypeMetadataName));
-            
+
             _epiServerContentTypeAttributeType = new Lazy<INamedTypeSymbol>(() =>
                 compilation.GetTypeByMetadataNameOrThrow(EPiServerContentTypeAttributeTypeMetadataName));
 
-            _styleguideContentTypeAttributeType = new Lazy<INamedTypeSymbol>(() =>
-                compilation.GetTypeByMetadataNameOrThrow(StyleguideContentTypeAttributeTypeMetadataName));
-
             _styleguideIgnoreAttributeType = new Lazy<INamedTypeSymbol>(() =>
                 compilation.GetTypeByMetadataNameOrThrow(StyleguideIgnoreAttributeTypeMetadataName));
-            
-            _styleguideItemsContentTypesAttributeType = new Lazy<INamedTypeSymbol>(() =>
-                compilation.GetTypeByMetadataNameOrThrow(StyleguideItemsContentTypesAttributeTypeMetadataName));
         }
 
         protected override IEnumerable<GenerationSource> GetSourceFiles()
@@ -80,7 +68,7 @@ namespace Styleguide.JsonGenerator
 
                 JObject componentContext;
 
-                var propertyVisitor = new TypeMembersVisitor(Compilation);
+                var propertyVisitor = new TypeMembersVisitor(Compilation, ExpandableNamespaces);
                 
                 try
                 {
@@ -131,42 +119,6 @@ namespace Styleguide.JsonGenerator
                 }
             });
 
-        private JProperty CreateProperty(IPropertySymbol sourceProperty)
-        {
-            var propertyAttributes = sourceProperty.GetAttributes();
-            
-            if (sourceProperty.HasAttribute(_styleguideItemsContentTypesAttributeType.Value))
-            {
-                if (!sourceProperty.Type.OriginalDefinition.DoesImplement(_systemIEnumerableType.Value))
-                {
-                    throw new Exception($"[{sourceProperty.ContainingType.Name}] Property {sourceProperty.Name} is not a collection. Use StyleguideContentTypeAttribute instead.");
-                }
-
-                var itemsContentTypesAttribute = propertyAttributes.First(attribute =>
-                    attribute.AttributeClass?.MetadataName ==
-                    _styleguideItemsContentTypesAttributeType.Value.MetadataName);
-
-                var contentTypes = itemsContentTypesAttribute.ConstructorArguments.FirstOrDefault().Values.Select(value => value.Value).Cast<string>();
-                
-                return new JProperty(sourceProperty.Name, new JArray(contentTypes.Select(CreateJsonObjectForContentType)));
-            }
-
-            if (sourceProperty.HasAttribute(_styleguideContentTypeAttributeType.Value))
-            {
-                if (sourceProperty.Type.OriginalDefinition.DoesImplement(_systemIEnumerableType.Value))
-                    throw new Exception($"[{sourceProperty.ContainingType.Name}] Property {sourceProperty.Name} is a collection. Use StyleguideItemsContentTypesAttribute instead.");
-                
-                var contentTypeAttribute = propertyAttributes.First(attribute =>
-                    attribute.AttributeClass?.MetadataName ==
-                    _styleguideContentTypeAttributeType.Value.MetadataName);
-
-                var contentType = contentTypeAttribute.ConstructorArguments.Take(1).Select(x => x.Value).Cast<string>();
-                
-                return new JProperty(sourceProperty.Name, contentType.Select(CreateJsonObjectForContentType));
-            }
-
-            return new JProperty(sourceProperty.Name, string.Empty);
-        }
 
         private JObject CreateJsonObjectForContentType(string contentType) =>
             new JObject(
@@ -211,14 +163,14 @@ namespace Styleguide.JsonGenerator
         #endregion
         
         #region Expandable assemblies
-
-        private readonly string[] expandableAssembliesNames = {
-            "ImageResizer.Plugins.EPiFocalPoint",
-        };
+        
+        private readonly IEnumerable<string> _expandableAssemblies;
 
         #endregion
-        public TypeMembersVisitor(CSharpCompilation compilation)
+        
+        public TypeMembersVisitor(CSharpCompilation compilation, IEnumerable<string> expandableAssemblies)
         {
+            _expandableAssemblies = expandableAssemblies;
             iEnumerableType = new Lazy<INamedTypeSymbol>(() =>
                 compilation.GetTypeByMetadataNameOrThrow("System.Collections.IEnumerable"));
 
@@ -327,7 +279,7 @@ namespace Styleguide.JsonGenerator
             new JProperty("ContentType", propertyType.IsAbstract ? "#PROVIDE_CONCRETE_TYPE#" : propertyType.Name);
         
         private bool ShouldExpand(ITypeSymbol typeSymbol) => 
-            typeSymbol.IsFromCodeBase() || expandableAssembliesNames.Contains(typeSymbol.ContainingAssembly.Identity.Name);
+            typeSymbol.IsFromCodeBase() || _expandableAssemblies.Contains(typeSymbol.ContainingAssembly.Identity.Name);
 
     }
 }
