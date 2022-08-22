@@ -8,10 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.EPiServer", "Sty
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.Tests", "Styleguide.Tests\Styleguide.Tests.csproj", "{C89754ED-8EBD-405A-9152-DF9ABEA4C650}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.JsonGenerator", "Styleguide.JsonGenerator\Styleguide.JsonGenerator.csproj", "{DCD7BAFE-1CE1-40FA-A293-FFAEBE99501B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.JsonGenerator.Annotations", "Styleguide.JsonGenerator.Annotations\Styleguide.JsonGenerator.Annotations.csproj", "{BF4B8465-BCBA-47EC-A37A-B6BAE873641C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
