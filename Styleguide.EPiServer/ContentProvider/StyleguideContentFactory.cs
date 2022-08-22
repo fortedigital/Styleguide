@@ -6,7 +6,7 @@ using System.Net;
 using EPiServer.Construction;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.DataAnnotations;
+using EPiServer.DataAbstraction.RuntimeModel;
 using EPiServer.Framework.Blobs;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
@@ -26,13 +26,15 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
         private readonly ContentReference entryPoint;
 
         private readonly IContentTypeRepository contentTypeRepository;
+        private readonly ISharedBlockFactory sharedBlockFactory;
         private readonly IContentFactory contentFactory;
 
-        public StyleguideContentFactory(ContentReference entryPoint, IContentTypeRepository contentTypeRepository, IContentFactory contentFactory)
+        public StyleguideContentFactory(ContentReference entryPoint, IContentTypeRepository contentTypeRepository, IContentFactory contentFactory, ISharedBlockFactory sharedBlockFactory)
         {
             this.entryPoint = entryPoint;
             this.contentTypeRepository = contentTypeRepository;
             this.contentFactory = contentFactory;
+            this.sharedBlockFactory = sharedBlockFactory;
         }
 
         public IContent CreateContent(int id, string name, string contentTypeName, IDictionary<string, object> properties)
@@ -49,6 +51,7 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
         public IContent CreateContent(int id, string name, Type modelType, IDictionary<string, object> properties)
         {
             var contentType = this.contentTypeRepository.Load(modelType);
+            
             if (contentType == null)
             {
                 throw new InvalidOperationException($"Unable to load content type for type {modelType}");
@@ -59,7 +62,7 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
         
         private IContent CreateContent(int id, string name, ContentType contentType, IDictionary<string, object> properties)
         {
-            var content = this.contentFactory.CreateContent(contentType);
+            var content = CreateInstance(contentType);
             content.ContentTypeID = contentType.ID;
             content.ParentLink = this.entryPoint;
             content.ContentGuid = Guid.NewGuid();
@@ -117,6 +120,14 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
             return content;
         }
 
+        private IContent CreateInstance(ContentType contentType)
+        {
+            if (!(contentType is BlockType blockType)) return contentFactory.CreateContent(contentType);
+            
+            var modelType = blockType.ModelType ?? typeof(BlockData);
+            return sharedBlockFactory.CreateSharedBlock(modelType);
+        }
+        
         private class WebBlob : Blob
         {
             public string Url { get; }
