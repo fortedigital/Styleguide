@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.EPiServer", "Sty
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.Tests", "Styleguide.Tests\Styleguide.Tests.csproj", "{C89754ED-8EBD-405A-9152-DF9ABEA4C650}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.JsonGenerator", "Styleguide.JsonGenerator\Styleguide.JsonGenerator.csproj", "{B14D15EA-ECB0-4D5C-ACE2-A45D6226D483}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Styleguide.JsonGenerator.Annotations", "Styleguide.JsonGenerator.Annotations\Styleguide.JsonGenerator.Annotations.csproj", "{69288688-8711-4AC2-8547-6BE20A221958}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,14 @@ Global
 		{BF4B8465-BCBA-47EC-A37A-B6BAE873641C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF4B8465-BCBA-47EC-A37A-B6BAE873641C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF4B8465-BCBA-47EC-A37A-B6BAE873641C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B14D15EA-ECB0-4D5C-ACE2-A45D6226D483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B14D15EA-ECB0-4D5C-ACE2-A45D6226D483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B14D15EA-ECB0-4D5C-ACE2-A45D6226D483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B14D15EA-ECB0-4D5C-ACE2-A45D6226D483}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69288688-8711-4AC2-8547-6BE20A221958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69288688-8711-4AC2-8547-6BE20A221958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69288688-8711-4AC2-8547-6BE20A221958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69288688-8711-4AC2-8547-6BE20A221958}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
