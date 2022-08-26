@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Forte.Styleguide</id>
-    <version>0.1.0</version>
+    <version>$version$</version>
     <description>Description</description>
     <title>Forte.Styleguide</title>
     <authors>Forte_ Digital</authors>
