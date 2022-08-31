@@ -36,7 +36,7 @@
 	  <PackageReference Include="EPiServer.CMS.UI.Core" Version="[12.4.0,13)" />
 	  <PackageReference Include="EPiServer.Framework" Version="[12.4.0,13)" />
 	  <PackageReference Include="EPiServer.Framework.AspNetCore" Version="[12.4.0,13)" />
-	  <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
