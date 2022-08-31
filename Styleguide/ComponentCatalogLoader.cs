@@ -1,28 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Forte.Styleguide
+﻿namespace Forte.Styleguide
 {
     public class ComponentCatalogLoader
     {
-        private ComponentCatalog catalog;
+        private ComponentCatalog _catalog;
 
-        private readonly object syncLock = new object();        
-        private readonly IEnumerable<IStyleguideComponentLoader> loaders;
+        private readonly object _syncLock = new object();        
+        private readonly IEnumerable<IStyleguideComponentLoader> _loaders;
 
         public ComponentCatalogLoader(IEnumerable<IStyleguideComponentLoader> loaders)
         {
-            this.loaders = loaders;
+            _loaders = loaders;
         }
 
         public ComponentCatalog Load(bool reload = false)
         {
-            lock (this.syncLock)
+            lock (_syncLock)
             {
-                if (reload != false || this.catalog == null)
-                    this.catalog = new ComponentCatalog(this.loaders.SelectMany(l => l.LoadComponents()).OrderBy(c=>c.Name).ToList());
+                if (reload != false || _catalog == null)
+                    _catalog = new ComponentCatalog(_loaders.SelectMany(l => l.LoadComponents()).OrderBy(c=>c.Name).ToList());
                 
-                return this.catalog;
+                return _catalog;
             }
         }
     }

@@ -1,126 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{84EBE80B-8BBE-43C5-A7EF-6CC22B4C14FA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Forte.Styleguide</RootNamespace>
-    <AssemblyName>Forte.Styleguide</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <PackageId>Forte.Styleguide</PackageId>
+	  <RootNamespace>Forte.Styleguide</RootNamespace>
+	  <AssemblyName>Forte.Styleguide</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+	
   <ItemGroup>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+	  <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentCatalog.cs" />
-    <Compile Include="ComponentCatalogLoader.cs" />
-    <Compile Include="Controllers\StyleGuideController.cs" />
-    <Compile Include="HtmlHelperExtensions.cs" />
-    <Compile Include="IStyleguideComponentDescriptor.cs" />
-    <Compile Include="IStyleguideComponentLoader.cs" />
-    <Compile Include="MvcPartialComponentLoader.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MvcPartialComponentDescriptor.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="ViewModelDeserializer.cs" />
-    <Compile Include="Views\Styleguide\MvcPartialComponentContextViewModel.cs" />
-    <Compile Include="Views\Styleguide\MvcPartialComponentVariantViewModel.cs" />
-    <Compile Include="Views\Styleguide\MvcPartialComponentVariantViewModelBuilder.cs" />
-    <Compile Include="Views\Styleguide\MvcPartialComponentViewModel.cs" />
-    <Compile Include="Views\Styleguide\MvcPartialComponentViewModelBuilder.cs" />
-    <Compile Include="Views\Styleguide\StyleguideIndexViewModel.cs" />
+	<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+	<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Static\Styleguide\css\white.css" />
-    <Content Include="Static\Styleguide\fonts\hack-bold-webfont.woff" />
-    <Content Include="Static\Styleguide\fonts\hack-bold-webfont.woff2" />
-    <Content Include="Static\Styleguide\fonts\hack-bolditalic-webfont.woff" />
-    <Content Include="Static\Styleguide\fonts\hack-bolditalic-webfont.woff2" />
-    <Content Include="Static\Styleguide\fonts\hack-italic-webfont.woff" />
-    <Content Include="Static\Styleguide\fonts\hack-italic-webfont.woff2" />
-    <Content Include="Static\Styleguide\fonts\hack-regular-webfont.woff" />
-    <Content Include="Static\Styleguide\fonts\hack-regular-webfont.woff2" />
-    <Content Include="Static\Styleguide\fonts\OpenSans-Italic.woff" />
-    <Content Include="Static\Styleguide\fonts\OpenSans-Italic.woff2" />
-    <Content Include="Static\Styleguide\fonts\OpenSans-Regular.woff" />
-    <Content Include="Static\Styleguide\fonts\OpenSans-Regular.woff2" />
-    <Content Include="Static\Styleguide\fonts\OpenSans-Semibold.woff" />
-    <Content Include="Static\Styleguide\fonts\OpenSans-Semibold.woff2" />
-    <Content Include="Static\Styleguide\fonts\OpenSans-SemiboldItalic.woff" />
-    <Content Include="Static\Styleguide\fonts\OpenSans-SemiboldItalic.woff2" />
-    <Content Include="Static\Styleguide\img\favicon.png" />
-    <Content Include="Static\Styleguide\img\icon-drag--horizontal.svg" />
-    <Content Include="Static\Styleguide\img\icon-drag--vertical.svg" />
-    <Content Include="Static\Styleguide\img\icon-navigation-closed-ltr.svg" />
-    <Content Include="Static\Styleguide\img\icon-navigation-closed-rtl.svg" />
-    <Content Include="Static\Styleguide\img\icon-navigation-opened.svg" />
-    <Content Include="Static\Styleguide\img\icon-window.svg" />
-    <Content Include="Static\Styleguide\img\loader.svg" />
-    <Content Include="Static\Styleguide\js\mandelbrot.js" />
-    <Content Include="Static\Styleguide\js\mandelbrot.js.map" />
-    <Content Include="Styleguide.nuspec" />
-    <Content Include="Views\Styleguide\MvcPartialComponent.cshtml" />
-    <Content Include="Views\Styleguide\Index.cshtml" />
-    <Content Include="Views\Styleguide\MvcPartialComponentContext.cshtml" />
+	<PackageReference Include="Newtonsoft.Json" Version="[10.0.0,14)" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Static\Styleguide" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

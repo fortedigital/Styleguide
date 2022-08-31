@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Forte.Styleguide
+﻿namespace Forte.Styleguide.Views.Styleguide
 {
     public class MvcPartialComponentViewModel
     {

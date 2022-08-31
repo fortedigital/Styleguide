@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace Forte.Styleguide
+namespace Forte.Styleguide.Views.Styleguide
 {
     public class MvcPartialComponentVariantViewModel
     {
         public string Name { get; set; }
         public object Model { get; set; }
-        public ViewDataDictionary ViewData { get; set; } = new ViewDataDictionary();
+        public ViewDataDictionary ViewData { get; set; } = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary());
     }
 }

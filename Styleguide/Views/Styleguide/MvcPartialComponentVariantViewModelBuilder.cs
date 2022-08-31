@@ -1,8 +1,8 @@
-﻿namespace Forte.Styleguide
+﻿namespace Forte.Styleguide.Views.Styleguide
 {
     public class MvcPartialComponentVariantViewModelBuilder
     {
-        private readonly MvcPartialComponentVariantViewModel viewModel = new MvcPartialComponentVariantViewModel();
+        private readonly MvcPartialComponentVariantViewModel viewModel = new();
 
         public MvcPartialComponentVariantViewModelBuilder WithModel(object model)
         {
