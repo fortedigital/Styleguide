@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -16,7 +17,8 @@ namespace Forte.Styleguide
         public ActionResult Index()
         {
             var catalog = this.loader.Load(reload: true);
-            var model = new StyleguideIndexViewModel(catalog.Components);
+            var tags = catalog.Components.SelectMany(c => c.Tags).Distinct().OrderBy(t => t);
+            var model = new StyleguideIndexViewModel(catalog.Components, tags);
 
             return View(model);
         }

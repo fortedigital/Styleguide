@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -8,7 +9,7 @@ namespace Forte.Styleguide
     {
         string Name { get; }
         string DisplayName { get; }
-        string Category { get; }
+        IEnumerable<string> Tags { get; }
         FileInfo File { get; }
         Task<ActionResult> Execute(ControllerContext context);
     }

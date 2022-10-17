@@ -62,11 +62,11 @@
 
                     <div class="Tree" data-behaviour="tree" id="tree-components">
                          <ul class="Tree-items Tree-depth-1">
-                            @foreach (var category in Model.Components.GroupBy(c => c.Category).OrderBy(c => c.Key))
+                            @foreach (var tag in Model.Tags)
                             {
                                 <ul class="Tree-items Tree-depth-2">
-                                    <li class="Tree-item Tree-entity"><h2 class="Tree-title">@category.Key</h2></li>
-                                    @foreach (var component in category.OrderBy(c => c.DisplayName))
+                                    <li class="Tree-item Tree-entity"><h2 class="Tree-title">@tag</h2></li>
+                                    @foreach (var component in Model.Components.Where(c => c.Tags.Contains(tag)).OrderBy(c => c.DisplayName))
                                     {
                                         <li class="Tree-item Tree-entity" data-role="item">
                                             <a class="Tree-entityLink" href="@Url.Action("Component", "Styleguide", new {Name = component.Name})" data-component="@component.Name">

@@ -17,12 +17,12 @@ namespace Forte.Styleguide
 
         public ComponentCatalog Load(bool reload = false)
         {
-            lock (syncLock)
+            lock (this.syncLock)
             {
-                if (reload || catalog == null)
-                    catalog = new ComponentCatalog(this.loaders.SelectMany(l => l.LoadComponents()).OrderBy(c=>c.DisplayName).ToList());
+                if (reload != false || this.catalog == null)
+                    this.catalog = new ComponentCatalog(this.loaders.SelectMany(l => l.LoadComponents()).OrderBy(c=>c.DisplayName).ToList());
                 
-                return catalog;
+                return this.catalog;
             }
         }
     }
