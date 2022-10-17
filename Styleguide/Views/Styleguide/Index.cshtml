@@ -66,11 +66,11 @@
                             {
                                 <ul class="Tree-items Tree-depth-2">
                                     <li class="Tree-item Tree-entity"><h2 class="Tree-title">@category.Key</h2></li>
-                                    @foreach (var component in category.OrderBy(c => c.Name))
+                                    @foreach (var component in category.OrderBy(c => c.DisplayName))
                                     {
                                         <li class="Tree-item Tree-entity" data-role="item">
                                             <a class="Tree-entityLink" href="@Url.Action("Component", "Styleguide", new {Name = component.Name})" data-component="@component.Name">
-                                                <span>@component.Name</span>
+                                                <span>@component.DisplayName</span>
                                             </a>
                                         </li>
                                     }

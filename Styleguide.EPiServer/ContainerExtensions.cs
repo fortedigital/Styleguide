@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Mvc.Routing.Constraints;
 using System.Web.Routing;
 using EPiServer;
 using EPiServer.Construction;
@@ -41,7 +40,6 @@ namespace Forte.Styleguide.EPiServer
                         c.GetInstance<ContentAreaConverter>()
                     }
                 }, layoutPath));
-                
             });
         }
     }

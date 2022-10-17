@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Forte.Styleguide
@@ -14,7 +15,11 @@ namespace Forte.Styleguide
         
         private readonly JsonSerializerSettings serializerSettings;
 
-        public MvcPartialComponentLoader(string rootPath, string componentFileNameExtension, JsonSerializerSettings serializerSettings, string layoutPath = null)
+        public MvcPartialComponentLoader(
+            string rootPath, 
+            string componentFileNameExtension, 
+            JsonSerializerSettings serializerSettings,
+            string layoutPath = null)
         {
             this.LayoutPath = layoutPath;
             this.RootPath = rootPath;
@@ -37,13 +42,20 @@ namespace Forte.Styleguide
                 .Reverse()
                 .SkipWhile(d => d.Equals(componentName, StringComparison.OrdinalIgnoreCase))
                 .First();
-            
-            return new MvcPartialComponentDescriptor(
-                componentName,
-                componentCategory,
-                this.LayoutPath,
-                new FileInfo(path),
-                this.serializerSettings);
+
+            using (var reader = new FileInfo(path).OpenText())
+            {
+                var jsonContent = reader.ReadToEnd();
+                var initialData = InitialDataDeserializer.Deserialize(jsonContent, this.serializerSettings);
+                
+                return new MvcPartialComponentDescriptor(
+                    componentName,
+                    initialData.DisplayName ?? componentName,
+                    componentCategory,
+                    this.LayoutPath,
+                    new FileInfo(path),
+                    this.serializerSettings);
+            }
         }
     }
 }
