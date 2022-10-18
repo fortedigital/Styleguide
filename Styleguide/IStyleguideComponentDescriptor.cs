@@ -11,6 +11,7 @@ namespace Forte.Styleguide
         string DisplayName { get; }
         IEnumerable<string> Tags { get; }
         FileInfo File { get; }
+        FileInfo MarkdownFile { get; }
         Task<ActionResult> Execute(ControllerContext context);
     }
 }

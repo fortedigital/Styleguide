@@ -14,9 +14,10 @@ namespace Forte.Styleguide
         public string Name { get; }
         public string DisplayName { get; }
         public FileInfo File { get; }
+        public FileInfo MarkdownFile { get; }
         public string LayoutPath { get; }
         public IEnumerable<string> Tags { get; }
-
+        
         private readonly JsonSerializerSettings serializerSettings;
 
         public MvcPartialComponentDescriptor(
@@ -25,12 +26,14 @@ namespace Forte.Styleguide
             IEnumerable<string> tags,
             string layoutPath, 
             FileInfo file, 
+            FileInfo markdownFile,
             JsonSerializerSettings serializerSettings)
         {
             this.Name = name;
             this.DisplayName = displayName;
             this.Tags = tags;
             this.File = file;
+            this.MarkdownFile = markdownFile;
             this.LayoutPath = layoutPath;
             this.serializerSettings = serializerSettings;
         }

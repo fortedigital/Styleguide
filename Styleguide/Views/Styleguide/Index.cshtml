@@ -39,7 +39,16 @@
                             <div class="Browser-controls">
                                 <ul class="Browser-tabs">
                                     <li class="Browser-tab Browser-tab-context">
-                                        <a href="#">Context</a>
+                                        <a href="#">
+                                            @if (Model.UseMarkdownDescription)
+                                            {
+                                                <span>Block description</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Context</span>
+                                            }
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -89,6 +98,13 @@
 </div>
 <script type="text/javascript" src="~/Static/Styleguide/js/mandelbrot.js" ></script>
 
+@{
+    var httpAction = nameof(StyleguideController.ComponentContext);
+    if (Model.UseMarkdownDescription)
+    {
+        httpAction = nameof(StyleguideController.ComponentMarkdown);
+    }
+}
 <script type="text/javascript">
     $(document).ready(function() {
         $('a.Tree-entityLink').click(function(event) {
@@ -97,9 +113,8 @@
             var componentName = $(this).data("component");
 
             window.location.hash = componentName;
-            
             $("iframe#component").attr("src", "styleguide/Component/" + componentName);
-            $("iframe#componentContext").attr("src", "styleguide/ComponentContext/" + componentName);
+            $("iframe#componentContext").attr("src", "styleguide/@httpAction/" + componentName);
         });
 
         $(function() {

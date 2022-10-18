@@ -6,13 +6,16 @@ namespace Forte.Styleguide
     {
         public IEnumerable<IStyleguideComponentDescriptor> Components { get; }
         public IEnumerable<string> Tags { get; }
+        public bool UseMarkdownDescription { get; }
 
         public StyleguideIndexViewModel(
             IEnumerable<IStyleguideComponentDescriptor> components, 
-            IEnumerable<string> tags)
+            IEnumerable<string> tags,
+            bool useMarkdownDescription)
         {
             Components = components;
             Tags = tags;
+            UseMarkdownDescription = useMarkdownDescription;
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Forte.Styleguide
@@ -12,18 +11,21 @@ namespace Forte.Styleguide
         public string LayoutPath { get; }
         public readonly string RootPath;
         public readonly string ComponentFileNameExtension;
+        public readonly string ComponentMarkdownFileExtension;
         
         private readonly JsonSerializerSettings serializerSettings;
 
         public MvcPartialComponentLoader(
             string rootPath, 
             string componentFileNameExtension, 
+            string componentMarkdownFileExtension,
             JsonSerializerSettings serializerSettings,
             string layoutPath = null)
         {
             this.LayoutPath = layoutPath;
             this.RootPath = rootPath;
             this.ComponentFileNameExtension = componentFileNameExtension;
+            this.ComponentMarkdownFileExtension = componentMarkdownFileExtension;
             this.serializerSettings = serializerSettings;
         }
 
@@ -36,7 +38,7 @@ namespace Forte.Styleguide
 
         private MvcPartialComponentDescriptor CreateComponentDescriptorFromFullPath(string path)
         {
-            var componentName = Path.GetFileName(path).RemoveSuffix(this.ComponentFileNameExtension);
+            var componentName = Path.GetFileName(path).RemoveSuffix(ComponentFileNameExtension);
             var componentCategory = Path.GetDirectoryName(path)
                 .Split(Path.DirectorySeparatorChar)
                 .Reverse()
@@ -54,6 +56,7 @@ namespace Forte.Styleguide
                     GetTags(initialData, componentCategory),
                     this.LayoutPath,
                     new FileInfo(path),
+                    new FileInfo(path.Replace(ComponentFileNameExtension, ComponentMarkdownFileExtension)),
                     this.serializerSettings);
             }
         }
