@@ -1,5 +1,4 @@
-﻿@using System.Web.Mvc.Html
-@using Forte.Styleguide
+﻿@using Forte.Styleguide
 @model StyleguideIndexViewModel
 
 <!DOCTYPE html>
@@ -84,15 +83,11 @@
                                         </li>
                                     }
                                 </ul>
-                                
                             }
                         </ul>
                     </div>
-
                 </div>
-                
             </nav>
-
         </div>
     </div>
 </div>
@@ -121,8 +116,15 @@
             if (window.location.hash) {
                 var selectedComponent = window.location.hash.substr(1);
                 if (selectedComponent) {
-                    $("a[data-component='" + selectedComponent + "']").click();
+                    var jqComponent = $("a[data-component='" + selectedComponent + "']");
+                    jqComponent.click();
+                    jqComponent.parent().addClass("is-current");
                 }
+                
+                $("a[data-component]").on( "click", function() {
+                    $("li[data-role='item']").removeClass("is-current");
+                    $(this).parent().addClass("is-current");
+                });
             }
         });
     });
