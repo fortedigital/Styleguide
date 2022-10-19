@@ -66,6 +66,7 @@ namespace Forte.Styleguide
             }
         }
 
+        [HttpGet]
         public ActionResult ComponentMarkdown(string name)
         {
             if (string.IsNullOrEmpty(name))            
