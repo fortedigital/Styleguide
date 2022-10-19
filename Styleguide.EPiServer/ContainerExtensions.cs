@@ -20,7 +20,8 @@ namespace Forte.Styleguide.EPiServer
             string componentFileNameExtension = ".styleguide.json", 
             string layoutPath = null,
             string componentMarkdownFileExtension = ".styleguide.md",
-            bool useMarkdownDescription = false)
+            bool useMarkdownDescription = false,
+            bool useTags = false)
         {
             RouteTable.Routes.MapRoute(
                 "styleguide",
@@ -41,6 +42,7 @@ namespace Forte.Styleguide.EPiServer
                     HttpContext.Current.Server.MapPath(featuresRootPath), 
                     componentFileNameExtension, 
                     componentMarkdownFileExtension,
+                    useTags,
                     new JsonSerializerSettings 
                     {
                         Converters = new List<JsonConverter>

@@ -8,17 +8,21 @@ namespace Forte.Styleguide
 {
     public class MvcPartialComponentLoader : IStyleguideComponentLoader
     {
+        private const string CommonTagName = "Common";
+        
         public string LayoutPath { get; }
         public readonly string RootPath;
         public readonly string ComponentFileNameExtension;
         public readonly string ComponentMarkdownFileExtension;
-        
+        private readonly bool UseTags;
+
         private readonly JsonSerializerSettings serializerSettings;
 
         public MvcPartialComponentLoader(
             string rootPath, 
             string componentFileNameExtension, 
             string componentMarkdownFileExtension,
+            bool useTags,
             JsonSerializerSettings serializerSettings,
             string layoutPath = null)
         {
@@ -26,6 +30,7 @@ namespace Forte.Styleguide
             this.RootPath = rootPath;
             this.ComponentFileNameExtension = componentFileNameExtension;
             this.ComponentMarkdownFileExtension = componentMarkdownFileExtension;
+            this.UseTags = useTags;
             this.serializerSettings = serializerSettings;
         }
 
@@ -53,7 +58,7 @@ namespace Forte.Styleguide
                 return new MvcPartialComponentDescriptor(
                     componentName,
                     initialData.DisplayName ?? componentName,
-                    GetTags(initialData, componentCategory),
+                    LoadTags(initialData, componentCategory),
                     this.LayoutPath,
                     new FileInfo(path),
                     new FileInfo(path.Replace(ComponentFileNameExtension, ComponentMarkdownFileExtension)),
@@ -61,15 +66,14 @@ namespace Forte.Styleguide
             }
         }
 
-        private IEnumerable<string> GetTags(InitialData initialData, string componentCategory)
+        private IEnumerable<string> LoadTags(InitialData initialData, string componentCategory)
         {
-            var tags = new List<string> { componentCategory };
-            if (initialData.Tags != null)
+            if (!this.UseTags)
             {
-                tags.AddRange(initialData.Tags);
+                return new List<string> { componentCategory };
             }
-
-            return tags;
+            
+            return initialData.Tags ?? new List<string> { CommonTagName };
         }
     }
 }
