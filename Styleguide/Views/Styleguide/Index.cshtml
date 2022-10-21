@@ -1,5 +1,4 @@
-﻿@using System.Web.Mvc.Html
-@using Forte.Styleguide
+﻿@using Forte.Styleguide
 @model StyleguideIndexViewModel
 
 <!DOCTYPE html>
@@ -39,7 +38,16 @@
                             <div class="Browser-controls">
                                 <ul class="Browser-tabs">
                                     <li class="Browser-tab Browser-tab-context">
-                                        <a href="#">Context</a>
+                                        <a href="#">
+                                            @if (Model.UseMarkdownDescription)
+                                            {
+                                                <span>Block description</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Context</span>
+                                            }
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -62,33 +70,36 @@
 
                     <div class="Tree" data-behaviour="tree" id="tree-components">
                          <ul class="Tree-items Tree-depth-1">
-                            @foreach (var category in Model.Components.GroupBy(c => c.Category).OrderBy(c => c.Key))
+                            @foreach (var tag in Model.Tags)
                             {
                                 <ul class="Tree-items Tree-depth-2">
-                                    <li class="Tree-item Tree-entity"><h2 class="Tree-title">@category.Key</h2></li>
-                                    @foreach (var component in category.OrderBy(c => c.Name))
+                                    <li class="Tree-item Tree-entity"><h2 class="Tree-title">@tag</h2></li>
+                                    @foreach (var component in Model.Components.Where(c => c.Tags.Contains(tag)).OrderBy(c => c.DisplayName))
                                     {
                                         <li class="Tree-item Tree-entity" data-role="item">
                                             <a class="Tree-entityLink" href="@Url.Action("Component", "Styleguide", new {Name = component.Name})" data-component="@component.Name">
-                                                <span>@component.Name</span>
+                                                <span>@component.DisplayName</span>
                                             </a>
                                         </li>
                                     }
                                 </ul>
-                                
                             }
                         </ul>
                     </div>
-
                 </div>
-                
             </nav>
-
         </div>
     </div>
 </div>
 <script type="text/javascript" src="~/Static/Styleguide/js/mandelbrot.js" ></script>
 
+@{
+    var httpAction = nameof(StyleguideController.ComponentContext);
+    if (Model.UseMarkdownDescription)
+    {
+        httpAction = nameof(StyleguideController.ComponentMarkdown);
+    }
+}
 <script type="text/javascript">
     $(document).ready(function() {
         $('a.Tree-entityLink').click(function(event) {
@@ -97,17 +108,23 @@
             var componentName = $(this).data("component");
 
             window.location.hash = componentName;
-            
             $("iframe#component").attr("src", "styleguide/Component/" + componentName);
-            $("iframe#componentContext").attr("src", "styleguide/ComponentContext/" + componentName);
+            $("iframe#componentContext").attr("src", "styleguide/@httpAction/" + componentName);
         });
 
         $(function() {
             if (window.location.hash) {
                 var selectedComponent = window.location.hash.substr(1);
                 if (selectedComponent) {
-                    $("a[data-component='" + selectedComponent + "']").click();
+                    var jqComponent = $("a[data-component='" + selectedComponent + "']");
+                    jqComponent.click();
+                    jqComponent.parent().addClass("is-current");
                 }
+                
+                $("a[data-component]").on( "click", function() {
+                    $("li[data-role='item']").removeClass("is-current");
+                    $(this).parent().addClass("is-current");
+                });
             }
         });
     });

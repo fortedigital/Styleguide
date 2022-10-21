@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Mvc.Routing.Constraints;
 using System.Web.Routing;
 using EPiServer;
 using EPiServer.Construction;
@@ -15,7 +14,14 @@ namespace Forte.Styleguide.EPiServer
 {
     public static class ContainerExtensions
     {
-        public static void ConfigureStyleguide(this IContainer container, string featuresRootPath = "~/Features", string componentFileNameExtension = ".styleguide.json", string layoutPath = null)
+        public static void ConfigureStyleguide(
+            this IContainer container, 
+            string featuresRootPath = "~/Features", 
+            string componentFileNameExtension = ".styleguide.json", 
+            string layoutPath = null,
+            string componentMarkdownFileExtension = ".styleguide.md",
+            bool useMarkdownDescription = false,
+            bool useTags = false)
         {
             RouteTable.Routes.MapRoute(
                 "styleguide",
@@ -32,16 +38,22 @@ namespace Forte.Styleguide.EPiServer
                 
                 config.For<IStyleguideContentRepository>().Add<StyleguideContentRepository>();
                 
-                config.For<IStyleguideComponentLoader>().Add(c => new MvcPartialComponentLoader(HttpContext.Current.Server.MapPath(featuresRootPath), componentFileNameExtension, new JsonSerializerSettings
-                {
-                    Converters = new List<JsonConverter>
+                config.For<IStyleguideComponentLoader>().Add(c => new MvcPartialComponentLoader(
+                    HttpContext.Current.Server.MapPath(featuresRootPath), 
+                    componentFileNameExtension, 
+                    componentMarkdownFileExtension,
+                    useTags,
+                    new JsonSerializerSettings 
                     {
-                        c.GetInstance<ContentConverter>(),
-                        c.GetInstance<ContentReferenceConverter>(),
-                        c.GetInstance<ContentAreaConverter>()
-                    }
+                        Converters = new List<JsonConverter>
+                        {
+                            c.GetInstance<ContentConverter>(),
+                            c.GetInstance<ContentReferenceConverter>(),
+                            c.GetInstance<ContentAreaConverter>()
+                        }
                 }, layoutPath));
-                
+
+                config.For<IMarkdown>().Add(c => new MarkdigMarkdown(useMarkdownDescription));
             });
         }
     }
