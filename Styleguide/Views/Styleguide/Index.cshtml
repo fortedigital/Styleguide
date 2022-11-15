@@ -104,9 +104,11 @@
     $(document).ready(function() {
         $('a.Tree-entityLink').click(function(event) {
             event.preventDefault();
+            
+            $("li[data-role='item']").removeClass("is-current");
+            $(this).parent().addClass("is-current");
 
             var componentName = $(this).data("component");
-
             window.location.hash = componentName;
             $("iframe#component").attr("src", "styleguide/Component/" + componentName);
             $("iframe#componentContext").attr("src", "styleguide/@httpAction/" + componentName);
@@ -120,11 +122,6 @@
                     jqComponent.click();
                     jqComponent.parent().addClass("is-current");
                 }
-                
-                $("a[data-component]").on( "click", function() {
-                    $("li[data-role='item']").removeClass("is-current");
-                    $(this).parent().addClass("is-current");
-                });
             }
         });
     });
