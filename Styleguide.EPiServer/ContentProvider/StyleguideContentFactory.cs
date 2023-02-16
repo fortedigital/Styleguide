@@ -97,6 +97,7 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
                         
                         media.BinaryData = new WebBlob(uri, uri.ToString());
                         media.Thumbnail = media.BinaryData;
+                        media.Saved = DateTime.Now;
                         if (string.IsNullOrEmpty(name))
                             media.Name = $"{id}_{Path.GetFileName(uri.AbsolutePath)}";
                         else
