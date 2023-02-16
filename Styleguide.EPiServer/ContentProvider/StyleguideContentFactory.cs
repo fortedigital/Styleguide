@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using EPiServer.Construction;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
@@ -128,7 +130,10 @@ namespace Forte.Styleguide.EPiServer.ContentProvider
 
             public override Stream OpenRead()
             {
-                return new MemoryStream(new WebClient().DownloadData(this.Url));
+                var httpClient = new HttpClient();
+                var streamAsync = httpClient.GetStreamAsync(this.Url).Result;
+                return streamAsync;
+                //return new MemoryStream(new WebClient().DownloadData(this.Url));
             }
         }
     }
