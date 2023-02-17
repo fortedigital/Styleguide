@@ -81,3 +81,25 @@ If you use `Startup.cs` file then:
 ```cs
 services.AddStyleguideEpiServer("PathToYourFolder");
 ```
+
+## Usage
+
+### Custom block names
+Default behaviour is to display block name (in Styleguide left menu) as original model class is named. 
+In order to override this label please add property `displayName` in json configuration for the block, as shown below:
+```json
+{
+  "displayName": "Article teaser",
+  "model": {
+    "title": "Lorem ipsum dolor sit amet",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "articleUrl": "#"
+  },
+  "variants": [
+    {
+      "name": "Without article image",
+      "model": {}
+    }
+  ]
+}
+```
