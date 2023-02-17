@@ -1,4 +1,5 @@
-﻿@model Forte.Styleguide.Views.Styleguide.StyleguideIndexViewModel
+﻿@using Forte.Styleguide.Controllers
+@model Forte.Styleguide.Views.Styleguide.StyleguideIndexViewModel
 
 <!DOCTYPE html>
 <html class="has-js" dir="ltr">
@@ -36,7 +37,16 @@
                             <div class="Browser-controls">
                                 <ul class="Browser-tabs">
                                     <li class="Browser-tab Browser-tab-context">
-                                        <a href="#">Context</a>
+                                        <a href="#">
+                                            @if (Model.UseMarkdownDescription)
+                                            {
+                                                <span>Block description</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Context</span>
+                                            }
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -84,6 +94,15 @@
     </div>
 </div>
 <script type="text/javascript" src="_content/Forte.Styleguide/Styleguide/js/mandelbrot.js" ></script>
+
+@{
+    var httpAction = nameof(StyleguideController.ComponentContext);
+    if (Model.UseMarkdownDescription)
+    {
+        httpAction = nameof(StyleguideController.ComponentMarkdown);
+    }
+}
+
 <script type="text/javascript" defer>
 
     (() => {
@@ -92,13 +111,12 @@
                  var componentName = this.getAttribute('data-component');
                 window.location.hash = componentName;
                 document.querySelectorAll("iframe#component").forEach(x => x.setAttribute("src", "styleguide/Component/" + componentName));
-                document.querySelectorAll("iframe#componentContext").forEach(x => x.setAttribute("src", "styleguide/ComponentContext/" + componentName));
+                document.querySelectorAll("iframe#componentContext").forEach(x => x.setAttribute("src", "styleguide/@httpAction/" + componentName));
             }));
         
         if (window.location.hash) {
             var selectedComponent = window.location.hash.substr(1);
             if (selectedComponent) {
-                
                 document.querySelectorAll("a[data-component='" + selectedComponent + "']").forEach(x => {x.click();});
             }
         }

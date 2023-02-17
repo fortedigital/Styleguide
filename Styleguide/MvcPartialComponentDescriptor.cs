@@ -13,6 +13,7 @@ namespace Forte.Styleguide
         public string Name { get; }
         public string DisplayName { get; }
         public FileInfo File { get; }
+        public FileInfo MarkdownFile { get; }
         public string LayoutPath { get; }
         public IEnumerable<string> Tags { get; }
 
@@ -24,6 +25,7 @@ namespace Forte.Styleguide
             IEnumerable<string> tags, 
             string layoutPath, 
             FileInfo file, 
+            FileInfo markdownFile,
             JsonSerializerSettings serializerSettings, 
             IViewEngine engine)
         {
@@ -31,6 +33,7 @@ namespace Forte.Styleguide
             DisplayName = displayName;
             Tags = tags;
             File = file;
+            MarkdownFile = markdownFile;
             LayoutPath = layoutPath;
             _engine = engine;
             _serializerSettings = serializerSettings;

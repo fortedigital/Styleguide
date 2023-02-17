@@ -10,7 +10,8 @@ namespace Forte.Styleguide
         public string LayoutPath { get; }
         public readonly string RootPath;
         public readonly string ComponentFileNameExtension;
-        
+        public readonly string ComponentMarkdownFileExtension;
+
         private readonly bool _useTags;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly IViewEngine _engine;
@@ -18,6 +19,7 @@ namespace Forte.Styleguide
 
         public MvcPartialComponentLoader(string rootPath, 
             string componentFileNameExtension, 
+            string componentMarkdownFileExtension,
             bool useTags,
             JsonSerializerSettings serializerSettings, 
             IViewEngine engine, 
@@ -26,6 +28,7 @@ namespace Forte.Styleguide
             LayoutPath = layoutPath;
             RootPath = rootPath;
             ComponentFileNameExtension = componentFileNameExtension;
+            ComponentMarkdownFileExtension = componentMarkdownFileExtension;
             _useTags = useTags;
             _serializerSettings = serializerSettings;
             _engine = engine;
@@ -58,6 +61,7 @@ namespace Forte.Styleguide
                 LoadTags(initialData, componentCategory),
                 LayoutPath,
                 new FileInfo(path),
+                new FileInfo(path.Replace(ComponentFileNameExtension, ComponentMarkdownFileExtension)),
                 _serializerSettings,
                 _engine);
         }
