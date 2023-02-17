@@ -17,7 +17,11 @@ namespace Forte.Styleguide.EPiServer
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddStyleGuideEpiServer(this IServiceCollection services, string featuresRootPath = "Features", string componentFileNameExtension = ".styleguide.json", string layoutPath = null)
+        public static IServiceCollection AddStyleGuideEpiServer(this IServiceCollection services, 
+            string featuresRootPath = "Features", 
+            string componentFileNameExtension = ".styleguide.json", 
+            string layoutPath = null,
+            bool useTags = false)
         {
             var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IViewCompilerProvider));
             services.Remove(descriptor);
@@ -38,7 +42,9 @@ namespace Forte.Styleguide.EPiServer
             var serviceProvider = services.BuildServiceProvider();
             var iHostEnvironment = serviceProvider.GetRequiredService<IHostEnvironment>();
             services.AddTransient<IStyleguideComponentLoader, MvcPartialComponentLoader>(provider =>
-                new MvcPartialComponentLoader(Path.Combine(iHostEnvironment.ContentRootPath, featuresRootPath), componentFileNameExtension,
+                new MvcPartialComponentLoader(Path.Combine(iHostEnvironment.ContentRootPath, featuresRootPath), 
+                    componentFileNameExtension,
+                    useTags,
                     new JsonSerializerSettings
                     {
                         Converters = new List<JsonConverter>()
