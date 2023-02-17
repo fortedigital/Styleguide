@@ -84,6 +84,33 @@ services.AddStyleguideEpiServer("PathToYourFolder");
 
 ## Usage
 
+### Tags
+Styleguide's left menu contains groups of blocks that are configured with `.styleguide.json` file.
+In default case groups are created from parent directory names of blocks. 
+However there is a possibility to customize group names - or even define groups from the scratch. 
+```csharp
+services.AddStyleGuideEpiServer(useTags: true);
+```
+With just `useTags` flag enabled all blocks with be put into group called `Common`. 
+Then, each block can be given multiple tags (that will create unique groups). 
+After assigning block to tag they will be removed from `Common` group.
+```json
+{
+  "tags": ["Article", "News"],
+  "model": {
+    "title": "Lorem ipsum dolor sit amet",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "articleUrl": "#"
+  },
+  "variants": [
+    {
+      "name": "Without article image",
+      "model": {}
+    }
+  ]
+}
+```
+
 ### Custom block names
 Default behaviour is to display block name (in Styleguide left menu) as original model class is named. 
 In order to override this label please add property `displayName` in json configuration for the block, as shown below:
