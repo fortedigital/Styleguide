@@ -14,6 +14,7 @@ namespace Forte.Styleguide
         private readonly bool _useTags;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly IViewEngine _engine;
+        private readonly InitialDataDeserializer _initialDataDeserializer;
 
         public MvcPartialComponentLoader(string rootPath, 
             string componentFileNameExtension, 
@@ -28,6 +29,7 @@ namespace Forte.Styleguide
             _useTags = useTags;
             _serializerSettings = serializerSettings;
             _engine = engine;
+            _initialDataDeserializer = new InitialDataDeserializer(_serializerSettings);
         }
 
         public IEnumerable<IStyleguideComponentDescriptor> LoadComponents()
@@ -48,7 +50,7 @@ namespace Forte.Styleguide
 
             using var reader = new FileInfo(path).OpenText();
             var jsonContent = reader.ReadToEnd();
-            var initialData = InitialDataDeserializer.Deserialize(jsonContent, _serializerSettings);
+            var initialData = _initialDataDeserializer.Deserialize(jsonContent);
 
             return new MvcPartialComponentDescriptor(
                 componentName,

@@ -3,25 +3,41 @@ using Newtonsoft.Json.Linq;
 
 namespace Forte.Styleguide
 {
-    public static class InitialDataDeserializer
+    public class InitialDataDeserializer
     {
+        private readonly JsonSerializerSettings _serializerSettings;
+        private readonly JsonSerializer _jsonSerializer;
         private const string DisplayNamePropertyName = "displayName";
         private const string TagsPropertyName = "tags";
 
-        public static InitialData Deserialize(string jsonContent, JsonSerializerSettings serializerSettings)
+        public InitialDataDeserializer(JsonSerializerSettings serializerSettings)
         {
-            var serializer = JsonSerializer.Create(serializerSettings);
-            var desc = JsonConvert.DeserializeObject(jsonContent, serializerSettings);
+            _serializerSettings = serializerSettings;
+            _jsonSerializer = JsonSerializer.Create(_serializerSettings);
+        }
+
+        public InitialData Deserialize(string jsonContent)
+        {
+            var desc = JsonConvert.DeserializeObject(jsonContent, _serializerSettings);
 
             if (desc is JObject jObject)
             {
-                var displayName = jObject.SelectToken(DisplayNamePropertyName)?.ToObject<string>(serializer);
-                var tags = jObject.SelectToken(TagsPropertyName)?.ToObject<List<string>>(serializer);
+                var displayName = GetValue(jObject, DisplayNamePropertyName, string.Empty);
+                var tags = GetValue(jObject, TagsPropertyName, new List<string>());
                 
                 return new InitialData(displayName, tags);
             }
 
             return new InitialData();
+        }
+
+        private T GetValue<T>(JToken jObject, string path, T defaultValue)
+        {
+            var token = jObject.SelectToken(path);
+            if (token == null)
+                return defaultValue;
+
+            return token.ToObject<T>(_jsonSerializer);
         }
     }
 }

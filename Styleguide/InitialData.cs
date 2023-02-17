@@ -2,7 +2,7 @@
 {
     public class InitialData
     {
-        public string DisplayName { get; }
+        public string DisplayName { get; } = string.Empty;
         public IEnumerable<string> Tags { get; }
 
         public InitialData()
