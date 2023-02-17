@@ -11,6 +11,7 @@ namespace Forte.Styleguide
     public class MvcPartialComponentDescriptor : IStyleguideComponentDescriptor
     {
         public string Name { get; }
+        public string DisplayName { get; }
         public string Category { get; }
         public FileInfo File { get; }
         public string LayoutPath { get; }
@@ -18,9 +19,11 @@ namespace Forte.Styleguide
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly IViewEngine _engine;
 
-        public MvcPartialComponentDescriptor(string name, string category, string layoutPath, FileInfo file, JsonSerializerSettings serializerSettings, IViewEngine engine)
+        public MvcPartialComponentDescriptor(string name, string displayName, string category, string layoutPath, 
+            FileInfo file, JsonSerializerSettings serializerSettings, IViewEngine engine)
         {
             Name = name;
+            DisplayName = displayName;
             Category = category;
             File = file;
             LayoutPath = layoutPath;

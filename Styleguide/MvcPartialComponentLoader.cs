@@ -12,7 +12,11 @@ namespace Forte.Styleguide
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly IViewEngine _engine;
 
-        public MvcPartialComponentLoader(string rootPath, string componentFileNameExtension, JsonSerializerSettings serializerSettings, IViewEngine engine, string layoutPath = null)
+        public MvcPartialComponentLoader(string rootPath, 
+            string componentFileNameExtension, 
+            JsonSerializerSettings serializerSettings, 
+            IViewEngine engine, 
+            string layoutPath = null)
         {
             LayoutPath = layoutPath;
             RootPath = rootPath;
@@ -36,9 +40,14 @@ namespace Forte.Styleguide
                 .Reverse()
                 .SkipWhile(d => d.Equals(componentName, StringComparison.OrdinalIgnoreCase))
                 .First();
-            
+
+            using var reader = new FileInfo(path).OpenText();
+            var jsonContent = reader.ReadToEnd();
+            var initialData = InitialDataDeserializer.Deserialize(jsonContent, _serializerSettings);
+
             return new MvcPartialComponentDescriptor(
                 componentName,
+                string.IsNullOrWhiteSpace(initialData.DisplayName) ? componentName : initialData.DisplayName,
                 componentCategory,
                 LayoutPath,
                 new FileInfo(path),
