@@ -48,11 +48,22 @@ namespace Forte.Styleguide
             return new MvcPartialComponentDescriptor(
                 componentName,
                 string.IsNullOrWhiteSpace(initialData.DisplayName) ? componentName : initialData.DisplayName,
-                componentCategory,
+                GetTags(initialData, componentCategory),
                 LayoutPath,
                 new FileInfo(path),
                 _serializerSettings,
                 _engine);
+        }
+        
+        private static IEnumerable<string> GetTags(InitialData initialData, string componentCategory)
+        {
+            var tags = new List<string> { componentCategory };
+            if (initialData?.Tags != null)
+            {
+                tags.AddRange(initialData.Tags);
+            }
+
+            return tags;
         }
     }
 }

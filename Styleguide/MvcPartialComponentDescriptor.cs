@@ -12,19 +12,24 @@ namespace Forte.Styleguide
     {
         public string Name { get; }
         public string DisplayName { get; }
-        public string Category { get; }
         public FileInfo File { get; }
         public string LayoutPath { get; }
+        public IEnumerable<string> Tags { get; }
 
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly IViewEngine _engine;
 
-        public MvcPartialComponentDescriptor(string name, string displayName, string category, string layoutPath, 
-            FileInfo file, JsonSerializerSettings serializerSettings, IViewEngine engine)
+        public MvcPartialComponentDescriptor(string name, 
+            string displayName, 
+            IEnumerable<string> tags, 
+            string layoutPath, 
+            FileInfo file, 
+            JsonSerializerSettings serializerSettings, 
+            IViewEngine engine)
         {
             Name = name;
             DisplayName = displayName;
-            Category = category;
+            Tags = tags;
             File = file;
             LayoutPath = layoutPath;
             _engine = engine;

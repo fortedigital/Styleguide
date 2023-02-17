@@ -18,10 +18,9 @@ namespace Forte.Styleguide.Controllers
         }
         public ActionResult Index()
         {
-            
             var catalog = _loader.Load(reload: true);
-            var model = new StyleguideIndexViewModel(catalog.Components);
-
+            var tags = catalog.Components.SelectMany(c => c.Tags).Distinct().OrderBy(t => t);
+            var model = new StyleguideIndexViewModel(catalog.Components, tags);
             
             return View(model);
         }

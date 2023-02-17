@@ -6,6 +6,7 @@ namespace Forte.Styleguide
     public static class InitialDataDeserializer
     {
         private const string DisplayNamePropertyName = "displayName";
+        private const string TagsPropertyName = "tags";
 
         public static InitialData Deserialize(string jsonContent, JsonSerializerSettings serializerSettings)
         {
@@ -15,8 +16,9 @@ namespace Forte.Styleguide
             if (desc is JObject jObject)
             {
                 var displayName = jObject.SelectToken(DisplayNamePropertyName)?.ToObject<string>(serializer);
-
-                return new InitialData(displayName);
+                var tags = jObject.SelectToken(TagsPropertyName)?.ToObject<List<string>>(serializer);
+                
+                return new InitialData(displayName, tags);
             }
 
             return new InitialData();
