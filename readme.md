@@ -130,3 +130,17 @@ In order to override this label please add property `displayName` in json config
   ]
 }
 ```
+
+### Markdown description
+Each block can have a markdown description file that will be shown in Context placeholder. 
+In order to enable the functionality please register Styleguide as below:
+```csharp
+services.AddStyleGuideEpiServer(useMarkdownDescription: true);
+```
+When enabled, Styleguide will search for files with extensions `.styleguide.md`.
+Then, file content will be parsed as markdown and rendered.
+For example, for block `ArticleTeaser` there should be (by default) two files:
+- `ArticleTeaser.styleguide.json`
+- `ArticleTeaser.styleguide.md`
+
+In case when block doesn't have appropriate `md` file, blank area will be rendered.
