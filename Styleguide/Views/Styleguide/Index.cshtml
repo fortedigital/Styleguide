@@ -103,24 +103,29 @@
     }
 }
 
-<script type="text/javascript" defer>
-
-    (() => {
-        document.querySelectorAll('a.Tree-entityLink').forEach(x => x.addEventListener('click',
-            function() { 
-                 var componentName = this.getAttribute('data-component');
-                window.location.hash = componentName;
-                document.querySelectorAll("iframe#component").forEach(x => x.setAttribute("src", "styleguide/Component/" + componentName));
-                document.querySelectorAll("iframe#componentContext").forEach(x => x.setAttribute("src", "styleguide/@httpAction/" + componentName));
-            }));
-        
-        if (window.location.hash) {
-            var selectedComponent = window.location.hash.substr(1);
-            if (selectedComponent) {
-                document.querySelectorAll("a[data-component='" + selectedComponent + "']").forEach(x => {x.click();});
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('a.Tree-entityLink').click(function(event) {
+            event.preventDefault();
+            
+            $("li[data-role='item']").removeClass("is-current");
+            $(this).parent().addClass("is-current");
+            var componentName = $(this).data("component");
+            window.location.hash = componentName;
+            $("iframe#component").attr("src", "styleguide/Component/" + componentName);
+            $("iframe#componentContext").attr("src", "styleguide/@httpAction/" + componentName);
+        });
+        $(function() {
+            if (window.location.hash) {
+                var selectedComponent = window.location.hash.substr(1);
+                if (selectedComponent) {
+                    var jqComponent = $("a[data-component='" + selectedComponent + "']");
+                    jqComponent.click();
+                    jqComponent.parent().addClass("is-current");
+                }
             }
-        }
-    })();
+        });
+    });
 </script>
 
 </body>
