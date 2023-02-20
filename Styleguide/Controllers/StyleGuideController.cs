@@ -30,7 +30,7 @@ namespace Forte.Styleguide.Controllers
         }
         
         [HttpGet("Component/{name}")]
-        public async Task<ActionResult> Component([FromRoute]string name)
+        public async Task<ActionResult> Component([FromRoute] string name)
         {
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Name of the component is not defined");
@@ -43,7 +43,7 @@ namespace Forte.Styleguide.Controllers
         }
         
         [HttpGet("ComponentContext/{name}")]
-        public ActionResult ComponentContext([FromRoute]string name)
+        public ActionResult ComponentContext([FromRoute] string name)
         {
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Name of the component is not defined");
@@ -67,7 +67,7 @@ namespace Forte.Styleguide.Controllers
         }
         
         [HttpGet("ComponentMarkdown/{name}")]
-        public ActionResult ComponentMarkdown(string name)
+        public ActionResult ComponentMarkdown([FromRoute] string name)
         {
             if (string.IsNullOrWhiteSpace(name))            
                 return BadRequest("Name of the component is not defined");
