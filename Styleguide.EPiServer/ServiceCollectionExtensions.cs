@@ -34,12 +34,13 @@ namespace Forte.Styleguide.EPiServer
             services.AddTransient<ContentReferenceConverter>();
             services.AddTransient<ContentAreaConverter>();
             services.AddScoped<IViewEngine, RazorViewEngine>();
-            services.AddScoped<IMarkdown>(provider => new MarkdigMarkdown(useMarkdownDescription));
+            services.AddScoped<IMarkdown>(_ => new MarkdigMarkdown(useMarkdownDescription));
 
             services.AddTransient<IStyleguideContentFactory>(provider => new StyleguideContentFactory(
                 StyleguideContentEntryPoint.Ensure(provider.GetRequiredService<IContentRepository>()),
                 provider.GetRequiredService<IContentTypeRepository>(),
-                provider.GetRequiredService<IContentFactory>()));
+                provider.GetRequiredService<IContentFactory>(),
+                provider.GetRequiredService<ISharedBlockFactory>()));
 
             services.AddTransient<IStyleguideContentRepository, StyleguideContentRepository>();
 
