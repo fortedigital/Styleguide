@@ -1,0 +1,9 @@
+@using Forte.Styleguide.Views.Styleguide
+
+<html>
+<body>
+    <div class="Browser-panel Browser-code is-active" data-role="tab-panel" id="markdown-content">
+        @Html.Raw(((MvcPartialComponentMarkdownViewModel)ViewData["Model"]).Content)
+    </div>
+</body>
+</html>

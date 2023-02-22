@@ -2230,6 +2230,7 @@ h6 {
   font: normal 0.875rem/1.71429 "Open Sans", Helvetica, Arial, sans-serif; }
 
 .Tree-entityLink {
+  cursor: pointer;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;

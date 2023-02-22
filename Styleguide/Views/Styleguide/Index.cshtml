@@ -1,4 +1,5 @@
-﻿@model Forte.Styleguide.Views.Styleguide.StyleguideIndexViewModel
+﻿@using Forte.Styleguide.Controllers
+@model Forte.Styleguide.Views.Styleguide.StyleguideIndexViewModel
 
 <!DOCTYPE html>
 <html class="has-js" dir="ltr">
@@ -36,7 +37,16 @@
                             <div class="Browser-controls">
                                 <ul class="Browser-tabs">
                                     <li class="Browser-tab Browser-tab-context">
-                                        <a href="#">Context</a>
+                                        <a href="#">
+                                            @if (Model.UseMarkdownDescription)
+                                            {
+                                                <span>Block description</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Context</span>
+                                            }
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -59,20 +69,19 @@
 
                     <div class="Tree" data-behaviour="tree" id="tree-components">
                         <ul class="Tree-items Tree-depth-1">
-                            @foreach (var category in Model.Components.GroupBy(c => c.Category).OrderBy(c => c.Key))
+                            @foreach (var tag in Model.Tags)
                             {
                                 <ul class="Tree-items Tree-depth-2">
-                                    <li class="Tree-item Tree-entity"><h2 class="Tree-title">@category.Key</h2></li>
-                                    @foreach (var component in category.OrderBy(c => c.Name))
+                                    <li class="Tree-item Tree-entity"><h2 class="Tree-title">@tag</h2></li>
+                                    @foreach (var component in Model.Components.Where(c => c.Tags.Contains(tag)).OrderBy(c => c.DisplayName))
                                     {
                                         <li class="Tree-item Tree-entity" data-role="item">
                                             <a class="Tree-entityLink"  data-component="@component.Name">
-                                                <span>@component.Name</span>
+                                                <span>@component.DisplayName</span>
                                             </a>
                                         </li>
                                     }
                                 </ul>
-                                
                             }
                         </ul>
                     </div>
@@ -85,22 +94,35 @@
     </div>
 </div>
 <script type="text/javascript" src="_content/Forte.Styleguide/Styleguide/js/mandelbrot.js" ></script>
-<script type="text/javascript" defer>
 
+@{
+    var httpAction = nameof(StyleguideController.ComponentContext);
+    if (Model.UseMarkdownDescription)
+    {
+        httpAction = nameof(StyleguideController.ComponentMarkdown);
+    }
+}
+
+<script type="text/javascript" defer>
     (() => {
-        document.querySelectorAll('a.Tree-entityLink').forEach(x => x.addEventListener('click',
+        document.querySelectorAll('a.Tree-entityLink').forEach(component => component.addEventListener('click',
             function() { 
-                 var componentName = this.getAttribute('data-component');
+                document.querySelectorAll("li[data-role='item']").forEach(item => item.classList.remove("is-current"));
+                component.parentElement.classList.add("is-current");
+                
+                let componentName = this.getAttribute('data-component');
                 window.location.hash = componentName;
                 document.querySelectorAll("iframe#component").forEach(x => x.setAttribute("src", "styleguide/Component/" + componentName));
-                document.querySelectorAll("iframe#componentContext").forEach(x => x.setAttribute("src", "styleguide/ComponentContext/" + componentName));
+                document.querySelectorAll("iframe#componentContext").forEach(x => x.setAttribute("src", "styleguide/@httpAction/" + componentName));
             }));
         
         if (window.location.hash) {
             var selectedComponent = window.location.hash.substr(1);
             if (selectedComponent) {
-                
-                document.querySelectorAll<HTMLAnchorElement>("a[data-component='" + selectedComponent + "']").forEach(x => {x.click();});
+                document.querySelectorAll("a[data-component='" + selectedComponent + "']").forEach(component => {
+                    component.click();
+                    component.parentElement.classList.add("is-current");
+                });
             }
         }
     })();
